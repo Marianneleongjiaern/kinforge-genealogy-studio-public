@@ -1,0 +1,36 @@
+.term-meaning { display: block; color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.6; margin-top: 5px; white-space: normal; overflow-wrap: anywhere; }
+.relative-dialog.terms-dialog { width: min(780px, calc(100% - 28px)); height: min(780px, calc(100dvh - 40px)); max-height: calc(100dvh - 40px); background: var(--panel); overflow: hidden; }
+.terms-dialog[open] { display: flex; flex-direction: column; gap: 14px; }
+.terms-dialog .dialog-heading { flex: none; margin: 0; align-items: center; }
+.terms-dialog .dialog-heading h2 { display: flex; align-items: center; gap: 9px; min-width: 0; }
+.terms-dialog .dialog-heading svg, .terms-search > svg { flex: none; }
+.terms-dialog .icon-button { width: 36px; height: 36px; flex: 0 0 36px; padding: 8px; }
+.terms-search-area { flex: none; min-width: 0; }
+.terms-search-label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; }
+.terms-dialog .terms-search { display: flex; align-items: center; gap: 8px; width: 100%; min-width: 0; min-height: 44px; padding: 3px 5px 3px 12px; }
+.terms-search input { flex: 1; width: 100%; min-width: 0; font-size: 16px; }
+.terms-search input::-webkit-search-cancel-button { -webkit-appearance: none; }
+.terms-dialog .terms-clear { background: transparent; }
+.terms-count { margin: 8px 0 0; min-height: 18px; font-size: 12px; color: var(--muted); }
+.terms-results { min-height: 70px; flex: 1 1 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-gutter: stable; border-top: 1px solid var(--line); }
+.terms-list { margin: 0; }
+.terms-row { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(0, 2fr); gap: 18px; padding: 15px 4px; border-bottom: 1px solid var(--line); }
+.terms-row dt { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.terms-row dt small { display: block; margin-top: 5px; font-size: 11px; line-height: 1.5; font-weight: 400; color: var(--muted); }
+.terms-row dd { margin: 0; font-size: 13px; line-height: 1.65; overflow-wrap: anywhere; }
+.terms-footer { flex: 0 0 auto; min-height: 54px; max-height: 30%; overflow-y: auto; font-size: 11px; line-height: 1.6; color: var(--muted); border-top: 1px solid var(--line); padding-top: 10px; }
+.terms-footer p { margin: 0 0 8px; }
+.terms-footer summary { cursor: pointer; color: var(--brand); font-weight: 600; }
+.terms-footer details[open] summary { margin-bottom: 8px; }
+.terms-footer ul { margin: 8px 0 0; padding-left: 18px; }
+.terms-footer li { margin: 5px 0; overflow-wrap: anywhere; }
+.terms-footer a { text-underline-offset: 3px; }
+.terms-dialog summary:focus-visible, .terms-results:focus-visible { outline: 2px solid var(--brand); outline-offset: -2px; }
+@media (max-width: 520px) {
+  .relative-dialog.terms-dialog { padding: 16px; height: calc(100dvh - 28px); max-height: calc(100dvh - 28px); }
+  .terms-dialog .dialog-heading h2 { font-size: 18px; }
+  .terms-row { grid-template-columns: minmax(0, 1fr); gap: 7px; }
+  .terms-row dt small { margin-top: 3px; }
+}
+@media (max-height: 420px) { .relative-dialog.terms-dialog { overflow-y: auto; } .terms-results { min-height: 100px; } .terms-footer { flex-shrink: 0; max-height: none; } }
+@media print { .terms-dialog { display: none !important; } }

@@ -1,0 +1,13 @@
+{
+  "dataset": "Natural Earth 1:110m land",
+  "version": "5.1.2",
+  "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/v5.1.2/geojson/ne_110m_land.geojson",
+  "website": "https://www.naturalearthdata.com/downloads/110m-physical-vectors/110m-land/",
+  "license": "Public domain",
+  "licenseUrl": "https://www.naturalearthdata.com/about/terms-of-use/",
+  "attribution": "Made with Natural Earth. Public-domain land outlines, 1:110m, version 5.1.2.",
+  "sourceSha256": "9e0729ee253ca7d7a5c4ae9395fb1902264c5377c52e224d13dd85010e2835d9",
+  "retrieved": "2026-09-23",
+  "processing": "Retained all 127 feature geometries; removed unused feature properties, CRS and bounding-box metadata. No coordinates simplified or invented.",
+  "limitations": "Generalized contemporary coastlines. Small islands and local detail may be absent. No historical borders, roads, geocoding or runtime map service."
+}

@@ -1,0 +1,1 @@
+ALTER TABLE `drive_files` ADD `remote_version` text DEFAULT '' NOT NULL;

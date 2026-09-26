@@ -1,0 +1,51 @@
+import { expect, test } from "@playwright/test";
+
+test("parentage can be recorded, revised, undone and reopened without assigning an unknown link", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue as guest" }).click();
+  await page.locator('.react-flow__node[data-id="person_june"]').click();
+  await page.getByRole("button", { name: "Show more", exact: true }).click();
+  const parentage = page.getByLabel("Parentage for Alex Chang", { exact: true });
+  await expect(parentage).toHaveValue("unspecified");
+  await parentage.selectOption("adoptive");
+  await page.getByRole("button", { name: "Undo last change", exact: true }).click();
+  await expect(parentage).toHaveValue("unspecified");
+  await page.getByRole("button", { name: "Redo last change", exact: true }).click();
+  await page.reload();
+  await page.getByRole("button", { name: "Show more", exact: true }).click();
+  await expect(page.getByLabel("Parentage for Alex Chang", { exact: true })).toHaveValue("adoptive");
+  await page.getByRole("button", { name: "Add parent", exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("Given name", { exact: true }).fill("Foster parent");
+  await dialog.getByLabel("Parentage", { exact: true }).selectOption("foster");
+  await dialog.getByRole("button", { name: "Add person", exact: true }).click();
+  await page.locator('.react-flow__node[data-id="person_june"]').click();
+  await page.getByRole("button", { name: "Show more", exact: true }).click();
+  await expect(page.getByLabel("Parentage for Foster parent Chang", { exact: true })).toHaveValue("foster");
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("kinforge-demo-v1")!).relationships);
+  expect(saved.some((r: { parentage?: string }) => r.parentage === "adoptive")).toBe(true);
+  expect(saved.some((r: { parentage?: string }) => r.parentage === "foster")).toBe(true);
+});
+
+test("a dated and cited local historical context record appears in the generated lifetime report", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Continue as guest" }).click();
+  await page.locator('.react-flow__node[data-id="person_june"]').click();
+  await page.getByRole("link", { name: "Research", exact: true }).click();
+  await page.getByRole("button", { name: "Record", exact: true }).click();
+  const record = page.getByRole("group", { name: "Historical record: New historical record", exact: true });
+  await record.getByLabel("Record collection", { exact: true }).selectOption("World History");
+  await record.getByLabel("Record date", { exact: true }).fill("2000-06-01");
+  await record.getByLabel("Record citation", { exact: true }).fill("Family archive, dated record 17.");
+  await record.getByLabel("Record transcription", { exact: true }).fill("A locally recorded historical context event.");
+  await record.getByLabel("Record title", { exact: true }).fill("Archive context example");
+  await page.reload();
+  await expect(page.getByRole("group", { name: "Historical record: Archive context example", exact: true }).getByLabel("Record date", { exact: true })).toHaveValue("2000-06-01");
+  await page.getByRole("link", { name: "Reports", exact: true }).click();
+  await page.getByLabel("Report type", { exact: true }).selectOption("World History Report");
+  await page.getByRole("button", { name: "Generate Editable Draft", exact: true }).click();
+  const draft = page.getByLabel("Report draft", { exact: true });
+  await expect(draft).toContainText("Archive context example");
+  await expect(draft).toContainText("Family archive, dated record 17.");
+  await expect(draft).toContainText("A locally recorded historical context event.");
+});

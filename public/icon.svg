@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="KinForge Genealogy Studio logo">
+  <defs>
+    <linearGradient id="roseSilver" x1="38" y1="28" x2="218" y2="228" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f7d8df"/>
+      <stop offset=".45" stop-color="#d8a5af"/>
+      <stop offset=".72" stop-color="#c49a71"/>
+      <stop offset="1" stop-color="#c7ccd3"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="56" y1="44" x2="204" y2="212" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#533743"/>
+      <stop offset="1" stop-color="#233d3f"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#roseSilver)"/>
+  <rect x="18" y="18" width="220" height="220" rx="45" fill="#fff9fb" opacity=".74"/>
+  <path d="M76 64v128M76 126l80-62M76 126l82 66" fill="none" stroke="url(#ink)" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M160 64h28M160 192h31M101 126h68" fill="none" stroke="#9f6f7d" stroke-width="17" stroke-linecap="round"/>
+  <circle cx="188" cy="64" r="18" fill="#c49a71"/>
+  <circle cx="169" cy="126" r="17" fill="#6f9894"/>
+  <circle cx="191" cy="192" r="18" fill="#b9c0c8"/>
+  <path d="M54 203c25 12 57 17 92 10" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+</svg>

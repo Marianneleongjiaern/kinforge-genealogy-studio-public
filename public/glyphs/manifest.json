@@ -1,0 +1,1305 @@
+[
+  {
+    "id": "gender-male",
+    "label": "Male",
+    "group": "Person",
+    "meaning": "Gender recorded as male; not a statement of sex assigned at birth.",
+    "file": "gender-male.svg"
+  },
+  {
+    "id": "gender-female",
+    "label": "Female",
+    "group": "Person",
+    "meaning": "Gender recorded as female; not a statement of sex assigned at birth.",
+    "file": "gender-female.svg"
+  },
+  {
+    "id": "gender-nonbinary",
+    "label": "Nonbinary",
+    "group": "Person",
+    "meaning": "Gender recorded as nonbinary; the symbol does not imply a particular transition history.",
+    "file": "gender-nonbinary.svg"
+  },
+  {
+    "id": "gender-unknown",
+    "label": "Not recorded",
+    "group": "Person",
+    "meaning": "Gender has not been recorded. This is not a gender identity.",
+    "file": "gender-unknown.svg"
+  },
+  {
+    "id": "identity-pronouns",
+    "label": "Pronouns",
+    "group": "Person",
+    "meaning": "Pronouns are recorded from the person's own wording or a source; they are not inferred from gender markers.",
+    "file": "identity-pronouns.svg"
+  },
+  {
+    "id": "identity-gender",
+    "label": "Gender identity",
+    "group": "Person",
+    "meaning": "A self-described gender identity or source wording. It does not imply a specific medical, transition, or legal history.",
+    "file": "identity-gender.svg"
+  },
+  {
+    "id": "identity-sexuality",
+    "label": "Sexual orientation",
+    "group": "Person",
+    "meaning": "A recorded sexual orientation label. KinForge does not infer this from partners or relationship history.",
+    "file": "identity-sexuality.svg"
+  },
+  {
+    "id": "identity-romantic",
+    "label": "Romantic orientation",
+    "group": "Person",
+    "meaning": "A recorded romantic orientation label. It may differ from sexual orientation.",
+    "file": "identity-romantic.svg"
+  },
+  {
+    "id": "identity-relationship-orientation",
+    "label": "Relationship orientation",
+    "group": "Person",
+    "meaning": "A recorded relationship style such as monogamous, polyamorous, ambiamorous or self-described wording.",
+    "file": "identity-relationship-orientation.svg"
+  },
+  {
+    "id": "engagement",
+    "label": "Engagement",
+    "group": "Relationships",
+    "meaning": "Recorded engagement event.",
+    "eventType": "Engagement",
+    "aliases": [],
+    "file": "engagement.svg"
+  },
+  {
+    "id": "marriage",
+    "label": "Marriage",
+    "group": "Relationships",
+    "meaning": "Recorded marriage event.",
+    "eventType": "Marriage",
+    "aliases": [],
+    "file": "marriage.svg"
+  },
+  {
+    "id": "marriage-banns",
+    "label": "Marriage Banns",
+    "group": "Relationships",
+    "meaning": "Recorded marriage banns event.",
+    "eventType": "Marriage Banns",
+    "aliases": [],
+    "file": "marriage-banns.svg"
+  },
+  {
+    "id": "marriage-license",
+    "label": "Marriage License",
+    "group": "Relationships",
+    "meaning": "Recorded marriage license event.",
+    "eventType": "Marriage License",
+    "aliases": [],
+    "file": "marriage-license.svg"
+  },
+  {
+    "id": "partnership",
+    "label": "Partnership",
+    "group": "Relationships",
+    "meaning": "Recorded partnership event.",
+    "eventType": "Partnership",
+    "aliases": [],
+    "file": "partnership.svg"
+  },
+  {
+    "id": "civil-union",
+    "label": "Civil Union",
+    "group": "Relationships",
+    "meaning": "Recorded civil union event.",
+    "eventType": "Civil Union",
+    "aliases": [],
+    "file": "civil-union.svg"
+  },
+  {
+    "id": "separation",
+    "label": "Separation",
+    "group": "Relationships",
+    "meaning": "Recorded separation; not an assertion of divorce or conflict.",
+    "eventType": "Separation",
+    "aliases": [],
+    "file": "separation.svg"
+  },
+  {
+    "id": "divorce-filing",
+    "label": "Divorce Filing",
+    "group": "Relationships",
+    "meaning": "Recorded divorce filing; not the same thing as a completed divorce.",
+    "eventType": "Divorce Filing",
+    "aliases": [],
+    "file": "divorce-filing.svg"
+  },
+  {
+    "id": "divorce",
+    "label": "Divorce",
+    "group": "Relationships",
+    "meaning": "Recorded divorce event; does not infer a legal outcome from other facts.",
+    "eventType": "Divorce",
+    "aliases": [],
+    "file": "divorce.svg"
+  },
+  {
+    "id": "annulment",
+    "label": "Annulment",
+    "group": "Relationships",
+    "meaning": "Recorded annulment event, distinct from separation and divorce.",
+    "eventType": "Annulment",
+    "aliases": [],
+    "file": "annulment.svg"
+  },
+  {
+    "id": "adoption",
+    "label": "Adoption",
+    "group": "Relationships",
+    "meaning": "Recorded adoption event.",
+    "eventType": "Adoption",
+    "aliases": [],
+    "file": "adoption.svg"
+  },
+  {
+    "id": "guardianship",
+    "label": "Guardianship",
+    "group": "Relationships",
+    "meaning": "Recorded guardianship event.",
+    "eventType": "Guardianship",
+    "aliases": [],
+    "file": "guardianship.svg"
+  },
+  {
+    "id": "foster-care",
+    "label": "Foster Care",
+    "group": "Relationships",
+    "meaning": "Recorded foster care event.",
+    "eventType": "Foster Care",
+    "aliases": [],
+    "file": "foster-care.svg"
+  },
+  {
+    "id": "child-custody",
+    "label": "Child Custody",
+    "group": "Relationships",
+    "meaning": "Recorded child custody event.",
+    "eventType": "Child Custody",
+    "aliases": [],
+    "file": "child-custody.svg"
+  },
+  {
+    "id": "custody-removal",
+    "label": "Custody Removal",
+    "group": "Relationships",
+    "meaning": "A recorded decision taking some or all custody away from a parent or carer. It does not by itself mean adoption, permanent loss of parental rights, or criminal guilt.",
+    "eventType": "Custody Removal",
+    "aliases": [],
+    "file": "custody-removal.svg"
+  },
+  {
+    "id": "custody-change",
+    "label": "Custody Change",
+    "group": "Relationships",
+    "meaning": "A change in who has custody, where a child lives, or who can make decisions for them. The record should say what changed.",
+    "eventType": "Custody Change",
+    "aliases": [],
+    "file": "custody-change.svg"
+  },
+  {
+    "id": "custody-restoration",
+    "label": "Custody Restoration",
+    "group": "Relationships",
+    "meaning": "Returning some or all custody to someone who previously held it. The decision states which responsibilities or rights return.",
+    "eventType": "Custody Restoration",
+    "aliases": [],
+    "file": "custody-restoration.svg"
+  },
+  {
+    "id": "foster-placement",
+    "label": "Foster Placement",
+    "group": "Relationships",
+    "meaning": "When a child starts living with a particular foster carer or foster family. It records that placement, not an adoption.",
+    "eventType": "Foster Placement",
+    "aliases": [],
+    "file": "foster-placement.svg"
+  },
+  {
+    "id": "foster-placement-end",
+    "label": "Foster Placement End",
+    "group": "Relationships",
+    "meaning": "When a particular foster placement stopped. The child may move to another placement, return home, or enter another arrangement; the label does not say which.",
+    "eventType": "Foster Placement End",
+    "aliases": [],
+    "file": "foster-placement-end.svg"
+  },
+  {
+    "id": "relationship-parent",
+    "label": "Parent",
+    "group": "Relationships",
+    "meaning": "A recorded parent relationship. Parentage details describe biological, adoptive, foster, step or other recorded roles when supplied.",
+    "file": "relationship-parent.svg"
+  },
+  {
+    "id": "relationship-child",
+    "label": "Child",
+    "group": "Relationships",
+    "meaning": "A recorded child relationship. This does not infer parentage type unless the relationship records it.",
+    "file": "relationship-child.svg"
+  },
+  {
+    "id": "relationship-sibling",
+    "label": "Sibling",
+    "group": "Relationships",
+    "meaning": "A recorded sibling relationship. It may be biological, half, step, adoptive or user-defined according to the recorded details.",
+    "file": "relationship-sibling.svg"
+  },
+  {
+    "id": "relationship-spouse",
+    "label": "Spouse",
+    "group": "Relationships",
+    "meaning": "A recorded spouse relationship.",
+    "file": "relationship-spouse.svg"
+  },
+  {
+    "id": "relationship-partner",
+    "label": "Partner",
+    "group": "Relationships",
+    "meaning": "A recorded partner relationship that is not necessarily a marriage.",
+    "file": "relationship-partner.svg"
+  },
+  {
+    "id": "relationship-guardian",
+    "label": "Guardian",
+    "group": "Relationships",
+    "meaning": "A recorded guardian relationship.",
+    "file": "relationship-guardian.svg"
+  },
+  {
+    "id": "relationship-ward",
+    "label": "Ward",
+    "group": "Relationships",
+    "meaning": "A recorded ward relationship connected to a guardian.",
+    "file": "relationship-ward.svg"
+  },
+  {
+    "id": "relationship-immediate-family",
+    "label": "Immediate family",
+    "group": "Relationships",
+    "meaning": "A close family relationship such as a parent, child, sibling, spouse or partner.",
+    "file": "relationship-immediate-family.svg"
+  },
+  {
+    "id": "relationship-extended-family",
+    "label": "Extended family",
+    "group": "Relationships",
+    "meaning": "A wider family relationship outside the immediate household or nuclear family.",
+    "file": "relationship-extended-family.svg"
+  },
+  {
+    "id": "relationship-cousin",
+    "label": "Cousin",
+    "group": "Relationships",
+    "meaning": "A cousin relationship. Cousin degree and removal are explained in kinship reports from the recorded path.",
+    "file": "relationship-cousin.svg"
+  },
+  {
+    "id": "relationship-in-law",
+    "label": "In-law",
+    "group": "Relationships",
+    "meaning": "A relationship connected through marriage, partnership, civil union or another recorded family bond.",
+    "file": "relationship-in-law.svg"
+  },
+  {
+    "id": "relationship-cousin-in-law",
+    "label": "Cousin-in-law",
+    "group": "Relationships",
+    "meaning": "A cousin relationship connected through a spouse, partner or in-law line rather than a direct bloodline.",
+    "file": "relationship-cousin-in-law.svg"
+  },
+  {
+    "id": "relationship-biological",
+    "label": "Biological parentage",
+    "group": "Relationships",
+    "meaning": "The parent-child link is recorded as biological. KinForge does not infer this from names, photos or gender.",
+    "file": "relationship-biological.svg"
+  },
+  {
+    "id": "relationship-adopted",
+    "label": "Adopted or adoptive parentage",
+    "group": "Relationships",
+    "meaning": "The parent-child link is recorded as adoptive or adopted.",
+    "file": "relationship-adopted.svg"
+  },
+  {
+    "id": "relationship-foster",
+    "label": "Foster parentage",
+    "group": "Relationships",
+    "meaning": "The parent-child link is recorded as foster care or foster parentage.",
+    "file": "relationship-foster.svg"
+  },
+  {
+    "id": "relationship-step",
+    "label": "Step parentage",
+    "group": "Relationships",
+    "meaning": "The parent-child link is recorded as step parentage.",
+    "file": "relationship-step.svg"
+  },
+  {
+    "id": "single-parent",
+    "label": "Single parent",
+    "group": "Relationships",
+    "meaning": "This person is recorded as the only linked parent for at least one child in this tree.",
+    "file": "single-parent.svg"
+  },
+  {
+    "id": "single-mom",
+    "label": "Single mom",
+    "group": "Relationships",
+    "meaning": "This person is recorded as the only linked parent for at least one child and has gender recorded as female.",
+    "file": "single-mom.svg"
+  },
+  {
+    "id": "single-dad",
+    "label": "Single dad",
+    "group": "Relationships",
+    "meaning": "This person is recorded as the only linked parent for at least one child and has gender recorded as male.",
+    "file": "single-dad.svg"
+  },
+  {
+    "id": "birth",
+    "label": "Birth",
+    "group": "Life events",
+    "meaning": "Recorded birth event.",
+    "eventType": "Birth",
+    "aliases": [],
+    "file": "birth.svg"
+  },
+  {
+    "id": "naming",
+    "label": "Naming",
+    "group": "Life events",
+    "meaning": "Recorded naming event.",
+    "eventType": "Naming",
+    "aliases": [],
+    "file": "naming.svg"
+  },
+  {
+    "id": "baptism",
+    "label": "Baptism",
+    "group": "Life events",
+    "meaning": "Recorded baptism event.",
+    "eventType": "Baptism",
+    "aliases": [],
+    "file": "baptism.svg"
+  },
+  {
+    "id": "christening",
+    "label": "Christening",
+    "group": "Life events",
+    "meaning": "Recorded christening event.",
+    "eventType": "Christening",
+    "aliases": [],
+    "file": "christening.svg"
+  },
+  {
+    "id": "blessing",
+    "label": "Blessing",
+    "group": "Life events",
+    "meaning": "Recorded blessing event.",
+    "eventType": "Blessing",
+    "aliases": [],
+    "file": "blessing.svg"
+  },
+  {
+    "id": "residence",
+    "label": "Residence",
+    "group": "Life events",
+    "meaning": "Recorded residence event.",
+    "eventType": "Residence",
+    "aliases": [],
+    "file": "residence.svg"
+  },
+  {
+    "id": "address-change",
+    "label": "Address Change",
+    "group": "Life events",
+    "meaning": "Recorded address change event.",
+    "eventType": "Address Change",
+    "aliases": [],
+    "file": "address-change.svg"
+  },
+  {
+    "id": "education",
+    "label": "Education",
+    "group": "Life events",
+    "meaning": "Recorded education event.",
+    "eventType": "Education",
+    "aliases": [],
+    "file": "education.svg"
+  },
+  {
+    "id": "graduation",
+    "label": "Graduation",
+    "group": "Life events",
+    "meaning": "Recorded graduation event.",
+    "eventType": "Graduation",
+    "aliases": [],
+    "file": "graduation.svg"
+  },
+  {
+    "id": "occupation",
+    "label": "Occupation",
+    "group": "Life events",
+    "meaning": "Recorded occupation event.",
+    "eventType": "Occupation",
+    "aliases": [],
+    "file": "occupation.svg"
+  },
+  {
+    "id": "employment-start",
+    "label": "Employment Start",
+    "group": "Life events",
+    "meaning": "Recorded employment start event.",
+    "eventType": "Employment Start",
+    "aliases": [],
+    "file": "employment-start.svg"
+  },
+  {
+    "id": "employment-end",
+    "label": "Employment End",
+    "group": "Life events",
+    "meaning": "Recorded employment end event.",
+    "eventType": "Employment End",
+    "aliases": [],
+    "file": "employment-end.svg"
+  },
+  {
+    "id": "retirement",
+    "label": "Retirement",
+    "group": "Life events",
+    "meaning": "Recorded retirement event.",
+    "eventType": "Retirement",
+    "aliases": [],
+    "file": "retirement.svg"
+  },
+  {
+    "id": "immigration",
+    "label": "Immigration",
+    "group": "Life events",
+    "meaning": "Recorded immigration event.",
+    "eventType": "Immigration",
+    "aliases": [],
+    "file": "immigration.svg"
+  },
+  {
+    "id": "emigration",
+    "label": "Emigration",
+    "group": "Life events",
+    "meaning": "Recorded emigration event.",
+    "eventType": "Emigration",
+    "aliases": [],
+    "file": "emigration.svg"
+  },
+  {
+    "id": "naturalisation",
+    "label": "Naturalisation",
+    "group": "Life events",
+    "meaning": "Recorded naturalisation or naturalization event.",
+    "eventType": "Naturalisation",
+    "aliases": [
+      "Naturalization"
+    ],
+    "file": "naturalisation.svg"
+  },
+  {
+    "id": "citizenship",
+    "label": "Citizenship",
+    "group": "Life events",
+    "meaning": "Recorded citizenship event.",
+    "eventType": "Citizenship",
+    "aliases": [],
+    "file": "citizenship.svg"
+  },
+  {
+    "id": "travel",
+    "label": "Travel",
+    "group": "Life events",
+    "meaning": "Recorded travel event.",
+    "eventType": "Travel",
+    "aliases": [],
+    "file": "travel.svg"
+  },
+  {
+    "id": "military-service",
+    "label": "Military Service",
+    "group": "Life events",
+    "meaning": "Recorded military service event.",
+    "eventType": "Military Service",
+    "aliases": [],
+    "file": "military-service.svg"
+  },
+  {
+    "id": "military-enlistment",
+    "label": "Military Enlistment",
+    "group": "Life events",
+    "meaning": "Recorded military enlistment event.",
+    "eventType": "Military Enlistment",
+    "aliases": [],
+    "file": "military-enlistment.svg"
+  },
+  {
+    "id": "military-discharge",
+    "label": "Military Discharge",
+    "group": "Life events",
+    "meaning": "Recorded military discharge event.",
+    "eventType": "Military Discharge",
+    "aliases": [],
+    "file": "military-discharge.svg"
+  },
+  {
+    "id": "protective-services",
+    "label": "Protective Services",
+    "group": "Life events",
+    "meaning": "Recorded protective services event.",
+    "eventType": "Protective Services",
+    "aliases": [],
+    "file": "protective-services.svg"
+  },
+  {
+    "id": "government-protection-status",
+    "label": "Government Protection Status",
+    "group": "Life events",
+    "meaning": "The recorded protection or supervision arrangement, if any. The label alone does not say that an allegation was proved.",
+    "eventType": "Government Protection Status",
+    "aliases": [],
+    "file": "government-protection-status.svg"
+  },
+  {
+    "id": "agency-involvement",
+    "label": "Agency Involvement",
+    "group": "Life events",
+    "meaning": "When an organisation becomes involved in providing support, assessment, or oversight. The record should say which agency and what role it had.",
+    "eventType": "Agency Involvement",
+    "aliases": [],
+    "file": "agency-involvement.svg"
+  },
+  {
+    "id": "social-worker-assignment",
+    "label": "Social Worker Assignment",
+    "group": "Life events",
+    "meaning": "When a named social worker was given responsibility for helping with or managing a person's case. Assignment alone does not say why help was needed.",
+    "eventType": "Social Worker Assignment",
+    "aliases": [],
+    "file": "social-worker-assignment.svg"
+  },
+  {
+    "id": "care-arrangement",
+    "label": "Care Arrangement",
+    "group": "Life events",
+    "meaning": "Who is providing a person's care, where that care happens, and any recorded conditions. A care arrangement alone does not establish legal custody.",
+    "eventType": "Care Arrangement",
+    "aliases": [],
+    "file": "care-arrangement.svg"
+  },
+  {
+    "id": "care-team-change",
+    "label": "Care Team Change",
+    "group": "Life events",
+    "meaning": "A change to the people or services involved in someone's care, such as a new doctor, social worker, or care provider.",
+    "eventType": "Care Team Change",
+    "aliases": [],
+    "file": "care-team-change.svg"
+  },
+  {
+    "id": "government-facility-placement",
+    "label": "Government Facility Placement",
+    "group": "Life events",
+    "meaning": "When a person began a stay at a government facility. Admission alone does not establish detention, criminal guilt, or a diagnosis.",
+    "eventType": "Government Facility Placement",
+    "aliases": [],
+    "file": "government-facility-placement.svg"
+  },
+  {
+    "id": "government-facility-release",
+    "label": "Government Facility Release",
+    "group": "Life events",
+    "meaning": "When a person's stay at a government facility ended. The reason and next living arrangement need to be recorded separately.",
+    "eventType": "Government Facility Release",
+    "aliases": [],
+    "file": "government-facility-release.svg"
+  },
+  {
+    "id": "personal-protection-order",
+    "label": "Personal Protection Order",
+    "group": "Life events",
+    "meaning": "A protection order for a person. In Singapore family proceedings, a PPO concerns protection from family violence; the meaning elsewhere can differ.",
+    "eventType": "Personal Protection Order",
+    "aliases": [],
+    "file": "personal-protection-order.svg"
+  },
+  {
+    "id": "restraining-order",
+    "label": "Restraining Order",
+    "group": "Life events",
+    "meaning": "A court order telling someone to stop specified actions, often contact, harassment, or approaching a person. The order itself states what is restricted; it is not by itself a criminal conviction.",
+    "eventType": "Restraining Order",
+    "aliases": [],
+    "file": "restraining-order.svg"
+  },
+  {
+    "id": "protection-order-change",
+    "label": "Protection Order Change",
+    "group": "Life events",
+    "meaning": "A recorded change to a protection order's conditions, scope, or duration. The updated order states what changed.",
+    "eventType": "Protection Order Change",
+    "aliases": [],
+    "file": "protection-order-change.svg"
+  },
+  {
+    "id": "protection-order-end",
+    "label": "Protection Order End",
+    "group": "Life events",
+    "meaning": "When a particular protection order expired or was ended by the relevant authority. This alone does not establish that all other orders ended.",
+    "eventType": "Protection Order End",
+    "aliases": [],
+    "file": "protection-order-end.svg"
+  },
+  {
+    "id": "arrest",
+    "label": "Arrest",
+    "group": "Life events",
+    "meaning": "When an authority takes a person into custody under legal powers. Arrest alone does not establish guilt.",
+    "eventType": "Arrest",
+    "aliases": [],
+    "file": "arrest.svg"
+  },
+  {
+    "id": "house-arrest",
+    "label": "House Arrest",
+    "group": "Life events",
+    "meaning": "A legal restriction requiring a person to stay at a specified home, with any exceptions set by the order. It does not by itself identify a conviction.",
+    "eventType": "House Arrest",
+    "aliases": [],
+    "file": "house-arrest.svg"
+  },
+  {
+    "id": "inpatient-care",
+    "label": "Inpatient Care",
+    "group": "Life events",
+    "meaning": "Care provided during an admitted stay at a hospital or other treatment facility.",
+    "eventType": "Inpatient Care",
+    "aliases": [],
+    "file": "inpatient-care.svg"
+  },
+  {
+    "id": "daycare-arrangement",
+    "label": "Daycare Arrangement",
+    "group": "Life events",
+    "meaning": "A recorded arrangement for care during the day, such as a childcare centre or adult day service.",
+    "eventType": "Daycare Arrangement",
+    "aliases": [],
+    "file": "daycare-arrangement.svg"
+  },
+  {
+    "id": "criminal-record",
+    "label": "Criminal Record",
+    "group": "Life events",
+    "meaning": "A recorded case or document; not a presumption of guilt.",
+    "eventType": "Criminal Record",
+    "aliases": [],
+    "file": "criminal-record.svg"
+  },
+  {
+    "id": "court-record",
+    "label": "Court Record",
+    "group": "Life events",
+    "meaning": "Recorded court record event.",
+    "eventType": "Court Record",
+    "aliases": [],
+    "file": "court-record.svg"
+  },
+  {
+    "id": "government-record",
+    "label": "Government Record",
+    "group": "Life events",
+    "meaning": "Recorded government record event.",
+    "eventType": "Government Record",
+    "aliases": [],
+    "file": "government-record.svg"
+  },
+  {
+    "id": "census",
+    "label": "Census",
+    "group": "Life events",
+    "meaning": "Recorded census event.",
+    "eventType": "Census",
+    "aliases": [],
+    "file": "census.svg"
+  },
+  {
+    "id": "property",
+    "label": "Property",
+    "group": "Life events",
+    "meaning": "Recorded property event.",
+    "eventType": "Property",
+    "aliases": [],
+    "file": "property.svg"
+  },
+  {
+    "id": "land-record",
+    "label": "Land Record",
+    "group": "Life events",
+    "meaning": "Recorded land record event.",
+    "eventType": "Land Record",
+    "aliases": [],
+    "file": "land-record.svg"
+  },
+  {
+    "id": "tax-record",
+    "label": "Tax Record",
+    "group": "Life events",
+    "meaning": "Recorded tax record event.",
+    "eventType": "Tax Record",
+    "aliases": [],
+    "file": "tax-record.svg"
+  },
+  {
+    "id": "medical-event",
+    "label": "Medical Event",
+    "group": "Life events",
+    "meaning": "A recorded health-related event; this is not medical advice and does not infer diagnosis.",
+    "eventType": "Medical Event",
+    "aliases": [],
+    "file": "medical-event.svg"
+  },
+  {
+    "id": "hospitalization",
+    "label": "Hospitalization",
+    "group": "Life events",
+    "meaning": "A recorded hospital event; details depend on the user's source wording.",
+    "eventType": "Hospitalization",
+    "aliases": [],
+    "file": "hospitalization.svg"
+  },
+  {
+    "id": "dna-test",
+    "label": "DNA Test",
+    "group": "Life events",
+    "meaning": "Recorded dna test event.",
+    "eventType": "DNA Test",
+    "aliases": [],
+    "file": "dna-test.svg"
+  },
+  {
+    "id": "award",
+    "label": "Award",
+    "group": "Life events",
+    "meaning": "Recorded award event.",
+    "eventType": "Award",
+    "aliases": [],
+    "file": "award.svg"
+  },
+  {
+    "id": "religious-event",
+    "label": "Religious Event",
+    "group": "Life events",
+    "meaning": "Recorded religious event event.",
+    "eventType": "Religious Event",
+    "aliases": [],
+    "file": "religious-event.svg"
+  },
+  {
+    "id": "community-event",
+    "label": "Community Event",
+    "group": "Life events",
+    "meaning": "Recorded community event event.",
+    "eventType": "Community Event",
+    "aliases": [],
+    "file": "community-event.svg"
+  },
+  {
+    "id": "membership",
+    "label": "Membership",
+    "group": "Life events",
+    "meaning": "Recorded membership event.",
+    "eventType": "Membership",
+    "aliases": [],
+    "file": "membership.svg"
+  },
+  {
+    "id": "will",
+    "label": "Will",
+    "group": "Life events",
+    "meaning": "Recorded will event.",
+    "eventType": "Will",
+    "aliases": [],
+    "file": "will.svg"
+  },
+  {
+    "id": "probate",
+    "label": "Probate",
+    "group": "Life events",
+    "meaning": "Recorded probate event.",
+    "eventType": "Probate",
+    "aliases": [],
+    "file": "probate.svg"
+  },
+  {
+    "id": "burial",
+    "label": "Burial",
+    "group": "Life events",
+    "meaning": "Recorded burial event.",
+    "eventType": "Burial",
+    "aliases": [],
+    "file": "burial.svg"
+  },
+  {
+    "id": "cremation",
+    "label": "Cremation",
+    "group": "Life events",
+    "meaning": "Recorded cremation event.",
+    "eventType": "Cremation",
+    "aliases": [],
+    "file": "cremation.svg"
+  },
+  {
+    "id": "memorial",
+    "label": "Memorial",
+    "group": "Life events",
+    "meaning": "Recorded memorial event.",
+    "eventType": "Memorial",
+    "aliases": [],
+    "file": "memorial.svg"
+  },
+  {
+    "id": "death",
+    "label": "Death",
+    "group": "Life events",
+    "meaning": "Recorded death event.",
+    "eventType": "Death",
+    "aliases": [],
+    "file": "death.svg"
+  },
+  {
+    "id": "other-event",
+    "label": "Other event",
+    "group": "Life events",
+    "meaning": "A custom or unrecognized event; its recorded label is retained.",
+    "file": "other-event.svg"
+  },
+  {
+    "id": "disability",
+    "label": "Disability details",
+    "meaning": "An explicitly recorded disability description, in the person's preferred terms. No diagnosis is inferred.",
+    "aliases": [],
+    "group": "Disabilities",
+    "file": "disability.svg"
+  },
+  {
+    "id": "neurological-impairment",
+    "label": "Neurological impairment",
+    "meaning": "A recorded neurological impairment; the label does not identify a specific cause or condition.",
+    "aliases": [
+      "neurological disability",
+      "neurologic impairment"
+    ],
+    "group": "Disabilities",
+    "file": "neurological-impairment.svg"
+  },
+  {
+    "id": "cerebral-palsy",
+    "label": "Cerebral palsy (CP)",
+    "meaning": "An explicitly recorded cerebral palsy entry. This glyph does not specify movement, communication or cognitive abilities.",
+    "aliases": [
+      "CP",
+      "C.P."
+    ],
+    "group": "Disabilities",
+    "file": "cerebral-palsy.svg"
+  },
+  {
+    "id": "blindness",
+    "label": "Blindness",
+    "meaning": "A recorded blindness entry. Preferred terminology and any additional details remain with the person's record.",
+    "aliases": [
+      "blind"
+    ],
+    "group": "Disabilities",
+    "file": "blindness.svg"
+  },
+  {
+    "id": "low-vision",
+    "label": "Low vision",
+    "meaning": "A recorded low-vision entry, distinct from blindness and from a request for large print.",
+    "aliases": [
+      "partially sighted",
+      "visual impairment"
+    ],
+    "group": "Disabilities",
+    "file": "low-vision.svg"
+  },
+  {
+    "id": "deafness",
+    "label": "Deafness",
+    "meaning": "A recorded deafness entry. The person's preferred identity, terminology and communication preferences can be recorded separately.",
+    "aliases": [
+      "deaf"
+    ],
+    "group": "Disabilities",
+    "file": "deafness.svg"
+  },
+  {
+    "id": "hard-of-hearing",
+    "label": "Hard of hearing",
+    "meaning": "A recorded hard-of-hearing entry, distinct from deafness and from an access request.",
+    "aliases": [
+      "hearing loss",
+      "hearing impairment"
+    ],
+    "group": "Disabilities",
+    "file": "hard-of-hearing.svg"
+  },
+  {
+    "id": "deafblindness",
+    "label": "Deafblindness",
+    "meaning": "An explicitly recorded deafblindness entry; no degree of sight or hearing is assumed.",
+    "aliases": [
+      "deafblind",
+      "deaf-blind",
+      "dual sensory impairment"
+    ],
+    "group": "Disabilities",
+    "file": "deafblindness.svg"
+  },
+  {
+    "id": "paralysis",
+    "label": "Paralysis",
+    "meaning": "A recorded paralysis entry. Affected areas, degree, cause and permanence are not inferred.",
+    "aliases": [
+      "paralyzed",
+      "paralysed"
+    ],
+    "group": "Disabilities",
+    "file": "paralysis.svg"
+  },
+  {
+    "id": "limb-loss",
+    "label": "Limb loss or amputation",
+    "meaning": "A recorded limb-loss or amputation entry; no cause, affected limb or prosthesis use is assumed.",
+    "aliases": [
+      "amputee",
+      "amputation",
+      "limb difference"
+    ],
+    "group": "Disabilities",
+    "file": "limb-loss.svg"
+  },
+  {
+    "id": "upper-limb-loss",
+    "label": "Upper-limb loss",
+    "meaning": "A recorded upper-limb loss. Side, level and any prosthesis details require explicit entry.",
+    "aliases": [
+      "arm amputation",
+      "hand amputation",
+      "upper limb amputee"
+    ],
+    "group": "Disabilities",
+    "file": "upper-limb-loss.svg"
+  },
+  {
+    "id": "lower-limb-loss",
+    "label": "Lower-limb loss",
+    "meaning": "A recorded lower-limb loss. Side, level and any prosthesis details require explicit entry.",
+    "aliases": [
+      "leg amputation",
+      "foot amputation",
+      "lower limb amputee"
+    ],
+    "group": "Disabilities",
+    "file": "lower-limb-loss.svg"
+  },
+  {
+    "id": "speech-impairment",
+    "label": "Speech impairment",
+    "meaning": "A recorded speech impairment; it does not imply a hearing or cognitive impairment.",
+    "aliases": [
+      "speech disability"
+    ],
+    "group": "Disabilities",
+    "file": "speech-impairment.svg"
+  },
+  {
+    "id": "motor-impairment",
+    "label": "Motor impairment",
+    "meaning": "A recorded motor impairment; it does not identify an underlying condition or a particular mobility aid.",
+    "aliases": [
+      "motor disability",
+      "physical impairment"
+    ],
+    "group": "Disabilities",
+    "file": "motor-impairment.svg"
+  },
+  {
+    "id": "intellectual-disability",
+    "label": "Intellectual disability",
+    "meaning": "An explicitly recorded intellectual disability. No inference is made from another diagnosis or support need.",
+    "aliases": [
+      "intellectual impairment"
+    ],
+    "group": "Disabilities",
+    "file": "intellectual-disability.svg"
+  },
+  {
+    "id": "cognitive-impairment",
+    "label": "Cognitive impairment",
+    "meaning": "An explicitly recorded cognitive impairment; no cause or severity is inferred.",
+    "aliases": [
+      "cognitive disability"
+    ],
+    "group": "Disabilities",
+    "file": "cognitive-impairment.svg"
+  },
+  {
+    "id": "dyslexia",
+    "label": "Dyslexia",
+    "meaning": "An explicitly recorded dyslexia entry. Use the person's preferred wording, and turn on dyslexia-friendly symbols when labels, spacing and text-first cues help.",
+    "aliases": [
+      "specific learning disorder reading",
+      "reading disability"
+    ],
+    "group": "Disabilities",
+    "file": "dyslexia.svg"
+  },
+  {
+    "id": "dysgraphia",
+    "label": "Dysgraphia",
+    "meaning": "An explicitly recorded dysgraphia entry. This can mean writing, spelling, motor-writing or written-expression support needs, depending on the person's own record.",
+    "aliases": [
+      "specific learning disorder written expression",
+      "writing disability"
+    ],
+    "group": "Disabilities",
+    "file": "dysgraphia.svg"
+  },
+  {
+    "id": "other-disability",
+    "label": "Other disability",
+    "meaning": "A user-described disability outside the current catalogue. Keep the person's preferred wording.",
+    "aliases": [
+      "custom disability"
+    ],
+    "group": "Disabilities",
+    "file": "other-disability.svg"
+  },
+  {
+    "id": "accessibility",
+    "label": "Accessibility needs",
+    "meaning": "A general access requirement recorded for this person.",
+    "group": "Access needs",
+    "file": "accessibility.svg"
+  },
+  {
+    "id": "mobility",
+    "label": "Mobility support",
+    "meaning": "Recorded support for moving around; not limited to wheelchair use.",
+    "group": "Access needs",
+    "file": "mobility.svg"
+  },
+  {
+    "id": "step-free",
+    "label": "Step-free access",
+    "meaning": "A recorded requirement for a step-free route.",
+    "group": "Access needs",
+    "file": "step-free.svg"
+  },
+  {
+    "id": "seating",
+    "label": "Seating support",
+    "meaning": "Recorded seating or positioning requirements.",
+    "group": "Access needs",
+    "file": "seating.svg"
+  },
+  {
+    "id": "hearing",
+    "label": "Hearing support",
+    "meaning": "A recorded hearing-related access requirement, not a diagnosis.",
+    "group": "Access needs",
+    "file": "hearing.svg"
+  },
+  {
+    "id": "captions",
+    "label": "Captions",
+    "meaning": "Captions or a written transcript requested by the person.",
+    "group": "Access needs",
+    "file": "captions.svg"
+  },
+  {
+    "id": "sign-language",
+    "label": "Sign language",
+    "meaning": "A recorded sign-language preference. Specify the language in the details.",
+    "group": "Access needs",
+    "file": "sign-language.svg"
+  },
+  {
+    "id": "vision",
+    "label": "Vision support",
+    "meaning": "A recorded vision-related access requirement, not a diagnosis.",
+    "group": "Access needs",
+    "file": "vision.svg"
+  },
+  {
+    "id": "large-print",
+    "label": "Large print",
+    "meaning": "A recorded preference for larger text.",
+    "group": "Access needs",
+    "file": "large-print.svg"
+  },
+  {
+    "id": "low-vision-symbols",
+    "label": "Low-vision symbols",
+    "meaning": "Symbols should use larger size, stronger contrast and visible text labels.",
+    "group": "Access needs",
+    "file": "low-vision-symbols.svg"
+  },
+  {
+    "id": "screen-reader",
+    "label": "Screen reader",
+    "meaning": "A recorded preference for screen-reader-compatible material.",
+    "group": "Access needs",
+    "file": "screen-reader.svg"
+  },
+  {
+    "id": "dyslexia-friendly-symbols",
+    "label": "Dyslexia-friendly symbols",
+    "meaning": "Symbols should include plain-language captions, more spacing and less reliance on similar-looking pictograms.",
+    "group": "Access needs",
+    "file": "dyslexia-friendly-symbols.svg"
+  },
+  {
+    "id": "dysgraphia-friendly-input",
+    "label": "Dysgraphia-friendly input",
+    "meaning": "Input should support dictation, larger controls, clear labels and slower form workflows.",
+    "group": "Access needs",
+    "file": "dysgraphia-friendly-input.svg"
+  },
+  {
+    "id": "color-vision-safe-symbols",
+    "label": "Color-vision safe symbols",
+    "meaning": "Symbols and relationship lines should remain understandable without depending on color alone.",
+    "group": "Access needs",
+    "file": "color-vision-safe-symbols.svg"
+  },
+  {
+    "id": "text-first-symbols",
+    "label": "Text-first symbols",
+    "meaning": "Show the written label before or instead of the pictogram when that is easier to read.",
+    "group": "Access needs",
+    "file": "text-first-symbols.svg"
+  },
+  {
+    "id": "communication",
+    "label": "Communication aid",
+    "meaning": "A recorded communication method or aid chosen by the person.",
+    "group": "Access needs",
+    "file": "communication.svg"
+  },
+  {
+    "id": "keyboard-switch",
+    "label": "Keyboard or switch access",
+    "meaning": "A recorded preference for keyboard or switch input.",
+    "group": "Access needs",
+    "file": "keyboard-switch.svg"
+  },
+  {
+    "id": "quiet",
+    "label": "Quiet environment",
+    "meaning": "A recorded preference for a quieter environment.",
+    "group": "Access needs",
+    "file": "quiet.svg"
+  },
+  {
+    "id": "low-light",
+    "label": "Reduced lighting",
+    "meaning": "A recorded lighting preference; it does not identify a condition.",
+    "group": "Access needs",
+    "file": "low-light.svg"
+  },
+  {
+    "id": "cognitive",
+    "label": "Cognitive support",
+    "meaning": "A recorded support preference; it does not label intelligence or diagnose a condition.",
+    "group": "Access needs",
+    "file": "cognitive.svg"
+  },
+  {
+    "id": "routine",
+    "label": "Predictable routines",
+    "meaning": "A recorded preference for structure, preparation or a predictable sequence.",
+    "group": "Access needs",
+    "file": "routine.svg"
+  },
+  {
+    "id": "extra-time",
+    "label": "Extra time",
+    "meaning": "Additional time requested for communication, processing or an activity.",
+    "group": "Access needs",
+    "file": "extra-time.svg"
+  },
+  {
+    "id": "rest",
+    "label": "Rest and energy needs",
+    "meaning": "A recorded preference for pacing or rest breaks.",
+    "group": "Access needs",
+    "file": "rest.svg"
+  },
+  {
+    "id": "personal-assistance",
+    "label": "Personal assistance",
+    "meaning": "A recorded assistance requirement; not an assumption of dependency.",
+    "group": "Access needs",
+    "file": "personal-assistance.svg"
+  },
+  {
+    "id": "health-support",
+    "label": "Health support needs",
+    "meaning": "Support needs explicitly recorded by the user; not medical advice or a diagnosis.",
+    "group": "Access needs",
+    "file": "health-support.svg"
+  },
+  {
+    "id": "language",
+    "label": "Language or interpreter",
+    "meaning": "A language preference or interpreter requirement. This does not imply disability.",
+    "group": "Access needs",
+    "file": "language.svg"
+  },
+  {
+    "id": "other-support",
+    "label": "Other support",
+    "meaning": "A user-described need not represented by another category.",
+    "group": "Access needs",
+    "file": "other-support.svg"
+  },
+  {
+    "id": "private",
+    "label": "Private",
+    "group": "Record status",
+    "meaning": "A privacy flag, not a security or encryption guarantee.",
+    "file": "private.svg"
+  },
+  {
+    "id": "source",
+    "label": "Source attached",
+    "group": "Record status",
+    "meaning": "A linked source, not proof that an assertion is correct.",
+    "file": "source.svg"
+  },
+  {
+    "id": "review",
+    "label": "Needs review",
+    "group": "Record status",
+    "meaning": "An explicit research review state.",
+    "file": "review.svg"
+  }
+]

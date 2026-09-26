@@ -1,0 +1,10 @@
+import { build } from "esbuild";
+import { cp, mkdir, readdir, rm } from "node:fs/promises";
+for (const entry of await readdir("dist")) if (!["client", "server", ".openai"].includes(entry)) await rm(`dist/${entry}`, { recursive: true, force: true });
+await mkdir("dist/server", { recursive: true });
+await build({ entryPoints: ["server/worker.ts"], outfile: "dist/server/index.js", bundle: true, platform: "browser", format: "esm", target: "es2022", minify: true });
+await mkdir("dist/.openai", { recursive: true });
+await cp(".openai/hosting.json", "dist/.openai/hosting.json");
+await cp("drizzle", "dist/.openai/drizzle", { recursive: true });
+await cp("website", "dist/client/website", { recursive: true });
+console.log("Cloud worker, browser app, website and database migrations built.");

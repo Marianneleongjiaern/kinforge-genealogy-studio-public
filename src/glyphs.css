@@ -1,0 +1,52 @@
+.kin-glyph { flex: 0 0 auto; vertical-align: middle; }
+.event-heading, .badge:has(.kin-glyph) { display: inline-flex; align-items: center; gap: 8px; }
+.needs-heading { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin: 0 0 22px; }
+.needs-heading h2 { margin: 0 0 8px !important; }
+.needs-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.needs-privacy { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; color: #5c6570; }
+.needs-list { border-top: 1px solid var(--line); }
+.need-row { display: grid; grid-template-columns: 90px minmax(0, 1fr) auto; gap: 16px; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.need-row > .kin-glyph { color: #3c5960; margin-top: 4px; }
+.need-row h4 { font-size: 14px; margin: 0 0 6px; }
+.needs-group-title, .needs-summary-group > h3 { font-size: 12px; font-weight: 600; color: #5b6770; margin: 22px 0 10px; }
+.needs-record-group { margin-bottom: 26px; }
+.need-row p { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.65; margin: 0; color: #4f6269; }
+.need-row small { display: block; margin-top: 8px; color: #66656e; }
+.needs-summary { display: flex; flex-wrap: wrap; gap: 10px 22px; padding-bottom: 24px; margin-bottom: 25px; border-bottom: 1px solid var(--line); }
+.needs-summary > div { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.needs-summary > div { max-width: 190px; }
+.needs-summary > div > svg:last-child { color: #716375; }
+.glyph-dialog { width: min(760px, calc(100% - 28px)); max-height: calc(100dvh - 40px); overflow-y: auto; }
+.glyph-dialog .tree-search { flex: none; width: 100%; min-height: 40px; }
+.glyph-dialog .dialog-heading { margin-bottom: 18px; }
+.glyph-dialog form { gap: 12px; }
+.glyph-dialog .dialog-footer { position: sticky; bottom: 0; z-index: 2; margin: 0; padding: 12px 0; border-top: 1px solid var(--line); background: #fff; }
+.glyph-picker { border: 0; min-width: 0; margin: 0; padding: 0; }
+.glyph-picker legend { font-size: 12px; color: #596c73; margin-bottom: 10px; }
+.glyph-picker-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: 248px; overflow-y: auto; border: 1px solid var(--line); border-radius: 5px; }
+.glyph-picker-group { display: contents; }
+.glyph-picker-group > h3 { grid-column: 1 / -1; font-size: 11px; color: #606a72; margin: 0; padding: 10px 12px; background: #f5f7f8; border-bottom: 1px solid var(--line); }
+.glyph-dialog .glyph-categories { display: flex; width: 100%; margin: 0; }
+.glyph-dialog .glyph-categories button { flex: 1; min-width: 0; white-space: normal; }
+.glyph-option { display: flex; align-items: center; gap: 10px; padding: 12px; min-height: 50px; border-bottom: 1px solid var(--line); cursor: pointer; font-size: 12px; color: #384e56; }
+.glyph-option span { min-width: 0; overflow-wrap: anywhere; }
+.glyph-option input { margin: 0; accent-color: #286970; flex: 0 0 auto; }
+.glyph-option:hover { background: #f1f5f5; }
+.glyph-option.selected { background: #e6f1f0; color: #204f55; }
+.glyph-option:focus-within { outline: 2px solid #286970; outline-offset: -3px; }
+.selected-glyph { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.selected-glyph > svg:last-child { margin-left: auto; color: #716375; }
+.glyph-legend-list { margin-top: 18px; }
+.glyph-legend-row { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--line); }
+.glyph-legend-row > .kin-glyph { margin-top: 2px; color: #3c5960; }
+.glyph-legend-row strong { font-size: 14px; }
+.glyph-legend-row small { display: block; color: #746777; margin-top: 5px; font-size: 11px; }
+.glyph-legend-row p { margin: 8px 0 0; font-size: 12px; color: #52626a; line-height: 1.6; }
+@media (max-width: 520px) {
+  .glyph-dialog { padding: 18px; }
+  .glyph-picker-grid { grid-template-columns: 1fr; max-height: 230px; }
+  .need-row { gap: 10px; grid-template-columns: 70px minmax(0, 1fr); }
+  .need-row .needs-actions { grid-column: 2; }
+  .needs-heading .needs-actions { gap: 6px; }
+}
+@media print { .person-needs-private, .glyph-dialog { display: none !important; } }

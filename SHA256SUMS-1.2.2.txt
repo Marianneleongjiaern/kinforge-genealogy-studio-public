@@ -1,0 +1,10 @@
+e97bf05d1605d157b3fd726e86c7a2251a988a3364e2aba3db2f2212598638bf  KinForge Genealogy Studio-1.2.2-arm64.dmg
+0f1be27e3124c3ec85cbd383ae659c988cae1e2e57cf9d72327e93fa1d3e0bda  KinForge Genealogy Studio-1.2.2-arm64.pkg
+51e07fb2ec1221c7f00f5b3961e27f6a64c6567e214c11aef93ffbe3ae370ce0  KinForge Genealogy Studio-1.2.2-arm64.zip
+06012a7f96f969fb931690a43d40ba797eee19a342e5658e2db91edd62eb5643  KinForge Genealogy Studio-1.2.2-x64.dmg
+bafdc9653c6fdd83573bc6192aa024be1ee7604e4faa225467882520e603b18a  KinForge Genealogy Studio-1.2.2-x64.pkg
+faa0ff732deccc91f11d414ba4798543b1381eae721c510bb2d98d8c25507f93  KinForge Genealogy Studio-1.2.2-x64.zip
+7cac361d44cfe92958f8bca50bebe26b3048529e75ef2107108f04a06a05941d  KinForge Genealogy Studio-1.2.2-x64-setup.exe
+1ab468e3e974ed5d882bc07048388f6983d20b1d68488b0fd94e44d342b83d7a  KinForge Genealogy Studio-1.2.2-x64-portable.exe
+55572e7a3a4c28eee8ec10a42a11f3fc8607494f51b10131d4c7dcc30d407550  KinForge-webapp-1.2.2.zip
+786ebb9ed87eec607d384bc1783d84255db52e89bafb7d1ea6e01135ed2c9e2f  KinForge-website-1.2.2.zip

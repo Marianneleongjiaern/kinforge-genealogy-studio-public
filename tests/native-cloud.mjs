@@ -1,0 +1,35 @@
+import { _electron as electron, expect, request } from "@playwright/test";
+import { mkdtemp, rm, readFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { transform } from "esbuild";
+const profile = await mkdtemp(join(tmpdir(), "kinforge-cloud-native-"));
+const compiled = (await transform(await readFile("src/domain.ts", "utf8"), { loader: "ts", format: "esm" })).code;
+const state = (await import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`)).createSeedState();
+let app, api;
+try {
+  app = await electron.launch({ args: [".", `--user-data-dir=${profile}`], env: { ...process.env, KINFORGE_TEST_CLOUD_URL: "http://127.0.0.1:8787" } });
+  const page = await app.firstWindow(); await page.waitForFunction(() => !!window.kinforgeNative);
+  await page.evaluate(state => localStorage.setItem("kinforge-genealogy-studio-v1", JSON.stringify(state)), state);
+  const email = `native-${Date.now()}@example.test`, password = "Native-test-password-42";
+  await page.getByRole("button", { name: "Create account", exact: true }).click();
+  await page.getByLabel("Name", { exact: true }).fill("Native Tester"); await page.getByLabel("Email", { exact: true }).fill(email); await page.getByLabel("Password", { exact: true }).fill(password);
+  await page.getByRole("button", { name: "Create account", exact: true }).first().click();
+  await page.getByRole("button", { name: "I have saved it" }).click();
+  await expect(page.getByRole("button", { name: "Cloud sync: Synced", exact: true })).toBeVisible({ timeout: 30000 });
+  await expect(page.locator(".react-flow__node")).toHaveCount(4);
+  api = await request.newContext({ baseURL: "http://127.0.0.1:8787", extraHTTPHeaders: { "X-KinForge-Client": "1" } });
+  expect((await api.post("/api/auth/login", { data: { email, password } })).status()).toBe(200);
+  const libraryId = (await (await api.get("/api/libraries")).json()).libraries[0].id;
+  const document = await (await api.get(`/api/libraries/${libraryId}`)).json(); expect(document.state.people).toHaveLength(4);
+  document.state.people[2].givenName = "Native Cloud June";
+  expect((await api.put(`/api/libraries/${libraryId}`, { data: { revision: document.revision, state: document.state } })).status()).toBe(200);
+  await expect(page.locator(".graph-person-heading").getByText("Native Cloud June Chang")).toBeVisible({ timeout: 15000 });
+  await page.screenshot({ path: "verification/native-cloud-1.2.0.png" });
+  expect((await readFile(join(profile, "cloud-session.enc"))).includes(Buffer.from("kinforge_session="))).toBe(false);
+  await app.close(); app = null;
+  app = await electron.launch({ args: [".", `--user-data-dir=${profile}`], env: { ...process.env, KINFORGE_TEST_CLOUD_URL: "http://127.0.0.1:8787" } });
+  const reopened = await app.firstWindow(); await expect(reopened.getByRole("button", { name: "Cloud sync: Synced", exact: true })).toBeVisible({ timeout: 30000 });
+  await expect(reopened.locator(".graph-person-heading").getByText("Native Cloud June Chang")).toBeVisible();
+  console.log("Native cloud sync PASS: automatic existing-data upload, authenticated account access, remote updates, encrypted session and app restart.");
+} finally { if (app) await app.close(); if (api) await api.dispose(); await rm(profile, { recursive: true, force: true }); }

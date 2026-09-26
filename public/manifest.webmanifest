@@ -1,0 +1,18 @@
+{
+  "name": "KinForge Genealogy Studio",
+  "short_name": "KinForge",
+  "description": "Your private genealogy library, automatically synced across devices.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#f7f4ed",
+  "theme_color": "#263d3b",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

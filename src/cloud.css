@@ -1,0 +1,67 @@
+.cloud-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.drive-dialog { box-sizing: border-box; }
+.drive-provider { padding: 16px 0; border-block-end: 1px solid #dfe5e5; }
+.drive-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.drive-heading h3 { margin: 8px 0; flex: 1; }
+.drive-state { font-size: 13px; color: #745c60; }
+.drive-state.ready { color: #286971; }
+.drive-setup, .drive-review { margin-top: 16px; padding: 12px 0; border-top: 1px solid #dfe5e5; }
+.drive-setup a { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.drive-setup input { width: 100%; min-width: 0; box-sizing: border-box; }
+.drive-file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.drive-file-actions button { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid #dfe5e5; border-radius: 4px; background: #fff; color: #286971; }
+.drive-exports .cloud-member > span { min-width: 0; }
+.drive-message { overflow-wrap: anywhere; }
+.drive-dialog .button-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.cloud-export-notice { position: fixed; left: 20px; bottom: 16px; z-index: 110; max-width: min(500px, calc(100vw - 40px)); display: flex; align-items: center; gap: 12px; background: #eff7f4; color: #254f55; border: 1px solid #aac5c4; padding: 12px; box-sizing: border-box; }
+.cloud-export-notice button { border: 0; background: transparent; color: inherit; }
+.cloud-status { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent; color: #286971; font-size: 12px; padding: 6px; max-width: 220px; text-align: left; }
+.cloud-warning { color: #8c432e; }
+.cloud-loading { min-height: 65vh; display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; padding: 24px; }
+.cloud-notice { position: fixed; bottom: 16px; right: 16px; left: 230px; z-index: 80; background: #fff1e5; color: #64361f; border: 1px solid #d9a883; padding: 12px 16px; display: flex; justify-content: space-between; gap: 16px; box-shadow: 0 3px 18px #0001; }
+.cloud-notice button { background: transparent; border: 0; color: inherit; text-decoration: underline; flex-shrink: 0; }
+.cloud-scrim { position: fixed; inset: 0; z-index: 100; background: #1b293552; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.cloud-dialog { position: relative; background: #fff; width: 560px; max-width: 100%; max-height: 88dvh; overflow: auto; padding: 26px; border-radius: 8px; box-shadow: 0 16px 60px #0003; }
+.cloud-dialog.wide { width: 760px; }
+.cloud-dialog h2 { font-size: 21px; margin: 0 30px 16px 0; }
+.cloud-dialog h3 { font-size: 16px; margin: 24px 0 12px; }
+.cloud-dialog p { line-height: 1.5; }
+.cloud-close { position: absolute; top: 16px; right: 16px; background: transparent; border: 0; padding: 6px; }
+.recovery-code, .invitation-code { display: block; margin: 16px 0; padding: 12px; background: #f0f5f4; overflow-wrap: anywhere; white-space: normal; }
+.invitation-code { display: flex; gap: 10px; }
+.invitation-code code { min-width: 0; }
+.invitation-code button { flex-shrink: 0; background: transparent; border: 0; }
+.cloud-member { display: flex; align-items: center; gap: 12px; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #dde5e6; overflow-wrap: anywhere; }
+.cloud-member small { display: block; color: #63777d; }
+.cloud-member button { flex-shrink: 0; }
+.sync-conflict { border: 1px solid #ccd7d9; padding: 12px; margin: 16px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; min-width: 0; }
+.sync-conflict legend { font-size: 12px; overflow-wrap: anywhere; }
+.sync-conflict label { min-width: 0; }
+.sync-conflict input { margin-right: 8px; }
+.sync-conflict pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 180px; overflow: auto; font-family: inherit; font-size: 13px; }
+.update-dialog .button-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.update-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 18px 0; }
+.update-summary > div { display: grid; gap: 4px; border: 1px solid #dfe5e5; background: #f9fbfa; padding: 12px; min-width: 0; }
+.update-summary strong { font-size: 12px; color: #6d7779; text-transform: uppercase; letter-spacing: .06em; }
+.update-summary span { min-width: 0; overflow-wrap: anywhere; }
+.update-files { display: grid; gap: 10px; }
+.update-file { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 1px solid #dfe5e5; padding: 12px; background: #fff; min-width: 0; }
+.update-file > div { display: grid; gap: 3px; min-width: 0; }
+.update-file span { color: #607074; font-size: 13px; overflow-wrap: anywhere; }
+.update-file .button { flex-shrink: 0; }
+.update-safety { display: flex; gap: 8px; align-items: center; color: #286971; font-size: 13px; }
+.beta-preview-panel { display: grid; gap: 13px; margin: 18px 0; padding: 14px; border: 1px solid #d9e3e4; border-left: 4px solid #9f6f7d; background: #fffafd; }
+.beta-preview-panel h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; color: #745264; }
+.beta-preview-panel p { margin: 0; color: #526970; }
+.beta-preview-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.beta-toggle { border: 1px solid #d9e3e4; background: #fff; padding: 8px 10px; min-height: 36px; }
+.beta-safety-list { margin: 0; padding-left: 20px; color: #526970; font-size: 13px; line-height: 1.45; }
+.cloud-workspace-fields { border: 0; padding: 0; margin: 0; min-width: 0; }
+.cloud-readonly { margin: 8px 0; color: #6c556b; font-size: 13px; }
+.topbar-controls { flex-wrap: wrap; }
+@media (max-width: 650px) {
+  .topbar-controls > .cloud-status { flex-basis: 100%; max-width: none; }
+  .topbar-controls .control { min-width: 140px; }
+  .topbar-controls .button { white-space: nowrap; }
+}
+@media (max-width: 760px) { .cloud-notice { left: 12px; right: 12px; bottom: 12px; } .cloud-dialog { padding: 20px; } .sync-conflict, .update-summary { grid-template-columns: 1fr; } .cloud-toolbar { width: 100%; } .update-file { align-items: stretch; flex-direction: column; } .update-file .button, .beta-preview-controls .button, .beta-toggle { justify-content: center; width: 100%; } }

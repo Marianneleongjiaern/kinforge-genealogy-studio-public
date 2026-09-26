@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790253816156,
+      "tag": "0000_icy_giant_girl",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790298186476,
+      "tag": "0001_silly_wild_child",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790299110354,
+      "tag": "0002_stiff_shard",
+      "breakpoints": true
+    }
+  ]
+}
