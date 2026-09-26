@@ -7,64 +7,64 @@ export const release = {
       "platform": "Apple Silicon",
       "format": "dmg",
       "name": "KinForge Genealogy Studio-1.3.8-Apple-Silicon.dmg",
-      "size": 114221891,
-      "sha256": "dbba62f7b42aeb7ed3142396970f8fb789d6d4b4ffca4ac34347dcb5ecd59286"
+      "size": 115369799,
+      "sha256": "8aa100814e821f01bbcdd1e4f4b058bb8101834926090442a3a51ae9a6e3197c"
     },
     {
       "id": "apple-silicon-pkg",
       "platform": "Apple Silicon",
       "format": "pkg",
       "name": "KinForge Genealogy Studio-1.3.8-Apple-Silicon.pkg",
-      "size": 113295283,
-      "sha256": "16a540f7d4d00200d527d9dc90c5916e7e352369416b007c0218f2028cc41083"
+      "size": 114430168,
+      "sha256": "495292a34ae4515eb05c4f83f458a090a1a611a73b0d06b16b136bb7e7e2bc75"
     },
     {
       "id": "apple-silicon-zip",
       "platform": "Apple Silicon",
       "format": "zip",
       "name": "KinForge Genealogy Studio-1.3.8-Apple-Silicon.zip",
-      "size": 113156484,
-      "sha256": "e4efb34795119bfc3bb38982862af7bb7e0e18d315a5e870097e8150a3c67926"
+      "size": 114303216,
+      "sha256": "20eacfa79ebd818500568701cc80f816c0b97eebf5074c26a9c360c7be99e89b"
     },
     {
       "id": "intel-dmg",
       "platform": "Intel",
       "format": "dmg",
       "name": "KinForge Genealogy Studio-1.3.8-Intel.dmg",
-      "size": 121393231,
-      "sha256": "c1062668660263c5dcaf7f1c2f2713f9839a4689b9710cec277ac4d970505ea1"
+      "size": 119964938,
+      "sha256": "b0938d5685615e6ec71d02e90d63e06951db25216bdacfbd2c097a6b668fb331"
     },
     {
       "id": "intel-pkg",
       "platform": "Intel",
       "format": "pkg",
       "name": "KinForge Genealogy Studio-1.3.8-Intel.pkg",
-      "size": 120573074,
-      "sha256": "cf4d3f788b362406cde6980e2ea145d880e6a32895467a48b393af9b4760047e"
+      "size": 114430751,
+      "sha256": "63286bddfcc4aa52f8a522c58f5cd64ae58ec358bbf24c3772931e7b72996d4e"
     },
     {
       "id": "intel-zip",
       "platform": "Intel",
       "format": "zip",
       "name": "KinForge Genealogy Studio-1.3.8-Intel.zip",
-      "size": 120355983,
-      "sha256": "070c961b9c823941058e9a96384005b8d014d1d7974e1331613dc55535c766e6"
+      "size": 118945715,
+      "sha256": "f9c99a79666c5cd860f1d6acfd682933c116b91946bd61b3cd7f51b9bb1b3ee5"
     },
     {
       "id": "x64-setup-exe",
       "platform": "Windows",
       "format": "setup.exe",
       "name": "KinForge Genealogy Studio-1.3.8-x64-setup.exe",
-      "size": 92333980,
-      "sha256": "e7b20e464072021c85ff1226e1823cadcde0e75c81b2716f5d812daf420984f4"
+      "size": 92376577,
+      "sha256": "015b2c1609257cec1aab2dc448cd2d04f251f98ae65447ae17368de8038c519f"
     },
     {
       "id": "x64-portable-exe",
       "platform": "Windows",
       "format": "portable.exe",
       "name": "KinForge Genealogy Studio-1.3.8-x64-portable.exe",
-      "size": 92071186,
-      "sha256": "17c20a5d857b95c100e908014088fe446966e42e9a4ba470f44ea721df83bbe3"
+      "size": 92113698,
+      "sha256": "c03df6090017a44278fa6c86cd11ca063c176cf8e12e38597aeac9c22fe5714d"
     }
   ]
 } as const;
