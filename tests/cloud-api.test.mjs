@@ -2,7 +2,7 @@ import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { Miniflare } from "miniflare";
-import { transform } from "esbuild";
+import { createDomainFixture } from "./helpers/domain-fixture.mjs";
 let mf, db, owner, other, viewer, fixture, delivered;
 async function call(path, method = "GET", data, cookie = "", extras = {}) {
   const response = await mf.dispatchFetch(`http://localhost${path}`, { method, headers: { "X-KinForge-Client": "1", "Content-Type": "application/json", cookie, ...extras }, ...(data === undefined ? {} : { body: typeof data === "string" ? data : JSON.stringify(data) }) });
@@ -16,8 +16,7 @@ async function account(email) {
   return { ...result, library: libraries.body.libraries[0].id };
 }
 before(async () => {
-  const code = (await transform(await readFile("src/domain.ts", "utf8"), { loader: "ts", format: "esm" })).code;
-  fixture = (await import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`)).createSeedState();
+  fixture = await createDomainFixture();
   delivered = [];
   const outboundService = async request => {
     const url = new URL(request.url);

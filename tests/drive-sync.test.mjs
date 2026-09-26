@@ -2,7 +2,7 @@ import { test, before, after } from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { Miniflare, Response as WorkerResponse } from "miniflare";
-import { transform } from "esbuild";
+import { createDomainFixture } from "./helpers/domain-fixture.mjs";
 import { createHash, randomUUID } from "node:crypto";
 
 let mf, db, owner, other, fixture;
@@ -84,8 +84,7 @@ async function connect(provider) {
   return waitStatus(provider, ["synced"]);
 }
 before(async () => {
-  const code = (await transform(await readFile("src/domain.ts", "utf8"), { loader: "ts", format: "esm" })).code;
-  fixture = (await import(`data:text/javascript;base64,${Buffer.from(code).toString("base64")}`)).createSeedState();
+  fixture = await createDomainFixture();
   const outboundService = async request => {
     const url = new URL(request.url); let result;
     await outboundHook(request);

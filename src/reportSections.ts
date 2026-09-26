@@ -34,6 +34,12 @@ const sections: Record<string, string[]> = {
   "Name Distribution Chart": ["Surname chart", "Surname distribution", "Surname and recorded event places"],
   "Influential People Report": ["Connection ranking"],
 };
+for (const type of ["Medical Files Report", "Diagnosis Files Report", "Prescription Files Report", "Treatment Files Report"]) {
+  sections[type] = ["Diagnosis and medical records", "Linked files", "Summary"];
+}
+for (const type of ["Work Contracts Report", "Company Files Report", "Character Work Files Report"]) {
+  sections[type] = ["Work and company files", "Summary"];
+}
 const diagram = ["Diagram", "Line legend", "Union status marks", "People in diagram", "Recorded connections"];
 for (const type of ["Hourglass Chart", "Relationship Chart", "Genogram", "Sociogram"]) sections[type] = type === "Relationship Chart" ? ["Relationship", ...diagram] : diagram;
 sections["Kinship Report"] = ["Kinship Explanations"];

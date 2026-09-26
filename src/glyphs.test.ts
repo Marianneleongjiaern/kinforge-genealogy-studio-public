@@ -26,7 +26,10 @@ describe("labelled glyph system", () => {
     }
   });
   it("covers every built-in event without guessing the meaning of custom labels", () => {
-    for (const type of EVENT_TYPES) expect(eventGlyph(type).id).not.toBe("other-event");
+    for (const type of EVENT_TYPES) {
+      expect(eventGlyph(type).id, type).not.toBe("other-event");
+      expect(eventGlyph(type).eventType, type).toBe(type);
+    }
     expect(EVENT_GLYPHS.length).toBeGreaterThanOrEqual(40);
     expect(eventGlyph("  DIVORCE ").id).toBe("divorce");
     expect(eventGlyph("Naturalization").id).toBe("naturalisation");

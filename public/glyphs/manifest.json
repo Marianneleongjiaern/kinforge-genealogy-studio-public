@@ -72,6 +72,186 @@
     "file": "engagement.svg"
   },
   {
+    "id": "engagement-ended",
+    "label": "Engagement Ended",
+    "group": "Relationships",
+    "meaning": "An engagement was recorded as ending; this does not imply a divorce.",
+    "eventType": "Engagement Ended",
+    "aliases": [],
+    "file": "engagement-ended.svg"
+  },
+  {
+    "id": "betrothal",
+    "label": "Betrothal",
+    "group": "Relationships",
+    "meaning": "A recorded promise or agreement to marry.",
+    "eventType": "Betrothal",
+    "aliases": [],
+    "file": "betrothal.svg"
+  },
+  {
+    "id": "relationship-started",
+    "label": "Relationship Started",
+    "group": "Relationships",
+    "meaning": "Recorded relationship started event.",
+    "eventType": "Relationship Started",
+    "aliases": [],
+    "file": "relationship-started.svg"
+  },
+  {
+    "id": "dating-started",
+    "label": "Dating Started",
+    "group": "Relationships",
+    "meaning": "Recorded dating started event.",
+    "eventType": "Dating Started",
+    "aliases": [],
+    "file": "dating-started.svg"
+  },
+  {
+    "id": "courtship-started",
+    "label": "Courtship Started",
+    "group": "Relationships",
+    "meaning": "Recorded courtship started event.",
+    "eventType": "Courtship Started",
+    "aliases": [],
+    "file": "courtship-started.svg"
+  },
+  {
+    "id": "relationship-milestone",
+    "label": "Relationship Milestone",
+    "group": "Relationships",
+    "meaning": "Recorded relationship milestone event.",
+    "eventType": "Relationship Milestone",
+    "aliases": [],
+    "file": "relationship-milestone.svg"
+  },
+  {
+    "id": "breakup",
+    "label": "Breakup",
+    "group": "Relationships",
+    "meaning": "A recorded end to a relationship; it does not establish a legal divorce.",
+    "eventType": "Breakup",
+    "aliases": [],
+    "file": "breakup.svg"
+  },
+  {
+    "id": "partner-breakup",
+    "label": "Partner Breakup",
+    "group": "Relationships",
+    "meaning": "A recorded breakup with a partner; the person's notes describe the circumstances.",
+    "eventType": "Partner Breakup",
+    "aliases": [],
+    "file": "partner-breakup.svg"
+  },
+  {
+    "id": "reconciliation",
+    "label": "Reconciliation",
+    "group": "Relationships",
+    "meaning": "A recorded reconciliation; it does not automatically change legal relationship status.",
+    "eventType": "Reconciliation",
+    "aliases": [],
+    "file": "reconciliation.svg"
+  },
+  {
+    "id": "cohabitation-started",
+    "label": "Cohabitation Started",
+    "group": "Relationships",
+    "meaning": "People are recorded as beginning to live together.",
+    "eventType": "Cohabitation Started",
+    "aliases": [],
+    "file": "cohabitation-started.svg"
+  },
+  {
+    "id": "cohabitation-ended",
+    "label": "Cohabitation Ended",
+    "group": "Relationships",
+    "meaning": "People are recorded as no longer living together; this does not by itself mean a breakup.",
+    "eventType": "Cohabitation Ended",
+    "aliases": [],
+    "file": "cohabitation-ended.svg"
+  },
+  {
+    "id": "commitment-ceremony",
+    "label": "Commitment Ceremony",
+    "group": "Relationships",
+    "meaning": "A recorded commitment ceremony; legal marriage status is recorded separately.",
+    "eventType": "Commitment Ceremony",
+    "aliases": [],
+    "file": "commitment-ceremony.svg"
+  },
+  {
+    "id": "civil-partnership",
+    "label": "Civil Partnership",
+    "group": "Relationships",
+    "meaning": "Recorded civil partnership event.",
+    "eventType": "Civil Partnership",
+    "aliases": [],
+    "file": "civil-partnership.svg"
+  },
+  {
+    "id": "domestic-partnership",
+    "label": "Domestic Partnership",
+    "group": "Relationships",
+    "meaning": "Recorded domestic partnership event.",
+    "eventType": "Domestic Partnership",
+    "aliases": [],
+    "file": "domestic-partnership.svg"
+  },
+  {
+    "id": "polycule-joined",
+    "label": "Polycule Joined",
+    "group": "Relationships",
+    "meaning": "A recorded addition to a connected group of relationships; individual connections are recorded separately.",
+    "eventType": "Polycule Joined",
+    "aliases": [],
+    "file": "polycule-joined.svg"
+  },
+  {
+    "id": "polycule-left",
+    "label": "Polycule Left",
+    "group": "Relationships",
+    "meaning": "A person is recorded as leaving a connected relationship group.",
+    "eventType": "Polycule Left",
+    "aliases": [],
+    "file": "polycule-left.svg"
+  },
+  {
+    "id": "metamour-link",
+    "label": "Metamour Link",
+    "group": "Relationships",
+    "meaning": "A recorded connection with a partner's other partner; it does not imply a romantic connection between the two people.",
+    "eventType": "Metamour Link",
+    "aliases": [],
+    "file": "metamour-link.svg"
+  },
+  {
+    "id": "queerplatonic-partnership",
+    "label": "Queerplatonic Partnership",
+    "group": "Relationships",
+    "meaning": "A queerplatonic partnership recorded in the people's own terms.",
+    "eventType": "Queerplatonic Partnership",
+    "aliases": [],
+    "file": "queerplatonic-partnership.svg"
+  },
+  {
+    "id": "relationship-agreement",
+    "label": "Relationship Agreement",
+    "group": "Relationships",
+    "meaning": "Recorded relationship agreement event.",
+    "eventType": "Relationship Agreement",
+    "aliases": [],
+    "file": "relationship-agreement.svg"
+  },
+  {
+    "id": "relationship-status-change",
+    "label": "Relationship Status Change",
+    "group": "Relationships",
+    "meaning": "Recorded relationship status change event.",
+    "eventType": "Relationship Status Change",
+    "aliases": [],
+    "file": "relationship-status-change.svg"
+  },
+  {
     "id": "marriage",
     "label": "Marriage",
     "group": "Relationships",
@@ -126,6 +306,24 @@
     "file": "separation.svg"
   },
   {
+    "id": "trial-separation",
+    "label": "Trial Separation",
+    "group": "Relationships",
+    "meaning": "A recorded trial separation; it does not establish a divorce.",
+    "eventType": "Trial Separation",
+    "aliases": [],
+    "file": "trial-separation.svg"
+  },
+  {
+    "id": "legal-separation",
+    "label": "Legal Separation",
+    "group": "Relationships",
+    "meaning": "A separation recorded as legal; source documents supply the jurisdiction and details.",
+    "eventType": "Legal Separation",
+    "aliases": [],
+    "file": "legal-separation.svg"
+  },
+  {
     "id": "divorce-filing",
     "label": "Divorce Filing",
     "group": "Relationships",
@@ -133,6 +331,15 @@
     "eventType": "Divorce Filing",
     "aliases": [],
     "file": "divorce-filing.svg"
+  },
+  {
+    "id": "divorce-decree",
+    "label": "Divorce Decree",
+    "group": "Relationships",
+    "meaning": "A recorded divorce decree; its date and source belong in the event details.",
+    "eventType": "Divorce Decree",
+    "aliases": [],
+    "file": "divorce-decree.svg"
   },
   {
     "id": "divorce",
@@ -151,6 +358,15 @@
     "eventType": "Annulment",
     "aliases": [],
     "file": "annulment.svg"
+  },
+  {
+    "id": "annulment-filing",
+    "label": "Annulment Filing",
+    "group": "Relationships",
+    "meaning": "A recorded application for annulment; this does not mean the application was granted.",
+    "eventType": "Annulment Filing",
+    "aliases": [],
+    "file": "annulment-filing.svg"
   },
   {
     "id": "adoption",
@@ -473,6 +689,78 @@
     "eventType": "Employment End",
     "aliases": [],
     "file": "employment-end.svg"
+  },
+  {
+    "id": "work-contract-signed",
+    "label": "Work Contract Signed",
+    "group": "Life events",
+    "meaning": "Recorded work contract signed event.",
+    "eventType": "Work Contract Signed",
+    "aliases": [],
+    "file": "work-contract-signed.svg"
+  },
+  {
+    "id": "employment-contract",
+    "label": "Employment Contract",
+    "group": "Life events",
+    "meaning": "Recorded employment contract event.",
+    "eventType": "Employment Contract",
+    "aliases": [],
+    "file": "employment-contract.svg"
+  },
+  {
+    "id": "company-joined",
+    "label": "Company Joined",
+    "group": "Life events",
+    "meaning": "Recorded company joined event.",
+    "eventType": "Company Joined",
+    "aliases": [],
+    "file": "company-joined.svg"
+  },
+  {
+    "id": "company-left",
+    "label": "Company Left",
+    "group": "Life events",
+    "meaning": "Recorded company left event.",
+    "eventType": "Company Left",
+    "aliases": [],
+    "file": "company-left.svg"
+  },
+  {
+    "id": "promotion",
+    "label": "Promotion",
+    "group": "Life events",
+    "meaning": "Recorded promotion event.",
+    "eventType": "Promotion",
+    "aliases": [],
+    "file": "promotion.svg"
+  },
+  {
+    "id": "workplace-accommodation",
+    "label": "Workplace Accommodation",
+    "group": "Life events",
+    "meaning": "Recorded workplace accommodation event.",
+    "eventType": "Workplace Accommodation",
+    "aliases": [],
+    "file": "workplace-accommodation.svg"
+  },
+  {
+    "id": "work-transfer",
+    "label": "Work Transfer",
+    "group": "Life events",
+    "meaning": "Recorded work transfer event.",
+    "eventType": "Work Transfer",
+    "aliases": [],
+    "file": "work-transfer.svg"
+  },
+  {
+    "id": "freelance-contract",
+    "label": "Freelance Contract",
+    "group": "Life events",
+    "meaning": "Recorded freelance contract event.",
+    "eventType": "Freelance Contract",
+    "aliases": [],
+    "file": "freelance-contract.svg"
   },
   {
     "id": "retirement",
@@ -880,6 +1168,141 @@
     "eventType": "Death",
     "aliases": [],
     "file": "death.svg"
+  },
+  {
+    "id": "diagnosis-event",
+    "label": "Diagnosis Event",
+    "group": "Life events",
+    "meaning": "A diagnosis event entered from a person's record; the symbol does not diagnose anyone.",
+    "eventType": "Diagnosis Event",
+    "aliases": [],
+    "file": "diagnosis-event.svg"
+  },
+  {
+    "id": "prescription-issued",
+    "label": "Prescription Issued",
+    "group": "Life events",
+    "meaning": "A recorded prescription document or event; medication instructions remain in the source record.",
+    "eventType": "Prescription Issued",
+    "aliases": [],
+    "file": "prescription-issued.svg"
+  },
+  {
+    "id": "treatment-started",
+    "label": "Treatment Started",
+    "group": "Life events",
+    "meaning": "Recorded treatment started event.",
+    "eventType": "Treatment Started",
+    "aliases": [],
+    "file": "treatment-started.svg"
+  },
+  {
+    "id": "treatment-ended",
+    "label": "Treatment Ended",
+    "group": "Life events",
+    "meaning": "Recorded treatment ended event.",
+    "eventType": "Treatment Ended",
+    "aliases": [],
+    "file": "treatment-ended.svg"
+  },
+  {
+    "id": "therapy-started",
+    "label": "Therapy Started",
+    "group": "Life events",
+    "meaning": "Recorded therapy started event.",
+    "eventType": "Therapy Started",
+    "aliases": [],
+    "file": "therapy-started.svg"
+  },
+  {
+    "id": "therapy-ended",
+    "label": "Therapy Ended",
+    "group": "Life events",
+    "meaning": "Recorded therapy ended event.",
+    "eventType": "Therapy Ended",
+    "aliases": [],
+    "file": "therapy-ended.svg"
+  },
+  {
+    "id": "hospital-admission",
+    "label": "Hospital Admission",
+    "group": "Life events",
+    "meaning": "Recorded hospital admission event.",
+    "eventType": "Hospital Admission",
+    "aliases": [],
+    "file": "hospital-admission.svg"
+  },
+  {
+    "id": "hospital-discharge",
+    "label": "Hospital Discharge",
+    "group": "Life events",
+    "meaning": "Recorded hospital discharge event.",
+    "eventType": "Hospital Discharge",
+    "aliases": [],
+    "file": "hospital-discharge.svg"
+  },
+  {
+    "id": "surgery",
+    "label": "Surgery",
+    "group": "Life events",
+    "meaning": "Recorded surgery event.",
+    "eventType": "Surgery",
+    "aliases": [],
+    "file": "surgery.svg"
+  },
+  {
+    "id": "assessment",
+    "label": "Assessment",
+    "group": "Life events",
+    "meaning": "Recorded assessment event.",
+    "eventType": "Assessment",
+    "aliases": [],
+    "file": "assessment.svg"
+  },
+  {
+    "id": "accessibility-accommodation-started",
+    "label": "Accessibility Accommodation Started",
+    "group": "Life events",
+    "meaning": "Recorded accessibility accommodation started event.",
+    "eventType": "Accessibility Accommodation Started",
+    "aliases": [],
+    "file": "accessibility-accommodation-started.svg"
+  },
+  {
+    "id": "accessibility-aid-received",
+    "label": "Accessibility Aid Received",
+    "group": "Life events",
+    "meaning": "Recorded accessibility aid received event.",
+    "eventType": "Accessibility Aid Received",
+    "aliases": [],
+    "file": "accessibility-aid-received.svg"
+  },
+  {
+    "id": "character-arc",
+    "label": "Character Arc",
+    "group": "Life events",
+    "meaning": "A recorded development in a fictional character's story.",
+    "eventType": "Character Arc",
+    "aliases": [],
+    "file": "character-arc.svg"
+  },
+  {
+    "id": "canon-event",
+    "label": "Canon Event",
+    "group": "Life events",
+    "meaning": "An event marked as part of the character's selected fictional continuity.",
+    "eventType": "Canon Event",
+    "aliases": [],
+    "file": "canon-event.svg"
+  },
+  {
+    "id": "fandom-milestone",
+    "label": "Fandom Milestone",
+    "group": "Life events",
+    "meaning": "A milestone recorded for a fictional setting or fandom project.",
+    "eventType": "Fandom Milestone",
+    "aliases": [],
+    "file": "fandom-milestone.svg"
   },
   {
     "id": "other-event",

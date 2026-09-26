@@ -41,7 +41,7 @@ function makeFixture() {
   const source = (id, mediaIds = []) => ({ id, treeId: "tree", title: id, fields: {}, citation: id, mediaIds });
   const media = (id, file, extra = {}) => ({ id, treeId: "tree", title: id, dataUrl: files[file].marker, tags: [], assignedTo: [], ...extra });
   const protection = (id, entityKind, entityId, extra = {}) => ({ id, treeId: "tree", entityKind, entityId, type: "custody", status: "recorded", notes: id, sourceIds: [], mediaIds: [], ...extra });
-  return { ...state, chartConfig: {}, customFactTerms: [],
+  return { ...state, chartConfig: {}, customFactTerms: [], ideasJournal: [], userFeedback: [],
     books: [{ id: "book", title: "Family archive" }],
     collections: [{ id: "collection", bookId: "book", name: "Research" }],
     trees: [{ id: "tree", bookId: "book", collectionId: "collection", title: "Family tree" }],
