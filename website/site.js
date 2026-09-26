@@ -7,6 +7,13 @@
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
+  const billingControls = document.getElementById("billing-controls");
+  const checkout = document.getElementById("checkout");
+  const portal = document.getElementById("billing-portal");
+  const syncBilling = document.getElementById("sync-billing");
+  const syncRevenue = document.getElementById("sync-revenue");
+  const billingHistory = document.getElementById("billing-history");
+  const revenueReport = document.getElementById("revenue-report");
   if (!auth || !interest || !status || !result) return;
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
@@ -28,6 +35,9 @@
       auth.hidden = true; interest.hidden = false; status.textContent = `Signed in as ${me.user.email}.`;
       const saved = await api("/api/beta/interest", { method: "GET", headers: {} });
       withdraw.hidden = !saved.interest;
+      if (billingControls) billingControls.hidden = false;
+      if (checkout) checkout.hidden = !saved.interest;
+      if (portal) portal.hidden = false;
       if (saved.interest) result.textContent = `Registered interest: ${saved.interest.plan}, ${saved.interest.interval}${saved.interest.discount_code ? `, ${saved.interest.discount_code}` : ""}.`;
     } catch {
       auth.hidden = false; interest.hidden = true; status.textContent = "Create an account or sign in to register interest.";
@@ -54,11 +64,38 @@
       const saved = await api("/api/beta/interest", { method: "POST", body: JSON.stringify(data) });
       result.textContent = `Saved. ${saved.interest.plan} interest is registered${saved.interest.discountCode ? ` with ${saved.interest.discountCode}` : ""}.`;
       withdraw.hidden = false;
+      if (billingControls) billingControls.hidden = false;
+      if (checkout) checkout.hidden = false;
     } catch (error) { result.textContent = error.message; }
   });
   withdraw?.addEventListener("click", async () => {
     try { await api("/api/beta/interest", { method: "DELETE" }); result.textContent = "Beta interest withdrawn."; withdraw.hidden = true; }
     catch (error) { result.textContent = error.message; }
+  });
+  checkout?.addEventListener("click", async () => {
+    const form = new FormData(interest);
+    try {
+      const data = await api("/api/billing/checkout", { method: "POST", body: JSON.stringify(Object.fromEntries(form)) });
+      location.href = data.url;
+    } catch (error) { result.textContent = error.message; }
+  });
+  portal?.addEventListener("click", async () => {
+    try {
+      const data = await api("/api/billing/portal", { method: "POST", body: "{}" });
+      location.href = data.url;
+    } catch (error) { result.textContent = error.message; }
+  });
+  syncBilling?.addEventListener("click", async () => {
+    try {
+      const data = await api("/api/billing/history", { method: "GET", headers: {} });
+      if (billingHistory) billingHistory.textContent = JSON.stringify(data, null, 2);
+    } catch (error) { result.textContent = error.message; }
+  });
+  syncRevenue?.addEventListener("click", async () => {
+    try {
+      const data = await api("/api/admin/revenue", { method: "GET", headers: {} });
+      if (revenueReport) revenueReport.textContent = JSON.stringify(data, null, 2);
+    } catch (error) { result.textContent = error.message; }
   });
   refresh();
 })();
