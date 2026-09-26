@@ -1,0 +1,44 @@
+name: KinForge release verification
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to check, such as v1.3.8 (blank checks the latest release)'
+        required: false
+        type: string
+  release:
+    types: [published]
+  pull_request:
+    paths:
+      - '.github/workflows/release-verification.yml'
+      - 'scripts/verify-github-release.mjs'
+      - 'tests/github-release.test.mjs'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-verification-${{ github.event.release.tag_name || inputs.tag || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify Mac, Windows, and web downloads
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - name: Test the release verifier
+        run: node --test tests/github-release.test.mjs
+      - name: Download and check every release file
+        run: node scripts/verify-github-release.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag || '' }}

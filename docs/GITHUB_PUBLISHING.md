@@ -28,6 +28,14 @@ Create a draft release for the reviewed version tag, attach the installers and w
 
 Native signing and Apple notarization require the owner's signing credentials. The current 1.3.8 Mac release is locally signed, not Apple-notarized.
 
+## Release verification Action
+
+`KinForge release verification` is separate from the normal build-and-test checks. It downloads all nine release files and checks their byte counts, GitHub SHA-256 digests, and `SHA256SUMS.txt` entries. Files are streamed, never executed or installed. The job needs only the repository's read-only automatic GitHub token, not deployment or signing secrets.
+
+It runs when a release is published and when this verifier changes in an internal pull request. After the workflow reaches `main`, choose **Actions > KinForge release verification > Run workflow** to check the latest release, or enter a tag such as `v1.3.8`. A red result identifies missing, unfinished, empty, truncated, or corrupted downloads. Fork pull requests cannot run the private-download job.
+
+This Action does not build new installers, update the live site, change the installed app, certify feature completeness, execute installers, or prove signing/notarization. Those remain separate release checks. Its local regression tests can run without account access using `node --test tests/github-release.test.mjs`.
+
 ## Access and secrets
 
 Repository and release downloads require access to this private repository. The live site's public download page remains available for people without GitHub access. Keep service credentials in the deployment environment or GitHub Actions secrets when a workflow requires them. Never commit runtime databases or private libraries.
