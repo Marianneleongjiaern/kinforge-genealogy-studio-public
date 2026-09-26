@@ -7,6 +7,9 @@ The initial GitHub import preserves the current 1.3.8 application behavior. It a
 - Clean dependency installation completed from the committed lockfile.
 - Requirements preservation passed: 26 documents and 1,433 indexed blocks. This checks source preservation, not feature completion.
 - The full unit suite ran: 637 passed and 10 failed across 37 files.
+- The production webapp, website, and cloud-worker build completed.
+- Release delivery and native-wrapper checks passed: 13 tests.
+- The 36 cloud tests were blocked by a shared fixture-loader error: the existing test setup transforms `src/domain.ts` in isolation, so its new relative `languageCatalog` import cannot resolve from a data URL. This does not establish whether those cloud checks pass or fail once their setup is repaired.
 - All eight existing desktop installers matched their published SHA-256 manifest before upload.
 - A targeted scan found no common GitHub/OpenAI/AWS token patterns, embedded HTTP credentials, or private-key headers in the imported files. This is not a comprehensive security audit.
 - Local databases, libraries, private attachments, browser traces, screenshots, old build directories, and local Git history were excluded.

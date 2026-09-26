@@ -3,7 +3,7 @@
 KinForge is a family-tree, genealogy, and character-record application by Dreams of Serene Landscapes. This repository contains the version 1.3.8 desktop, webapp, website, and ChatGPT Site source.
 
 - [Open the live app and website](https://kinforge-genealogy-studio.marianneleong3.chatgpt.site/)
-- [Download desktop installers](https://github.com/Marianneleongjiaern/kinforge-genealogy-studio/releases)
+- [Download desktop installers](https://github.com/Aesdocktectics/kinforge-genealogy-studio/releases)
 - [Live downloads and in-app update feed](https://kinforge-genealogy-studio.marianneleong3.chatgpt.site/downloads)
 
 ## Project layout

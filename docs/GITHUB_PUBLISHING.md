@@ -1,6 +1,6 @@
 # GitHub publishing
 
-Repository: https://github.com/Marianneleongjiaern/kinforge-genealogy-studio
+Repository: https://github.com/Aesdocktectics/kinforge-genealogy-studio
 
 This private repository keeps the shared application source for Mac, Windows, webapp, website, and the current ChatGPT Site together. Installer binaries belong in Releases rather than Git history. Family libraries, runtime databases, private attachments, session files, and deployment secrets are excluded.
 
