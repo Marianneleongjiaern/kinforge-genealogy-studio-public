@@ -44,6 +44,17 @@ test("sessions use protected cookies and password hashes; anonymous reads fail",
   assert.equal((await call("/api/libraries")).status, 401);
   assert.equal((await call(`/api/libraries/${owner.library}`)).status, 401);
 });
+test("beta interest is account protected and records creator discount codes", async () => {
+  assert.equal((await call("/api/beta/interest")).status, 401);
+  const saved = await call("/api/beta/interest", "POST", { plan: "beta", interval: "year", discountCode: "WRITER10", consent: true }, owner.cookie);
+  assert.equal(saved.status, 201, JSON.stringify(saved.body));
+  assert.deepEqual(saved.body.interest, { plan: "beta", interval: "year", discountCode: "WRITER10" });
+  const listed = await call("/api/beta/interest", "GET", undefined, owner.cookie);
+  assert.equal(listed.body.interest.discount_code, "WRITER10");
+  assert.equal((await call("/api/beta/interest", "POST", { plan: "beta", interval: "month", discountCode: "MADEUP", consent: true }, owner.cookie)).status, 400);
+  assert.equal((await call("/api/beta/interest", "DELETE", undefined, owner.cookie)).status, 200);
+  assert.equal((await call("/api/beta/interest", "GET", undefined, owner.cookie)).body.interest, null);
+});
 test("whole library including reports, collections, subcollections and books survives another session", async () => {
   fixture.books.push({ id: "book_extra", title: "Archive", description: "A second book" });
   fixture.collections.push({ id: "sub", bookId: fixture.books[0].id, parentId: fixture.collections[0].id, name: "Nested collection" });

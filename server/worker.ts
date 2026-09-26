@@ -4,8 +4,9 @@ import { LibraryPrivacyError, libraryAssetHashes, mergeSharedLibraryWrite, sanit
 import { driveOAuth, driveRoutes, syncLibraryDrives } from "./driveSync";
 import { DriveError, type DriveEnv } from "./driveProviders";
 import { releaseRoutes, type ReleaseEnv } from "./releases";
+import { publicWebsiteRoutes } from "./publicWebsite";
 
-type Env = DriveEnv & ReleaseEnv & { ASSETS: Fetcher; EMAIL_CODE_ENDPOINT?: string; EMAIL_CODE_TOKEN?: string; EMAIL_CODE_FROM?: string; SERENE_RELAY_SUPPORT_ENDPOINT?: string; SERENE_RELAY_SUPPORT_TOKEN?: string; SERENE_RELAY_SUPPORT_TO?: string; SERENE_RELAY_SUPPORT_FROM?: string };
+type Env = DriveEnv & ReleaseEnv & { ASSETS: Fetcher; EMAIL_CODE_ENDPOINT?: string; EMAIL_CODE_TOKEN?: string; EMAIL_CODE_FROM?: string; SERENE_RELAY_SUPPORT_ENDPOINT?: string; SERENE_RELAY_SUPPORT_TOKEN?: string; SERENE_RELAY_SUPPORT_TO?: string; SERENE_RELAY_SUPPORT_FROM?: string; KINFORGE_ADMIN_EMAILS?: string };
 type Account = { id: string; email: string; name: string; password: string; recovery_hash: string };
 type Library = { id: string; owner_id: string; name: string; revision: number; object_key: string | null; updated_at: number; role: string };
 type AuthCodePurpose = "reset" | "login";
@@ -276,6 +277,33 @@ async function api(request: Request, env: Env, ctx: ExecutionContext) {
     await env.DB.prepare("DELETE FROM sessions WHERE hash=?").bind(await digest(requestToken(request))).run();
     return json({ ok: true }, 200, { "Set-Cookie": cookie("", request, 0) });
   }
+  if (path === "/api/beta/interest" && method === "GET") {
+    const interest = await env.DB.prepare("SELECT plan,interval,discount_code,created_at,updated_at FROM beta_interests WHERE account_id=?").bind(user.id).first();
+    return json({ interest });
+  }
+  if (path === "/api/beta/interest" && method === "POST") {
+    const data = await body(request);
+    const plan = ["beta", "basic", "plus", "premium", "pro"].includes(data.plan) ? data.plan : "beta";
+    const interval = data.interval === "year" ? "year" : "month";
+    const discount = String(data.discountCode || "").trim().toUpperCase().slice(0, 24);
+    const allowedDiscounts = new Set(["", "WRITER10", "AUTHOR10", "ILLUSTRATOR10", "ROLEPLAYER10", "DND10", "RPG10"]);
+    if (!allowedDiscounts.has(discount)) throw new Problem(400, "Choose a valid creator discount code.");
+    if (!data.consent) throw new Problem(400, "Confirm that this is interest registration only.");
+    await env.DB.prepare("INSERT INTO beta_interests (account_id,plan,interval,discount_code,created_at,updated_at) VALUES (?,?,?,?,?,?) ON CONFLICT(account_id) DO UPDATE SET plan=excluded.plan,interval=excluded.interval,discount_code=excluded.discount_code,updated_at=excluded.updated_at")
+      .bind(user.id, plan, interval, discount || null, Date.now(), Date.now()).run();
+    return json({ ok: true, interest: { plan, interval, discountCode: discount || null } }, 201);
+  }
+  if (path === "/api/beta/interest" && method === "DELETE") {
+    await env.DB.prepare("DELETE FROM beta_interests WHERE account_id=?").bind(user.id).run();
+    return json({ ok: true });
+  }
+  if (path === "/api/admin/revenue" && method === "GET") {
+    const admins = new Set(String(env.KINFORGE_ADMIN_EMAILS || "").split(",").map(email => email.trim().toLowerCase()).filter(Boolean));
+    if (!admins.has(user.email)) throw new Problem(403, "Only KinForge admins can view revenue.");
+    const payments = await env.DB.prepare("SELECT p.id,p.account_id,a.email,p.plan,p.interval,p.currency,p.amount,p.status,p.discount_code,p.created_at FROM beta_payments p JOIN accounts a ON a.id=p.account_id ORDER BY p.created_at DESC LIMIT 500").all();
+    const totals = await env.DB.prepare("SELECT currency,status,SUM(amount) AS amount,COUNT(*) AS count FROM beta_payments GROUP BY currency,status ORDER BY currency,status").all();
+    return json({ payments: payments.results, totals: totals.results });
+  }
   if (path === "/api/libraries" && method === "GET") {
     const result = await env.DB.prepare("SELECT l.id,l.name,l.revision,l.updated_at,m.role,a.email AS owner_email FROM libraries l JOIN library_members m ON m.library_id=l.id JOIN accounts a ON a.id=l.owner_id WHERE m.user_id=? ORDER BY CASE m.role WHEN 'owner' THEN 0 ELSE 1 END,l.name").bind(user.id).all();
     return json({ libraries: result.results });
@@ -371,6 +399,7 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext) {
     const url = new URL(request.url);
     const release = await releaseRoutes(request, env); if (release) return release;
+    const website = publicWebsiteRoutes(request); if (website) return website;
     if (url.pathname.startsWith("/api/")) {
       try { return await api(request, env, ctx); }
       catch (error) { if (error instanceof Problem || error instanceof DriveError) return json({ error: error.message }, error.status); if (error instanceof LibraryPrivacyError) return json({ error: error.message, code: error.code }, 403); console.error("KinForge API failure", error instanceof Error ? error.message : "Unknown error"); return json({ error: "Cloud storage is temporarily unavailable. Your device changes are kept. Please retry." }, 503); }
