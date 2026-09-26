@@ -2,21 +2,11 @@ import jsPDF from "jspdf";
 import { AppState, emptyDeathDetails, fullName, Person } from "./domain";
 import { hasNativeStorage, saveBlobToNative, type NativeStorageCategory } from "./nativeStorage";
 import { captureExportContext, type ExportCapture } from "./exportCapture";
+import { ensurePublicExportAgreement, PUBLIC_EXPORT_NOTICE, publicExportNoticeHtml, withPublicExportAttribution } from "./exportAttribution";
 
 export type DownloadResult =
   | { status: "native-saved"; path?: string }
   | { status: "browser-initiated" };
-
-export const COPYRIGHT_NOTICE = "Copyright 2026 Dreams of Serene Landscapes. All rights reserved.";
-const COPYRIGHT_HTML = `<footer class="kinforge-export-copyright">${COPYRIGHT_NOTICE}</footer>`;
-
-const hasCopyright = (value: string) => value.includes(COPYRIGHT_NOTICE);
-const withTextCopyright = (body: string) => hasCopyright(body) ? body : `${body.replace(/\s+$/g, "")}\n\n${COPYRIGHT_NOTICE}\n`;
-const withHtmlCopyright = (html: string) => {
-  if (hasCopyright(html)) return html;
-  const footer = `\n${COPYRIGHT_HTML}\n`;
-  return /<\/body>/i.test(html) ? html.replace(/<\/body>/i, `${footer}</body>`) : `${html}${footer}`;
-};
 
 const browserDownload = (fileName: string, blob: Blob): DownloadResult => {
   const url = URL.createObjectURL(blob);
@@ -38,9 +28,9 @@ const browserDownload = (fileName: string, blob: Blob): DownloadResult => {
 };
 
 export const downloadBlob = async (fileName: string, content: BlobPart, type = "text/plain;charset=utf-8", category?: NativeStorageCategory, options: { localOnly?: boolean; capture?: ExportCapture | null } = {}): Promise<DownloadResult> => {
-  const shouldMarkHtml = typeof content === "string" && /text\/html/i.test(type);
-  const finalContent = shouldMarkHtml ? withHtmlCopyright(content) : content;
-  const blob = finalContent instanceof Blob ? finalContent : new Blob([finalContent], { type });
+  if (!ensurePublicExportAgreement(fileName)) throw new Error("Agree to the KinForge export and download terms before downloading this file.");
+  const attributed = await withPublicExportAttribution(fileName, content, type);
+  const blob = attributed.content instanceof Blob ? attributed.content : new Blob([attributed.content], { type: attributed.type });
   const capture = options.capture === undefined ? captureExportContext() : options.capture;
   if (!options.localOnly && capture) void capture(fileName, blob, category).catch(() => {
     window.dispatchEvent(new CustomEvent("kinforge-export-status", { detail: "The local download is ready, but this device could not queue its cloud copy. Free device storage and export again." }));
@@ -57,16 +47,15 @@ export const downloadBlob = async (fileName: string, content: BlobPart, type = "
   return browserDownload(fileName, blob);
 };
 
-export const exportText = (fileName: string, body: string) => downloadBlob(fileName, /\.ged$/i.test(fileName) ? body : withTextCopyright(body));
+export const exportText = (fileName: string, body: string) => downloadBlob(fileName, body);
 
 export const exportRtf = (fileName: string, body: string) => {
-  const escaped = withTextCopyright(body).replace(/\\/g, "\\\\").replace(/{/g, "\\{").replace(/}/g, "\\}").replace(/\n/g, "\\par\n");
+  const escaped = body.replace(/\\/g, "\\\\").replace(/{/g, "\\{").replace(/}/g, "\\}").replace(/\n/g, "\\par\n");
   downloadBlob(fileName, `{\\rtf1\\ansi\\deff0\n${escaped}\n}`, "application/rtf");
 };
 
 export const exportCsv = (fileName: string, rows: string[][]) => {
-  const csvRows = [...rows, [], ["Copyright", COPYRIGHT_NOTICE]];
-  const csv = csvRows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const csv = rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
   downloadBlob(fileName, csv, "text/csv;charset=utf-8");
 };
 
@@ -80,17 +69,17 @@ export const exportPdf = (fileName: string, title: string, body: string) => {
   pdf.setFont("times", "normal");
   pdf.setFontSize(10);
   const lines = pdf.splitTextToSize(body, 516);
+  const notice = pdf.splitTextToSize(PUBLIC_EXPORT_NOTICE, 516);
   lines.forEach((line: string) => {
     if (y > 740) {
+      notice.forEach((noticeLine: string, index: number) => pdf.text(noticeLine, 48, 752 + index * 10));
       pdf.addPage();
       y = 48;
     }
     pdf.text(line, 48, y);
     y += 14;
   });
-  pdf.setFont("times", "normal");
-  pdf.setFontSize(8);
-  pdf.text(COPYRIGHT_NOTICE, 48, 764);
+  notice.forEach((noticeLine: string, index: number) => pdf.text(noticeLine, 48, 752 + index * 10));
   void downloadBlob(fileName, pdf.output("blob"), "application/pdf");
 };
 
@@ -120,18 +109,18 @@ export const buildWebsiteExport = (state: AppState, treeId: string) => {
     header{padding:48px 8vw;background:#9f6f7d;color:white}
     main{max-width:960px;margin:auto;padding:32px}
     article{border-bottom:1px solid #e5d6dd;padding:24px 0}
-    .kinforge-export-copyright{max-width:960px;margin:16px auto 40px;padding:0 32px;color:#715967;font-size:13px}
+    .kinforge-public-export-credit{max-width:960px;margin:0 auto;padding:24px 32px;border-top:1px solid #e5d6dd;color:#5f5260;font:14px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
   </style>
 </head>
 <body>
   <header><h1>${escapeHtml(tree?.title ?? "KinForge family site")}</h1><p>Private export generated by KinForge Genealogy Studio.</p></header>
   <main>${peopleHtml}</main>
-  ${COPYRIGHT_HTML}
+  ${publicExportNoticeHtml()}
 </body>
 </html>`;
 };
 
-export const buildBackup = (state: AppState) => JSON.stringify({ app: "KinForge Genealogy Studio", copyright: "Copyright 2026 Dreams of Serene Landscapes. All rights reserved.", version: 1, exportedAt: new Date().toISOString(), state }, null, 2);
+export const buildBackup = (state: AppState) => JSON.stringify({ app: "KinForge Genealogy Studio", copyright: PUBLIC_EXPORT_NOTICE, version: 1, exportedAt: new Date().toISOString(), state }, null, 2);
 
 export const personCsvRows = (people: Person[]) => [
   ["Given name", "Family name", "Birth", "Death", "Living", "Labels"],

@@ -9,6 +9,7 @@ import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import { closeHistory } from "@tiptap/pm/history";
 import { localReportImage } from "./reportDocument";
 import { REPORT_THEMES, type ReportPresentation } from "./reportOptions";
+import { publicExportNoticeHtml } from "./exportAttribution";
 
 const size = (value: unknown) => Number.isFinite(Number(value)) && Number(value) > 0 ? Math.min(2400, Number(value)) : null;
 const alignment = (value: unknown) => ["left", "center", "right"].includes(String(value)) ? String(value) : null;
@@ -219,7 +220,7 @@ export function reportHtmlDocument(html: string, title: string, paper: "a4" | "l
       if (reportRules) rules.push(sheet.media.mediaText ? `@media ${sheet.media.mediaText}{${reportRules}}` : reportRules);
     } catch { /* External fonts are optional in the standalone file. */ }
   }
-  style.textContent = `${rules.join("\n")}\nbody{margin:0;background:#eee;color:${colors.ink}}.report-html-paper{--report-ink:${colors.ink};--report-accent:${colors.accent};--report-band:${colors.band};position:relative;box-sizing:border-box;background:white;margin:20px auto;padding:${p.margin}pt;max-width:${p.orientation === "landscape" ? 1123 : 816}px}.report-page-header,.report-page-footer{white-space:pre-wrap}.report-page-watermark{pointer-events:none}.report-page-break{break-after:page;page-break-after:always}@page{size:${paper === "a4" ? "A4" : "letter"} ${p.orientation};margin:${p.margin}pt}@media print{body{background:white}.report-html-paper{margin:0;padding:0;max-width:none}.report-page-footer{position:fixed;bottom:0}.report-page-number{display:none}}`;
+  style.textContent = `${rules.join("\n")}\nbody{margin:0;background:#eee;color:${colors.ink}}.report-html-paper{--report-ink:${colors.ink};--report-accent:${colors.accent};--report-band:${colors.band};position:relative;box-sizing:border-box;background:white;margin:20px auto;padding:${p.margin}pt;max-width:${p.orientation === "landscape" ? 1123 : 816}px}.report-page-header,.report-page-footer{white-space:pre-wrap}.report-page-watermark{pointer-events:none}.report-page-break{break-after:page;page-break-after:always}.kinforge-public-export-credit{margin:32px 0 0;padding-top:14px;border-top:1px solid #d7e0e3;color:#526369;font:13px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}@page{size:${paper === "a4" ? "A4" : "letter"} ${p.orientation};margin:${p.margin}pt}@media print{body{background:white}.report-html-paper{margin:0;padding:0;max-width:none}.report-page-footer{position:fixed;bottom:0}.report-page-number{display:none}}`;
   doc.head.append(style);
   const page = doc.createElement("article"); page.className = "report-html-paper";
   const addText = (className: string, text: string) => { if (!text) return; const el = doc.createElement("div"); el.className = className; el.textContent = text; page.append(el); };
@@ -233,6 +234,7 @@ export function reportHtmlDocument(html: string, title: string, paper: "a4" | "l
     page.style.width = `${p.canvasWidth + p.margin * 8 / 3}px`; page.style.maxWidth = "none";
   }
   addText("report-page-footer", p.footer);
+  page.insertAdjacentHTML("beforeend", publicExportNoticeHtml());
   doc.body.append(page);
   return `<!doctype html>\n${doc.documentElement.outerHTML}`;
 }

@@ -1,6 +1,7 @@
 import { AppState } from "./domain";
 import { DeleteTarget, deletionSnapshot, planDeletion } from "./deletion";
 import { buildBackup } from "./exporters";
+import { PUBLIC_EXPORT_NOTICE } from "./exportAttribution";
 
 export type ItemDownload = { name: string; content: string | Uint8Array; type: string };
 const safeName = (name: string) => name.replace(/[<>:"/\\|?*\x00-\x1f]/g, "-").slice(0, 120).trim() || "KinForge-item";
@@ -55,5 +56,5 @@ export function buildItemDownload(state: AppState, target: DeleteTarget): ItemDo
   const events = state.events.filter(e => eventIds.has(e.id)); refs(events);
   const sources = state.sources.filter(s => sourceIds.has(s.id)); refs(sources);
   const places = state.places.filter(p => placeIds.has(p.id)); refs(places);
-  return { name: `${name}.kinforge.json`, type: "application/json", content: JSON.stringify({ app: "KinForge Genealogy Studio", copyright: "Copyright 2026 Dreams of Serene Landscapes. All rights reserved.", format: "saved-item", version: 1, exportedAt: new Date().toISOString(), kind: target.kind, ownerId: target.ownerId, data, related: { ...related, events, sources, places, media: state.media.filter(m => mediaIds.has(m.id)) } }, null, 2) };
+  return { name: `${name}.kinforge.json`, type: "application/json", content: JSON.stringify({ app: "KinForge Genealogy Studio", copyright: PUBLIC_EXPORT_NOTICE, format: "saved-item", version: 1, exportedAt: new Date().toISOString(), kind: target.kind, ownerId: target.ownerId, data, related: { ...related, events, sources, places, media: state.media.filter(m => mediaIds.has(m.id)) } }, null, 2) };
 }

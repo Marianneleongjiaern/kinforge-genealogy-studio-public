@@ -1,4 +1,5 @@
 import { AppState, createEmptyPerson, fullName, makeId, Person, Relationship } from "./domain";
+import { PUBLIC_EXPORT_COPYRIGHT, PUBLIC_EXPORT_CREDIT, PUBLIC_EXPORT_PERMISSION } from "./exportAttribution";
 
 type GedcomRecord = {
   level: number;
@@ -117,7 +118,7 @@ export const normalizeGedcomDate = (value: string) => {
 export const exportGedcom = (state: AppState, treeId: string, options: { hideLiving?: boolean; hidePrivate?: boolean; includeMedia?: boolean } = {}) => {
   const people = state.people.filter((person) => person.treeId === treeId).filter((person) => !(options.hidePrivate && person.private)).filter((person) => !(options.hideLiving && person.living));
   const allowedPeople = new Set(people.map((person) => person.id));
-  const lines = ["0 HEAD", "1 SOUR KinForge", "1 GEDC", "2 VERS 7.0", "1 CHAR UTF-8"];
+  const lines = ["0 HEAD", "1 SOUR KinForge", "1 GEDC", "2 VERS 7.0", "1 CHAR UTF-8", `1 NOTE ${PUBLIC_EXPORT_COPYRIGHT}`, `1 NOTE ${PUBLIC_EXPORT_CREDIT}`, `1 NOTE ${PUBLIC_EXPORT_PERMISSION}`];
   people.forEach((person, index) => {
     const pointer = `@I${index + 1}@`;
     lines.push(`0 ${pointer} INDI`);

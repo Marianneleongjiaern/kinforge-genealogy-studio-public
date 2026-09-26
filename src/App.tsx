@@ -30,6 +30,7 @@ import {
   Pencil,
   Plus,
   Printer,
+  Save,
   Search,
   Settings,
   Shield,
@@ -41,6 +42,7 @@ import {
   Wand2,
   XCircle,
   X,
+  LogOut,
   Undo2,
   Redo2
 } from "lucide-react";
@@ -95,6 +97,8 @@ import {
 } from "./analysis";
 import { exportGedcom, mergeImportedPeople, parseGedcom } from "./gedcom";
 import { buildBackup, buildWebsiteExport, downloadBlob, exportText } from "./exporters";
+import { PUBLIC_EXPORT_COPYRIGHT, PUBLIC_EXPORT_CREDIT, PUBLIC_EXPORT_PERMISSION, recordPublicExportAgreement } from "./exportAttribution";
+import { LEGAL_EFFECTIVE_DATE, PRIVACY_POLICY_SECTIONS, TERMS_CONDITIONS_SECTIONS, recordAppLegalAgreement } from "./legalPolicies";
 import { COMPETITIVE_UPGRADES, COMPETITOR_SWOT, FEATURE_MATRIX, featureSummary, FeatureStatus } from "./features";
 import { activeUser, AuthState, createAccount, loadAuthState, login, resetPassword, saveAuthState } from "./auth";
 import { ViewKey, useWorkspaceNavigation, workspacePath } from "./workspace";
@@ -518,7 +522,7 @@ function loadState(): AppState {
   return createSeedState();
 }
 
-type CloudApp = { state: AppState; account: { id: string; name: string; email: string }; onChange: (state: AppState) => void; toolbar: ReactNode; onSignOut: () => void; readOnly: boolean; saved: boolean; demo: boolean; canManagePrivacy: boolean };
+type CloudApp = { state: AppState; account: { id: string; name: string; email: string }; onChange: (state: AppState) => void; onSave: (state: AppState) => void | Promise<void>; toolbar: ReactNode; onSignOut: () => void; readOnly: boolean; saved: boolean; demo: boolean; canManagePrivacy: boolean };
 function App({ cloud }: { cloud?: CloudApp }) {
   const [history, setHistory] = useState<{ present: AppState; past: AppState[]; future: AppState[] }>(() => ({ present: cloud ? cloud.state : loadState(), past: [], future: [] }));
   const lastIncoming = useRef(cloud?.state);
@@ -534,7 +538,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
   const selectedPersonId = route.personId;
   const [auth, setAuth] = useState<AuthState>(() => loadAuthState());
   const [authMode, setAuthMode] = useState<"login" | "create" | "forgot">("login");
-  const [authForm, setAuthForm] = useState({ name: "", email: "", password: "", recoveryHint: "", recoveryCode: "", newPassword: "" });
+  const [authForm, setAuthForm] = useState({ name: "", email: "", password: "", recoveryHint: "", recoveryCode: "", newPassword: "", privacyAccepted: false, termsAccepted: false });
   const [authError, setAuthError] = useState("");
   const [guestMode, setGuestMode] = useState(() => sessionStorage.getItem("kinforge-guest") === "true");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -646,6 +650,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
     subject: "",
     message: "",
     device: "",
+    proof: "",
     permissionToReply: true,
     includeDiagnostics: true
   });
@@ -695,6 +700,21 @@ function App({ cloud }: { cloud?: CloudApp }) {
   useEffect(() => {
     savePrivateAccessSettings(privateAccess);
   }, [privateAccess]);
+
+  const saveNow = async () => {
+    try {
+      if (cloud) {
+        await cloud.onSave(state);
+        setItemMessage(cloud.demo ? "Demo saved on this device." : "Save requested. KinForge is syncing this library to your cloud account.");
+      } else {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        setStorageError("");
+        setItemMessage("Saved on this device.");
+      }
+    } catch {
+      setStorageError("Save could not finish. Download a backup before closing or reloading.");
+    }
+  };
 
   useEffect(() => {
     document.documentElement.lang = appLanguage || "en";
@@ -765,8 +785,21 @@ function App({ cloud }: { cloud?: CloudApp }) {
         form={authForm}
         setForm={setAuthForm}
         error={authError}
-        onGuest={() => { sessionStorage.setItem("kinforge-guest", "true"); setGuestMode(true); }}
+        onGuest={() => {
+          if (!authForm.privacyAccepted || !authForm.termsAccepted) {
+            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            return;
+          }
+          recordAppLegalAgreement();
+          recordPublicExportAgreement();
+          sessionStorage.setItem("kinforge-guest", "true");
+          setGuestMode(true);
+        }}
         onSubmit={() => {
+          if (!authForm.privacyAccepted || !authForm.termsAccepted) {
+            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            return;
+          }
           const result = authMode === "create"
             ? createAccount(auth, authForm.name, authForm.email, authForm.password, authForm.recoveryHint)
             : authMode === "forgot"
@@ -775,6 +808,10 @@ function App({ cloud }: { cloud?: CloudApp }) {
           setAuth(result.state);
           setAuthError(result.error);
           const recoveryCode = "recoveryCode" in result ? result.recoveryCode : undefined;
+          if (!result.error) {
+            recordAppLegalAgreement();
+            recordPublicExportAgreement();
+          }
           if (!result.error && recoveryCode) {
             setAuthError(`Save this new secret recovery key: ${recoveryCode}`);
           } else if (!result.error && authMode === "forgot") {
@@ -805,17 +842,6 @@ function App({ cloud }: { cloud?: CloudApp }) {
         ? `Saved ${file.name}${result.path ? ` to ${result.path}` : ""}. Keep this private copy secure.`
         : `Download started for ${file.name}. Check your browser downloads and keep this private copy secure.`);
     } catch (error) { setItemMessage(error instanceof Error ? error.message : "The download could not be created. Please try again."); }
-  };
-  const signOut = () => {
-    if (cloud && state !== cloud.state) cloud.onChange(state);
-    if (!cloud) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    setItemMessage("Saved. Signing out...");
-    window.setTimeout(() => {
-      if (cloud) { cloud.onSignOut(); return; }
-      setGuestMode(false);
-      sessionStorage.removeItem("kinforge-guest");
-      setAuth({ ...auth, activeUserId: null });
-    }, cloud?.saved ? 0 : 350);
   };
   const itemActions = (target: DeleteTarget, title: string) => <ItemActions target={target} title={title} onDelete={requestDelete} onDownload={downloadItem} readOnly={cloud?.readOnly} />;
   const confirmDeletion = () => {
@@ -1842,6 +1868,7 @@ Quality checklist:
     `Email: ${supportForm.email || "Not provided"}`,
     `Permission to reply: ${supportForm.permissionToReply ? "yes" : "no"}`,
     `Device/app: ${supportForm.device || "Not provided"}`,
+    supportForm.proof ? `Permission proof: ${supportForm.proof}` : "",
     "",
     "Message:",
     supportForm.message || "No message written yet.",
@@ -3308,10 +3335,11 @@ Quality checklist:
           <div className="settings-grid">
             <label className="field"><span>Your name</span><input className="control" value={supportForm.name} onChange={event => setSupportForm(current => ({ ...current, name: event.target.value }))} /></label>
             <label className="field"><span>Email for replies</span><input className="control" type="email" value={supportForm.email} onChange={event => setSupportForm(current => ({ ...current, email: event.target.value }))} /></label>
-            <label className="field"><span>Request type</span><select className="control" value={supportForm.type} onChange={event => setSupportForm(current => ({ ...current, type: event.target.value }))}><option>Support request</option><option>Bug report</option><option>Feature request</option><option>Account or login help</option><option>Sync issue</option><option>Billing or download question</option><option>Accessibility request</option></select></label>
+            <label className="field"><span>Request type</span><select className="control" value={supportForm.type} onChange={event => setSupportForm(current => ({ ...current, type: event.target.value }))}><option>Support request</option><option>Copyright-free permission request</option><option>Bug report</option><option>Feature request</option><option>Account or login help</option><option>Sync issue</option><option>Download question</option><option>Accessibility request</option></select></label>
             <label className="field"><span>Device/app version</span><input className="control" value={supportForm.device} placeholder="Example: Mac app 1.3.8 on Apple Silicon" onChange={event => setSupportForm(current => ({ ...current, device: event.target.value }))} /></label>
           </div>
           <label className="field"><span>Subject</span><input className="control" value={supportForm.subject} onChange={event => setSupportForm(current => ({ ...current, subject: event.target.value }))} /></label>
+          <label className="field"><span>Proof for copyright-free permission</span><textarea className="control" rows={4} value={supportForm.proof} placeholder="Only for permission requests: describe or link real non-AI proof, such as photos together or digital/physical records showing you are close to Marianne Leong / Dreams of Serene Landscapes." onChange={event => setSupportForm(current => ({ ...current, proof: event.target.value }))} /></label>
           <label className="field"><span>Message</span><textarea className="control" rows={7} value={supportForm.message} placeholder="Tell support what happened, what you expected, and what you clicked." onChange={event => setSupportForm(current => ({ ...current, message: event.target.value }))} /></label>
           <label className="check-row"><input type="checkbox" checked={supportForm.permissionToReply} onChange={event => setSupportForm(current => ({ ...current, permissionToReply: event.target.checked }))} />Allow support to reply to this email</label>
           <label className="check-row"><input type="checkbox" checked={supportForm.includeDiagnostics} onChange={event => setSupportForm(current => ({ ...current, includeDiagnostics: event.target.checked }))} />Include non-sensitive app diagnostics</label>
@@ -4206,16 +4234,22 @@ Important limitation:
                 {LANGUAGES.map((language) => <option key={language.code} value={language.code}>{languageLabel(language.code)}{language.region ? ` (${language.region})` : ""}</option>)}
               </select>
             </label>
-            <select className="control" aria-label="Active family tree" value={treeId} onChange={(event) => setSelectedTreeId(event.target.value)}>
-              {!state.trees.length && <option value="">No family trees</option>}
+            <select className="control" aria-label="Active relationship tree" value={treeId} onChange={(event) => setSelectedTreeId(event.target.value)}>
+              {!state.trees.length && <option value="">No trees</option>}
               {state.trees.map((item) => <option key={item.id} value={item.id}>{item.title}</option>)}
             </select>
+            <Button onClick={() => void saveNow()} icon={<Save size={16} />}>Save</Button>
             <Button onClick={() => downloadBlob("KinForge-backup.json", buildBackup(state), "application/json")} icon={<Download size={16} />}>Backup</Button>
             {tree && itemActions({ kind: "trees", id: treeId }, tree.title)}
             <Button variant="secondary" icon={<Archive size={16} />} onClick={() => setItemsOpen(true)}>Saved items</Button>
             <Button variant="secondary" icon={<BookOpen size={16} />} onClick={() => setTermsOpen(true)}>Terms and meanings</Button>
             <Button variant="secondary" icon={<BookOpen size={16} />} onClick={() => setReligiousTermsOpen(true)}>Religious terms</Button>
-            <Button variant="ghost" onClick={signOut}>Save &amp; Logout</Button>
+            <Button variant="ghost" icon={<LogOut size={16} />} onClick={() => {
+              if (cloud) { cloud.onSignOut(); return; }
+              setGuestMode(false);
+              sessionStorage.removeItem("kinforge-guest");
+              setAuth({ ...auth, activeUserId: null });
+            }}>Logout</Button>
           </div>
         </header>
         {storageError && <p role="alert" className="report-error">{storageError}</p>}
@@ -4244,11 +4278,30 @@ Important limitation:
   );
 }
 
+function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, onTermsAccepted }: { privacyAccepted: boolean; termsAccepted: boolean; onPrivacyAccepted: (accepted: boolean) => void; onTermsAccepted: (accepted: boolean) => void }) {
+  return <section className="legal-agreement" aria-labelledby="legal-agreement-title">
+    <h2 id="legal-agreement-title">Privacy Policy and Terms & Conditions</h2>
+    <p className="quiet">Effective {LEGAL_EFFECTIVE_DATE}. These rules apply before using the app, creating an account, signing in, recovering an account, checking updates, trying the separate demo, exporting, or downloading files.</p>
+    <details open>
+      <summary>Privacy Policy</summary>
+      {PRIVACY_POLICY_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
+    </details>
+    <details open>
+      <summary>Terms & Conditions</summary>
+      {TERMS_CONDITIONS_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
+    </details>
+    <div className="legal-checks">
+      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I have read and agree to the KinForge Privacy Policy.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I have read and agree to the KinForge Terms & Conditions.</label>
+    </div>
+  </section>;
+}
+
 function AuthScreen({ mode, setMode, form, setForm, error, onSubmit, onGuest }: {
   mode: "login" | "create" | "forgot";
   setMode: (mode: "login" | "create" | "forgot") => void;
-  form: { name: string; email: string; password: string; recoveryHint: string; recoveryCode: string; newPassword: string };
-  setForm: (form: { name: string; email: string; password: string; recoveryHint: string; recoveryCode: string; newPassword: string }) => void;
+  form: { name: string; email: string; password: string; recoveryHint: string; recoveryCode: string; newPassword: string; privacyAccepted: boolean; termsAccepted: boolean };
+  setForm: (form: { name: string; email: string; password: string; recoveryHint: string; recoveryCode: string; newPassword: string; privacyAccepted: boolean; termsAccepted: boolean }) => void;
   error: string;
   onSubmit: () => void;
   onGuest: () => void;
@@ -4265,7 +4318,7 @@ function AuthScreen({ mode, setMode, form, setForm, error, onSubmit, onGuest }: 
           </div>
         </div>
         <h1>{mode === "create" ? "Create account" : mode === "forgot" ? "Reset password" : "Sign in"}</h1>
-        <p className="quiet">Sign in protects private trees, archives, reports, and government files on this device. Cloud authentication is ready for a secure backend connection; guest mode opens only a demo workspace.</p>
+        <p className="quiet">Sign in protects private trees, genograms, character networks, archives, reports, and government files on this device. KinForge is built for social workers, writers, genealogists, historians, roleplayers, RPG players and anyone mapping complex relationships. Guest mode opens only a demo workspace.</p>
         {mode === "create" && <Field label="Name" value={form.name} onChange={(value) => setForm({ ...form, name: value })} />}
         <Field label="Email" value={form.email} onChange={(value) => setForm({ ...form, email: value })} />
         {mode !== "forgot" && <Field label="Password" type="password" value={form.password} onChange={(value) => setForm({ ...form, password: value })} />}
@@ -4279,8 +4332,9 @@ function AuthScreen({ mode, setMode, form, setForm, error, onSubmit, onGuest }: 
           <button onClick={() => setMode("login")}>Login</button>
           <button onClick={() => setMode("create")}>Create account</button>
           <button onClick={() => setMode("forgot")}>Forgot password</button>
-          <button aria-label="Continue as guest" onClick={onGuest}>Continue as guest demo</button>
+          <button aria-label="Continue as guest" onClick={onGuest}>Try a separate demo</button>
         </div>
+        <LegalAgreementBox privacyAccepted={form.privacyAccepted} termsAccepted={form.termsAccepted} onPrivacyAccepted={accepted => setForm({ ...form, privacyAccepted: accepted })} onTermsAccepted={accepted => setForm({ ...form, termsAccepted: accepted })} />
       </div>
     </div>
   );

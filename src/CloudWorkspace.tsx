@@ -8,6 +8,8 @@ import type { ConflictChoices } from "./cloudMerge";
 import { loadAuthState, login as legacyLogin, activeUser as legacyUser } from "./auth";
 import { clearCloudStartup, readCloudStartup, writeCloudStartup } from "./cloudStartup";
 import { startCloudExports } from "./cloudExports";
+import { recordPublicExportAgreement } from "./exportAttribution";
+import { LEGAL_EFFECTIVE_DATE, PRIVACY_POLICY_SECTIONS, TERMS_CONDITIONS_SECTIONS, recordAppLegalAgreement } from "./legalPolicies";
 const App = lazy(() => import("./App"));
 const CloudDrives = lazy(() => import("./CloudDrives"));
 const UpdateCenter = lazy(() => import("./UpdateCenter"));
@@ -95,13 +97,13 @@ export default function CloudWorkspace() {
       await sync.current?.stop(); sync.current = null; clearAssetCache(); clearCloudStartup(); setUser(null); setView(null); setViewLibraryId(""); setRecovery(""); setSharing(false); setError("");
     } catch (e) { setError(e instanceof Error ? e.message : "Reconnect before signing out."); }
   }
-  if (demo) return <App cloud={{ state: demo, account: { id: "demo", name: "Guest demo", email: "" }, onChange: state => { setDemo(state); localStorage.setItem("kinforge-demo-v1", JSON.stringify(state)); }, toolbar: <span className="cloud-status">Demo - saved on this device</span>, onSignOut: () => { setDemo(null); sessionStorage.removeItem("kinforge-demo-session"); }, readOnly: false, saved: true, demo: true, canManagePrivacy: true }} />;
+  if (demo) return <App cloud={{ state: demo, account: { id: "demo", name: "Guest demo", email: "" }, onChange: state => { setDemo(state); localStorage.setItem("kinforge-demo-v1", JSON.stringify(state)); }, onSave: state => { setDemo(state); localStorage.setItem("kinforge-demo-v1", JSON.stringify(state)); }, toolbar: <span className="cloud-status">Demo - saved on this device</span>, onSignOut: () => { setDemo(null); sessionStorage.removeItem("kinforge-demo-session"); }, readOnly: false, saved: true, demo: true, canManagePrivacy: true }} />;
   if (checking) return <div className="cloud-loading" role="status">Connecting to your KinForge account...</div>;
   if (!user) return <CloudSignIn error={error} onSignedIn={(account, code) => { setUser(account); setRecovery(code || ""); setError(""); }} onDemo={() => { const state = demoState(); localStorage.setItem("kinforge-demo-v1", JSON.stringify(state)); setDemo(state); sessionStorage.setItem("kinforge-demo-session", "true"); setError(""); }} />;
   const toolbar = <div className="cloud-toolbar"><button className={`cloud-status ${view?.error ? "cloud-warning" : ""}`} onClick={() => void sync.current?.sync()} title={view?.lastSaved ? `Last saved ${new Date(view.lastSaved).toLocaleString()}` : "Sync now"} aria-label={`Cloud sync: ${view?.status || "Connecting"}`}>
     {view?.error ? <CloudOff size={17} /> : <Cloud size={17} />}<span>{view?.status || "Connecting"}</span></button>{library?.role === "owner" && <button className="button secondary" onClick={() => setDrivesOpen(true)}><Cloud size={16} />Cloud drives</button>}<button className="button secondary" onClick={() => setUpdatesOpen(true)}><RefreshCw size={16} />Updates</button><button className="button secondary" onClick={() => setSharing(true)} title="Account, libraries and sharing"><Share2 size={16} />Account & sharing</button></div>;
   return <>
-    {view && viewLibraryId === libraryId ? <div style={{ display: "contents" }} {...(view.preview ? { inert: "" } : {})}><App key={`${user.id}:${libraryId}`} cloud={{ state: view.state, account: user, onChange: state => sync.current?.change(state), onSignOut: signOut, toolbar, readOnly: library?.role === "viewer" || view.locked || view.conflicts.length > 0, saved: !view.dirty && !view.error, demo: false, canManagePrivacy: library?.role === "owner" }} /></div> : <div className="cloud-loading"><p role="status">Opening your cloud library...</p><button className="button secondary" onClick={() => { if (!library) void refreshLibraries().catch(e => setError(e.message)); else setRetry(n => n + 1); }}><RefreshCw size={16} />Retry</button><button className="button ghost" onClick={signOut}>Sign out</button></div>}
+    {view && viewLibraryId === libraryId ? <div style={{ display: "contents" }} {...(view.preview ? { inert: "" } : {})}><App key={`${user.id}:${libraryId}`} cloud={{ state: view.state, account: user, onChange: state => sync.current?.change(state), onSave: async state => { sync.current?.change(state); await sync.current?.sync(); }, onSignOut: signOut, toolbar, readOnly: library?.role === "viewer" || view.locked || view.conflicts.length > 0, saved: !view.dirty && !view.error, demo: false, canManagePrivacy: library?.role === "owner" }} /></div> : <div className="cloud-loading"><p role="status">Opening your cloud library...</p><button className="button secondary" onClick={() => { if (!library) void refreshLibraries().catch(e => setError(e.message)); else setRetry(n => n + 1); }}><RefreshCw size={16} />Retry</button><button className="button ghost" onClick={signOut}>Sign out</button></div>}
     {view?.preview && <div className="cloud-notice" role="status">Opening the full saved library. Editing and downloads will be available when it is ready.</div>}
     {(error || view?.error) && <div className="cloud-notice" role="alert"><span>{error || view?.error}</span><button onClick={() => error || !view || view.locked ? setRetry(n => n + 1) : void sync.current?.sync()}>Retry</button></div>}
     {recovery && <RecoveryDialog email={user.email} code={recovery} onSaved={() => setRecovery("")} />}
@@ -161,25 +163,45 @@ function RecoveryDialog({ email, code, onSaved }: { email: string; code: string;
 }
 function demoState() { try { const value = localStorage.getItem("kinforge-demo-v1"); if (value) return hydrateLibrary(JSON.parse(value) as AppState); } catch { /* A demo can always start fresh. */ } return createSeedState(); }
 function formatValue(value: unknown) { if (value === undefined) return "Deleted"; if (typeof value === "string") return value.startsWith("data:") ? "Attached file" : value; return JSON.stringify(value, (_key, v) => typeof v === "string" && v.startsWith("data:") ? "Attached file" : v, 2); }
+
+function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, onTermsAccepted }: { privacyAccepted: boolean; termsAccepted: boolean; onPrivacyAccepted: (accepted: boolean) => void; onTermsAccepted: (accepted: boolean) => void }) {
+  return <section className="legal-agreement" aria-labelledby="cloud-legal-agreement-title">
+    <h2 id="cloud-legal-agreement-title">Privacy Policy and Terms & Conditions</h2>
+    <p className="quiet">Effective {LEGAL_EFFECTIVE_DATE}. These rules apply before using the app, creating an account, signing in, recovering an account, checking updates, trying the separate demo, exporting, or downloading files.</p>
+    <details open>
+      <summary>Privacy Policy</summary>
+      {PRIVACY_POLICY_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
+    </details>
+    <details open>
+      <summary>Terms & Conditions</summary>
+      {TERMS_CONDITIONS_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
+    </details>
+    <div className="legal-checks">
+      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I have read and agree to the KinForge Privacy Policy.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I have read and agree to the KinForge Terms & Conditions.</label>
+    </div>
+  </section>;
+}
+
 function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: string; onSignedIn: (user: CloudUser, code?: string) => void; onDemo: () => void }) {
   const [mode, setMode] = useState<"login" | "create" | "forgot">("login"); const [error, setError] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
   const [recoveryMethod, setRecoveryMethod] = useState<"secret" | "reset-code" | "login-code" | "login-link">("secret"); const [codeRequested, setCodeRequested] = useState(false); const [updatesOpen, setUpdatesOpen] = useState(false);
   const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [recoveryCode, setRecoveryCode] = useState("");
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const linkAttempted = useRef(false);
+  const requireAgreement = () => {
+    if (privacyAccepted && termsAccepted) return true;
+    setError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+    return false;
+  };
   useEffect(() => { setCodeRequested(false); setRecoveryCode(""); setStatus(""); }, [mode, recoveryMethod, email]);
   useEffect(() => {
     if (linkAttempted.current || !window.location.hash.startsWith("#/email-login")) return;
     const query = new URLSearchParams(window.location.hash.includes("?") ? window.location.hash.slice(window.location.hash.indexOf("?") + 1) : "");
     const linkEmail = query.get("email") || "", linkCode = query.get("code") || "";
     if (!linkEmail || !linkCode) return;
-    linkAttempted.current = true; setBusy(true); setMode("forgot"); setRecoveryMethod("login-link"); setEmail(linkEmail); setStatus("Opening your KinForge library from the email login link...");
-    void cloudRequest<{ user: CloudUser }>("/api/auth/code/confirm", "POST", { email: linkEmail, purpose: "login", code: linkCode }).then(result => {
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}#/`);
-      onSignedIn(result.user);
-    }).catch(error => {
-      setRecoveryMethod("login-code"); setCodeRequested(true); setRecoveryCode(linkCode);
-      setError(error instanceof Error ? error.message : "This login link could not be used. Request a new one.");
-    }).finally(() => setBusy(false));
+    linkAttempted.current = true; setMode("forgot"); setRecoveryMethod("login-code"); setCodeRequested(true); setEmail(linkEmail); setRecoveryCode(linkCode); setStatus("Agree to the KinForge Privacy Policy and Terms & Conditions, then sign in with the code from your email link.");
   }, [onSignedIn]);
   const showPassword = mode !== "forgot" || recoveryMethod === "secret" || (recoveryMethod === "reset-code" && codeRequested);
   const showRecoveryCode = mode === "forgot" && (recoveryMethod === "secret" || (codeRequested && recoveryMethod !== "login-link"));
@@ -188,6 +210,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     event.preventDefault(); setBusy(true); setError(""); setStatus("");
     try {
       let result: { user: CloudUser; recoveryCode?: string };
+      if (!privacyAccepted || !termsAccepted) throw new Error("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
       if (mode === "forgot" && recoveryMethod !== "secret") {
         const purpose = recoveryMethod === "login-code" || recoveryMethod === "login-link" ? "login" : "reset";
         if (!codeRequested) {
@@ -201,17 +224,19 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
         result = await cloudRequest("/api/auth/code/confirm", "POST", { email, purpose, code: recoveryCode, password });
         onSignedIn(result.user, result.recoveryCode); return;
       }
-      try { result = await cloudRequest(`/api/auth/${mode === "create" ? "register" : mode === "forgot" ? "recover" : "login"}`, "POST", { name, email, password, recoveryCode }); }
+      try { result = await cloudRequest(`/api/auth/${mode === "create" ? "register" : mode === "forgot" ? "recover" : "login"}`, "POST", { name, email, password, recoveryCode, privacyAccepted, termsAccepted }); }
       catch (error) {
         const local = legacyLogin(loadAuthState(), email, password);
         if (mode !== "login" || !(error instanceof CloudError) || error.status !== 401 || local.error) throw error;
         if (password.length < 12) throw new Error("Your existing account is stored on this device. Create its cloud account with the same email and a password of at least 12 characters. Your data will sync automatically.");
-        result = await cloudRequest("/api/auth/register", "POST", { email, password, name: legacyUser(local.state)?.name || name });
+        result = await cloudRequest("/api/auth/register", "POST", { email, password, name: legacyUser(local.state)?.name || name, privacyAccepted, termsAccepted });
       }
+      recordAppLegalAgreement();
+      recordPublicExportAgreement();
       onSignedIn(result.user, result.recoveryCode);
     }
     catch (e) { setError(e instanceof Error ? e.message : "Could not connect. Please retry."); } finally { setBusy(false); }
-  }}><div className="brand auth-brand"><span className="brand-mark"><img src="./icon.svg" alt="" /></span><div><strong>KinForge</strong><small>Product of Dreams of Serene Landscapes</small></div></div><h1>{mode === "create" ? "Create your cloud account" : mode === "forgot" ? "Recover your account" : "Sign in to KinForge"}</h1><p className="quiet">Your family library, on every device.</p>
+  }}><div className="brand auth-brand"><span className="brand-mark"><img src="./icon.svg" alt="" /></span><div><strong>KinForge</strong><small>Product of Dreams of Serene Landscapes</small></div></div><h1>{mode === "create" ? "Create your cloud account" : mode === "forgot" ? "Recover your account" : "Sign in to KinForge"}</h1><p className="quiet">Relationship maps, family trees, social-work genograms, character networks, history projects and RPG worlds on every device.</p>
     {mode === "create" && <label className="field"><span>Name</span><input className="control" value={name} onChange={e => setName(e.target.value)} autoComplete="name" required maxLength={100} /></label>}
     <label className="field"><span>Email</span><input className="control" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" required /></label>
     {mode === "forgot" && <label className="field"><span>Recovery option</span><select className="control" value={recoveryMethod} onChange={e => setRecoveryMethod(e.target.value as "secret" | "reset-code" | "login-code" | "login-link")}><option value="secret">Secret recovery key</option><option value="reset-code">Email password reset code</option><option value="login-code">Email code login</option><option value="login-link">Email secret login link</option></select></label>}
@@ -221,7 +246,8 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     {(error || initialError) && <p className="auth-message bad" role="alert">{error || initialError}</p>}
     {status && <p className="auth-message" role="status">{status}</p>}
     <button className="button" type="submit" disabled={busy}><LogIn size={16} />{busy ? "Connecting..." : actionText}</button>
-    <div className="auth-links"><button type="button" onClick={() => { setMode("login"); setError(""); }}>Login</button><button type="button" onClick={() => { setMode("create"); setError(""); }}>Create account</button><button type="button" onClick={() => { setMode("forgot"); setError(""); }}>Forgot password</button><button type="button" onClick={() => setUpdatesOpen(true)}>Updates</button><button type="button" aria-label="Continue as guest" onClick={onDemo}>Try a separate demo</button></div>
+    <div className="auth-links"><button type="button" onClick={() => { setMode("login"); setError(""); }}>Login</button><button type="button" onClick={() => { setMode("create"); setError(""); }}>Create account</button><button type="button" onClick={() => { setMode("forgot"); setError(""); }}>Forgot password</button><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button><button type="button" aria-label="Continue as guest" onClick={() => { if (!requireAgreement()) return; recordAppLegalAgreement(); recordPublicExportAgreement(); onDemo(); }}>Try a separate demo</button></div>
+    <LegalAgreementBox privacyAccepted={privacyAccepted} termsAccepted={termsAccepted} onPrivacyAccepted={setPrivacyAccepted} onTermsAccepted={setTermsAccepted} />
     {mode === "create" && <p className="quiet">Existing work on this device will sync automatically to this account.</p>}
   </form>{updatesOpen && <UpdateCenter onClose={() => setUpdatesOpen(false)} />}</div>;
 }

@@ -1,20 +1,15 @@
 (function () {
   const auth = document.getElementById("beta-auth");
   const interest = document.getElementById("beta-register");
+  const support = document.getElementById("public-support");
+  const supportResult = document.getElementById("support-result");
   const status = document.getElementById("account-status");
   const result = document.getElementById("beta-result");
   const recovery = document.getElementById("recovery");
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
-  const billingControls = document.getElementById("billing-controls");
-  const checkout = document.getElementById("checkout");
-  const portal = document.getElementById("billing-portal");
-  const syncBilling = document.getElementById("sync-billing");
-  const syncRevenue = document.getElementById("sync-revenue");
-  const billingHistory = document.getElementById("billing-history");
-  const revenueReport = document.getElementById("revenue-report");
-  if (!auth || !interest || !status || !result) return;
+  if (!auth && !support) return;
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
   async function api(path, init) {
@@ -29,73 +24,58 @@
     link.href = url; link.download = name; link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
-  async function refresh() {
-    try {
-      const me = await api("/api/auth/me", { method: "GET", headers: {} });
-      auth.hidden = true; interest.hidden = false; status.textContent = `Signed in as ${me.user.email}.`;
-      const saved = await api("/api/beta/interest", { method: "GET", headers: {} });
-      withdraw.hidden = !saved.interest;
-      if (billingControls) billingControls.hidden = false;
-      if (checkout) checkout.hidden = !saved.interest;
-      if (portal) portal.hidden = false;
-      if (saved.interest) result.textContent = `Registered interest: ${saved.interest.plan}, ${saved.interest.interval}${saved.interest.discount_code ? `, ${saved.interest.discount_code}` : ""}.`;
-    } catch {
-      auth.hidden = false; interest.hidden = true; status.textContent = "Create an account or sign in to register interest.";
+  if (auth && interest && status && result) {
+    async function refresh() {
+      try {
+        const me = await api("/api/auth/me", { method: "GET", headers: {} });
+        auth.hidden = true; interest.hidden = false; status.textContent = `Signed in as ${me.user.email}.`;
+        const saved = await api("/api/beta/interest", { method: "GET", headers: {} });
+        withdraw.hidden = !saved.interest;
+        if (saved.interest) result.textContent = `Registered interest: ${saved.interest.plan}.`;
+      } catch {
+        auth.hidden = false; interest.hidden = true; status.textContent = "Create an account or sign in to register interest.";
+      }
     }
+    auth.addEventListener("submit", async event => {
+      event.preventDefault(); result.textContent = "";
+      const form = new FormData(auth);
+      const action = form.get("action") === "login" ? "/api/auth/login" : "/api/auth/register";
+      try {
+        const data = await api(action, { method: "POST", body: JSON.stringify(Object.fromEntries(form)) });
+        if (data.recoveryCode && recovery && recoveryKey) { recovery.hidden = false; recoveryKey.textContent = data.recoveryCode; }
+        await refresh();
+      } catch (error) { result.textContent = error.message; }
+    });
+    saveRecovery?.addEventListener("click", () => {
+      if (recoveryKey?.textContent) download("kinforge-recovery-key.txt", `KinForge recovery key\n\n${recoveryKey.textContent}\n`);
+    });
+    interest.addEventListener("submit", async event => {
+      event.preventDefault(); result.textContent = "";
+      const data = Object.fromEntries(new FormData(interest));
+      data.consent = Boolean(new FormData(interest).get("consent"));
+      try {
+        const saved = await api("/api/beta/interest", { method: "POST", body: JSON.stringify(data) });
+        result.textContent = `Saved. ${saved.interest.plan} interest is registered.`;
+        withdraw.hidden = false;
+      } catch (error) { result.textContent = error.message; }
+    });
+    withdraw?.addEventListener("click", async () => {
+      try { await api("/api/beta/interest", { method: "DELETE" }); result.textContent = "Beta interest withdrawn."; withdraw.hidden = true; }
+      catch (error) { result.textContent = error.message; }
+    });
+    refresh();
   }
-  auth.addEventListener("submit", async event => {
-    event.preventDefault(); result.textContent = "";
-    const form = new FormData(auth);
-    const action = form.get("action") === "login" ? "/api/auth/login" : "/api/auth/register";
+  support?.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (supportResult) supportResult.textContent = "";
+    const data = Object.fromEntries(new FormData(support));
+    data.permissionToReply = Boolean(new FormData(support).get("permissionToReply"));
     try {
-      const data = await api(action, { method: "POST", body: JSON.stringify(Object.fromEntries(form)) });
-      if (data.recoveryCode && recovery && recoveryKey) { recovery.hidden = false; recoveryKey.textContent = data.recoveryCode; }
-      await refresh();
-    } catch (error) { result.textContent = error.message; }
+      const saved = await api("/api/support", { method: "POST", body: JSON.stringify(data) });
+      if (supportResult) supportResult.textContent = saved.message || "Request sent.";
+      support.reset();
+    } catch (error) {
+      if (supportResult) supportResult.textContent = error.message;
+    }
   });
-  saveRecovery?.addEventListener("click", () => {
-    if (recoveryKey?.textContent) download("kinforge-recovery-key.txt", `KinForge recovery key\n\n${recoveryKey.textContent}\n`);
-  });
-  interest.addEventListener("submit", async event => {
-    event.preventDefault(); result.textContent = "";
-    const data = Object.fromEntries(new FormData(interest));
-    data.consent = Boolean(new FormData(interest).get("consent"));
-    try {
-      const saved = await api("/api/beta/interest", { method: "POST", body: JSON.stringify(data) });
-      result.textContent = `Saved. ${saved.interest.plan} interest is registered${saved.interest.discountCode ? ` with ${saved.interest.discountCode}` : ""}.`;
-      withdraw.hidden = false;
-      if (billingControls) billingControls.hidden = false;
-      if (checkout) checkout.hidden = false;
-    } catch (error) { result.textContent = error.message; }
-  });
-  withdraw?.addEventListener("click", async () => {
-    try { await api("/api/beta/interest", { method: "DELETE" }); result.textContent = "Beta interest withdrawn."; withdraw.hidden = true; }
-    catch (error) { result.textContent = error.message; }
-  });
-  checkout?.addEventListener("click", async () => {
-    const form = new FormData(interest);
-    try {
-      const data = await api("/api/billing/checkout", { method: "POST", body: JSON.stringify(Object.fromEntries(form)) });
-      location.href = data.url;
-    } catch (error) { result.textContent = error.message; }
-  });
-  portal?.addEventListener("click", async () => {
-    try {
-      const data = await api("/api/billing/portal", { method: "POST", body: "{}" });
-      location.href = data.url;
-    } catch (error) { result.textContent = error.message; }
-  });
-  syncBilling?.addEventListener("click", async () => {
-    try {
-      const data = await api("/api/billing/history", { method: "GET", headers: {} });
-      if (billingHistory) billingHistory.textContent = JSON.stringify(data, null, 2);
-    } catch (error) { result.textContent = error.message; }
-  });
-  syncRevenue?.addEventListener("click", async () => {
-    try {
-      const data = await api("/api/admin/revenue", { method: "GET", headers: {} });
-      if (revenueReport) revenueReport.textContent = JSON.stringify(data, null, 2);
-    } catch (error) { result.textContent = error.message; }
-  });
-  refresh();
 })();

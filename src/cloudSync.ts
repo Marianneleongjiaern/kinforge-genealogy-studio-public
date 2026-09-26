@@ -13,7 +13,7 @@ export function emptyCloudLibrary(): AppState {
   for (const key of Object.keys(state) as (keyof AppState)[]) if (Array.isArray(state[key])) (state as any)[key] = [];
   const bookId = `book_${crypto.randomUUID()}`, treeId = `tree_${crypto.randomUUID()}`;
   state.books = [{ id: bookId, title: "My genealogy book", description: "" }];
-  state.trees = [{ ...createSeedState().trees[0], id: treeId, bookId, collectionId: undefined, title: "My family tree", author: "", authorContact: "" }];
+  state.trees = [{ ...createSeedState().trees[0], id: treeId, bookId, collectionId: undefined, title: "My relationship tree", author: "", authorContact: "" }];
   return state;
 }
 export class CloudSync {

@@ -6,7 +6,7 @@ test("cloud drive setup and saved exports work across device sessions, including
   const context = await browser.newContext({ baseURL, acceptDownloads: true });
   try {
     const email = `drives-${Date.now()}@example.test`; const password = "Browser-drive-tests-42";
-    const registration = await context.request.post("/api/auth/register", { data: { email, password, name: "Drive Tester" }, headers: { "X-KinForge-Client": "1", "CF-Connecting-IP": email } });
+    const registration = await context.request.post("/api/auth/register", { data: { email, password, name: "Drive Tester", privacyAccepted: true, termsAccepted: true }, headers: { "X-KinForge-Client": "1", "CF-Connecting-IP": email } });
     expect(registration.status()).toBe(201);
     await context.addInitScript(seed => { if (!localStorage.getItem("kinforge-genealogy-studio-v1")) localStorage.setItem("kinforge-genealogy-studio-v1", JSON.stringify(seed)); }, createSeedState());
     const page = await context.newPage(); await page.goto("/");

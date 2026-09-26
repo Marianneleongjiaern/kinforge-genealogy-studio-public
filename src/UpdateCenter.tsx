@@ -86,10 +86,10 @@ export default function UpdateCenter({ onClose, currentState }: { onClose: () =>
       recordUpdateAgentSignal("update-download-started", { platform: file.platform, format: file.format });
       if (window.kinforgeNative?.downloadUpdate) {
         const saved = await window.kinforgeNative.downloadUpdate(file.url);
-        setMessage(`App update saved and opened from ${saved.path}. Your family library is left unchanged.`);
+        setMessage(`App update saved and opened from ${saved.path}. Your library is left unchanged.`);
       } else {
         window.location.assign(file.url);
-        setMessage("App download started. Open the installer when it finishes. Your family library is left unchanged.");
+        setMessage("App download started. Open the installer when it finishes. Your library is left unchanged.");
       }
     } catch (error) {
       recordUpdateAgentSignal("update-download-failed", { platform: file.platform, format: file.format });
@@ -153,7 +153,7 @@ export default function UpdateCenter({ onClose, currentState }: { onClose: () =>
   return <div className="cloud-scrim"><section className="cloud-dialog wide update-dialog" role="dialog" aria-modal="true" aria-labelledby="update-title">
     <button className="cloud-close" aria-label="Close updates" onClick={onClose}><X size={20} /></button>
     <h2 id="update-title">KinForge Updates</h2>
-    <p className="quiet">KinForge checks monthly for verified app updates. Installing an update changes the KinForge app package and interface, not your family library, trees, books, collections, media, or reports.</p>
+    <p className="quiet">KinForge checks monthly for verified app updates. Installing an update changes the KinForge app package and interface, not your library, trees, books, collections, media, or reports.</p>
     <div className="update-summary">
       <div><strong>Installed</strong><span>{appInfo ? `${appInfo.version} · ${appInfo.platformLabel}` : "Web app"}</span></div>
       <div><strong>Latest</strong><span>{release?.version || "Checking..."}</span></div>
