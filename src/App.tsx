@@ -806,6 +806,17 @@ function App({ cloud }: { cloud?: CloudApp }) {
         : `Download started for ${file.name}. Check your browser downloads and keep this private copy secure.`);
     } catch (error) { setItemMessage(error instanceof Error ? error.message : "The download could not be created. Please try again."); }
   };
+  const signOut = () => {
+    if (cloud && state !== cloud.state) cloud.onChange(state);
+    if (!cloud) localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    setItemMessage("Saved. Signing out...");
+    window.setTimeout(() => {
+      if (cloud) { cloud.onSignOut(); return; }
+      setGuestMode(false);
+      sessionStorage.removeItem("kinforge-guest");
+      setAuth({ ...auth, activeUserId: null });
+    }, cloud?.saved ? 0 : 350);
+  };
   const itemActions = (target: DeleteTarget, title: string) => <ItemActions target={target} title={title} onDelete={requestDelete} onDownload={downloadItem} readOnly={cloud?.readOnly} />;
   const confirmDeletion = () => {
     if (!deleteTarget || cloud?.readOnly) return;
@@ -4204,12 +4215,7 @@ Important limitation:
             <Button variant="secondary" icon={<Archive size={16} />} onClick={() => setItemsOpen(true)}>Saved items</Button>
             <Button variant="secondary" icon={<BookOpen size={16} />} onClick={() => setTermsOpen(true)}>Terms and meanings</Button>
             <Button variant="secondary" icon={<BookOpen size={16} />} onClick={() => setReligiousTermsOpen(true)}>Religious terms</Button>
-            <Button variant="ghost" onClick={() => {
-              if (cloud) { cloud.onSignOut(); return; }
-              setGuestMode(false);
-              sessionStorage.removeItem("kinforge-guest");
-              setAuth({ ...auth, activeUserId: null });
-            }}>Sign Out</Button>
+            <Button variant="ghost" onClick={signOut}>Save &amp; Logout</Button>
           </div>
         </header>
         {storageError && <p role="alert" className="report-error">{storageError}</p>}
