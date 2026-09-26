@@ -2,6 +2,10 @@
 
 Repository: https://github.com/Aesdocktectics/kinforge-genealogy-studio
 
+Project: [KinForge Studio: Roadmap & Releases](https://github.com/orgs/Aesdocktectics/projects/2)
+
+The private project tracks product delivery with Todo, In Progress, and Done states. It includes the current import pull request and the linked test-repair issue. Use it for features, fixes, accessibility, beta validation, and platform releases; keep private user records out of project items.
+
 This private repository keeps the shared application source for Mac, Windows, webapp, website, and the current ChatGPT Site together. Installer binaries belong in Releases rather than Git history. Family libraries, runtime databases, private attachments, session files, and deployment secrets are excluded.
 
 ## Pull requests
