@@ -988,6 +988,69 @@ a {
   color: #2d5a31;
 }
 
+.terms-box {
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #f6f8f9;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.terms-box p {
+  margin: 0;
+}
+
+.terms-box .check-row {
+  margin: 4px 0 0;
+}
+
+.legal-agreement {
+  display: grid;
+  gap: 12px;
+  max-height: min(46vh, 560px);
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfc;
+}
+
+.legal-agreement h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.legal-agreement h3 {
+  margin: 10px 0 4px;
+  font-size: 15px;
+}
+
+.legal-agreement details {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.legal-agreement summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.legal-agreement p {
+  margin: 0 0 8px;
+}
+
+.legal-checks {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-weight: 800;
+}
+
 .empty-state {
   min-height: 180px;
   display: grid;

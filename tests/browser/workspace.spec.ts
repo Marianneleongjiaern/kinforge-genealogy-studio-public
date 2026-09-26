@@ -138,7 +138,7 @@ test("separate tree data and searchable people directory", async ({ page }) => {
   await dialog.getByLabel("Given name").fill("Isolated");
   await dialog.getByRole("button", { name: "Add person", exact: true }).click();
   await expect(page.locator(".react-flow__node")).toHaveCount(1);
-  await page.getByLabel("Active family tree").selectOption({ index: 0 });
+  await page.getByLabel("Active relationship tree").selectOption({ index: 0 });
   await expect(page.locator(".react-flow__node")).toHaveCount(4);
   await expect(page.locator(".person-inspector")).not.toContainText("Isolated");
 });

@@ -3,7 +3,11 @@ import { sqliteTable, text, integer, primaryKey, index, uniqueIndex } from "driz
 export const accounts = sqliteTable("accounts", {
   id: text("id").primaryKey(), email: text("email").notNull(), name: text("name").notNull(),
   password: text("password").notNull(), recoveryHash: text("recovery_hash").notNull(),
-  createdAt: integer("created_at").notNull()
+  createdAt: integer("created_at").notNull(),
+  termsAcceptedAt: integer("terms_accepted_at"),
+  termsVersion: text("terms_version"),
+  privacyAcceptedAt: integer("privacy_accepted_at"),
+  privacyVersion: text("privacy_version")
 }, t => [uniqueIndex("accounts_email").on(t.email)]);
 export const sessions = sqliteTable("sessions", {
   hash: text("hash").primaryKey(), userId: text("user_id").notNull().references(() => accounts.id, { onDelete: "cascade" }),

@@ -231,7 +231,7 @@ function TreeWorkspaceContent(props: Props) {
           <Controls showInteractive={false} />
           <MiniMap pannable zoomable nodeColor={node => (node.data as PersonNode["data"]).person.branchColor} maskColor="rgba(244,247,248,.75)" />
         </ReactFlow>}
-        {!people.length && <div className="graph-empty"><Network size={40} /><h2>Your family tree</h2><button className="button primary" onClick={() => setDialog(true)}><Plus size={16} />Add first person</button></div>}
+        {!people.length && <div className="graph-empty"><Network size={40} /><h2>Your relationship tree</h2><button className="button primary" onClick={() => setDialog(true)}><Plus size={16} />Add first person</button></div>}
         <div className="chart-caption">{viewConfig.label}<span>{visible.length} people</span><span>{links.length} relationships</span></div>
       </div>
       <aside className="person-inspector" aria-label="Selected person">

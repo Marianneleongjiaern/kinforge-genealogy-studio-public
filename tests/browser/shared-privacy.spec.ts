@@ -20,7 +20,7 @@ type Scenario = {
 };
 
 async function register(context: BrowserContext, email: string): Promise<Account> {
-  const response = await context.request.post("/api/auth/register", { headers: clientHeaders, data: { email, password, name: "Privacy test account" } });
+  const response = await context.request.post("/api/auth/register", { headers: clientHeaders, data: { email, password, name: "Privacy test account", privacyAccepted: true, termsAccepted: true } });
   expect(response.status(), await response.text()).toBe(201);
   const { user } = await response.json();
   const libraries = await context.request.get("/api/libraries");

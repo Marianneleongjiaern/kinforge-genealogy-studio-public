@@ -10,7 +10,7 @@ async function call(path, method = "GET", data, cookie = "", extras = {}) {
   return { status: response.status, body, cookie: response.headers.get("set-cookie")?.split(";")[0], headers: response.headers };
 }
 async function account(email) {
-  const result = await call("/api/auth/register", "POST", { email, name: email.split("@")[0], password: "Test-library-password-42" });
+  const result = await call("/api/auth/register", "POST", { email, name: email.split("@")[0], password: "Test-library-password-42", privacyAccepted: true, termsAccepted: true });
   assert.equal(result.status, 201, JSON.stringify(result.body));
   const libraries = await call("/api/libraries", "GET", undefined, result.cookie);
   return { ...result, library: libraries.body.libraries[0].id };
@@ -44,14 +44,14 @@ test("sessions use protected cookies and password hashes; anonymous reads fail",
   assert.equal((await call("/api/libraries")).status, 401);
   assert.equal((await call(`/api/libraries/${owner.library}`)).status, 401);
 });
-test("beta interest is account protected and records creator discount codes", async () => {
+test("beta interest is account protected and records interest without payment data", async () => {
   assert.equal((await call("/api/beta/interest")).status, 401);
   const saved = await call("/api/beta/interest", "POST", { plan: "beta", interval: "year", discountCode: "WRITER10", consent: true }, owner.cookie);
   assert.equal(saved.status, 201, JSON.stringify(saved.body));
-  assert.deepEqual(saved.body.interest, { plan: "beta", interval: "year", discountCode: "WRITER10" });
+  assert.deepEqual(saved.body.interest, { plan: "beta", interval: "month", discountCode: null });
   const listed = await call("/api/beta/interest", "GET", undefined, owner.cookie);
-  assert.equal(listed.body.interest.discount_code, "WRITER10");
-  assert.equal((await call("/api/beta/interest", "POST", { plan: "beta", interval: "month", discountCode: "MADEUP", consent: true }, owner.cookie)).status, 400);
+  assert.equal(listed.body.interest.discount_code, null);
+  assert.equal((await call("/api/beta/interest", "POST", { plan: "beta", interval: "month", consent: false }, owner.cookie)).status, 400);
   assert.equal((await call("/api/beta/interest", "DELETE", undefined, owner.cookie)).status, 200);
   assert.equal((await call("/api/beta/interest", "GET", undefined, owner.cookie)).body.interest, null);
 });

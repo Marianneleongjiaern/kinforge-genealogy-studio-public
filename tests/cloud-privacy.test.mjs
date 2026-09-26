@@ -25,7 +25,7 @@ const get = account => call(path(), "GET", undefined, account);
 const put = (account, state, revision) => call(path(), "PUT", { state, revision }, account);
 const asset = (account, name, method = "GET") => call(`${path()}/assets/${files[name].hash}`, method, method === "PUT" ? files[name].data : undefined, account);
 async function account(name) {
-  const result = await call("/api/auth/register", "POST", { email: `${name}@privacy.test`, name, password: "Private-library-password-42" });
+  const result = await call("/api/auth/register", "POST", { email: `${name}@privacy.test`, name, password: "Private-library-password-42", privacyAccepted: true, termsAccepted: true });
   assert.equal(result.status, 201, result.text);
   const libraries = await call("/api/libraries", "GET", undefined, result);
   return { ...result, library: libraries.body.libraries[0].id, id: result.body.user.id };

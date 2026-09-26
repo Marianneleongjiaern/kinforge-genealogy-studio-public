@@ -3,7 +3,7 @@ import { createSeedState } from "../../src/domain";
 const password = "Library-testing-password-42";
 test.setTimeout(90000);
 async function register(context: BrowserContext, email: string) {
-  const response = await context.request.post("/api/auth/register", { data: { email, password, name: "Sync Tester" }, headers: { "X-KinForge-Client": "1", "CF-Connecting-IP": `test-${email}` } });
+  const response = await context.request.post("/api/auth/register", { data: { email, password, name: "Sync Tester", privacyAccepted: true, termsAccepted: true }, headers: { "X-KinForge-Client": "1", "CF-Connecting-IP": `test-${email}` } });
   expect(response.status(), await response.text()).toBe(201);
 }
 async function login(context: BrowserContext, email: string) {

@@ -3,6 +3,7 @@ import html2canvas from "html2canvas";
 import type { ReportPresentation } from "./reportOptions";
 import { createPdfTextLayer, measurePdfText, pdfUnicode, type PdfTextRun } from "./reportPdfText";
 import { createReportPdfLayout, pageDecoration } from "./reportPdfLayout";
+import { PUBLIC_EXPORT_NOTICE } from "./exportAttribution";
 
 const PX = 4 / 3;
 const fontFiles = new Map<string, Promise<string>>();
@@ -108,7 +109,7 @@ export async function buildFormattedPdf(element: HTMLElement, format: "a4" | "le
   // jsPDF 2.5 compresses even empty dictionaries into streams. A field must be
   // a dictionary: otherwise other readers can clone its widget and value apart.
   internal.putStream = options => putStream(options.data ? options : { ...options, filters: [] });
-  pdf.setProperties({ title: "KinForge report", creator: "KinForge Genealogy Studio", subject: fillable ? "Searchable report with interactive form fields" : "Searchable report" });
+  pdf.setProperties({ title: "KinForge report", creator: "KinForge Genealogy Studio", subject: fillable ? "Searchable report with interactive form fields" : "Searchable report", keywords: PUBLIC_EXPORT_NOTICE });
   await loadFont(pdf, "reportPdfNotoSans.ttf", "ReportNoto");
   const textLayer = createPdfTextLayer(pdf);
   const { host, clone, geometry, scale, pages, dispose } = await createReportPdfLayout(element, format, presentation, fillable);
@@ -147,6 +148,9 @@ export async function buildFormattedPdf(element: HTMLElement, format: "a4" | "le
       pdf.addImage(raster, "PNG", 0, 0, geometry.width, geometry.height, undefined, "FAST");
       const pageRuns = runs.filter(run => run.y + run.height / 2 >= slice.start && run.y + run.height / 2 < slice.end).map(run => points({ ...run, x: run.x * scale + geometry.margin * PX, y: (run.y - slice.start) * scale + geometry.top * PX, width: run.width * scale, height: run.height * scale, size: run.size * scale }));
       (pdf.internal as InternalPdf).write(textLayer([...decorationRuns.map(points), ...pageRuns], geometry.height));
+      pdf.setFont("ReportNoto", "normal");
+      pdf.setFontSize(7);
+      pdf.text(PUBLIC_EXPORT_NOTICE, geometry.margin, geometry.height - Math.max(10, geometry.margin / 2), { maxWidth: geometry.width - geometry.margin * 2 });
       for (const field of fields.filter(field => field.y >= slice.start - .1 && field.y < slice.end - .1)) {
         const font = /[\u2e80-\u9fff\uf900-\ufaff\uac00-\ud7ff]/.test(field.value) ? "ReportNotoCJK" : "ReportNoto";
         const scaledField = { ...field, width: field.width * scale, height: field.height * scale, size: field.size * scale, runs: field.runs.map(run => ({ ...run, x: run.x * scale, y: run.y * scale, width: run.width * scale, height: run.height * scale, size: run.size * scale })) };

@@ -62,7 +62,7 @@ async function call(path, method = "GET", data, cookie = "", headers = {}) {
   return { status: response.status, body, cookie: response.headers.get("set-cookie")?.split(";")[0], headers: response.headers };
 }
 async function account(email) {
-  const result = await call("/api/auth/register", "POST", { email, password: "Drive-tests-password-42" }); assert.equal(result.status, 201);
+  const result = await call("/api/auth/register", "POST", { email, password: "Drive-tests-password-42", privacyAccepted: true, termsAccepted: true }); assert.equal(result.status, 201);
   return { ...result, library: (await call("/api/libraries", "GET", undefined, result.cookie)).body.libraries[0].id };
 }
 async function waitStatus(provider, expected) {
