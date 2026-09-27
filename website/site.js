@@ -34,16 +34,37 @@
     });
     show(0);
   });
+  const createElevenLabsAudio = async text => {
+    const response = await fetch("/api/tts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-KinForge-Client": "1" },
+      body: JSON.stringify({ text })
+    });
+    if (!response.ok) throw new Error("ElevenLabs narration unavailable");
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.addEventListener("ended", () => URL.revokeObjectURL(url), { once: true });
+    audio.addEventListener("error", () => URL.revokeObjectURL(url), { once: true });
+    return { audio, url };
+  };
   const narrationPlayers = Array.from(document.querySelectorAll(".narration-player"));
   if (narrationPlayers.length && "speechSynthesis" in window) {
     let active = null;
+    const edgeVoiceHint = /microsoft.*(aria|jenny|michelle|emma|ava|sara|sonia|libby|natasha|clara|neerja|priya|online|natural)/i;
     const voiceHint = /female|woman|samantha|victoria|karen|zira|aria|jenny|susan|ava|serena|moira|tessa|salli|joanna|amy|emma/i;
     const chooseVoice = () => {
       const voices = speechSynthesis.getVoices();
-      return voices.find(voice => voice.lang.toLowerCase().startsWith("en") && voiceHint.test(voice.name)) || voices.find(voice => voice.lang.toLowerCase().startsWith("en")) || voices[0] || null;
+      return voices.find(voice => voice.lang.toLowerCase().startsWith("en") && edgeVoiceHint.test(voice.name)) || voices.find(voice => edgeVoiceHint.test(voice.name)) || voices.find(voice => voice.lang.toLowerCase().startsWith("en") && voiceHint.test(voice.name)) || voices.find(voice => voice.lang.toLowerCase().startsWith("en")) || voices[0] || null;
     };
     const clearActiveLine = () => document.querySelectorAll("[data-narration-line].active").forEach(line => line.classList.remove("active"));
-    const stop = () => { speechSynthesis.cancel(); clearActiveLine(); if (active?.status) active.status.textContent = "Narration stopped."; active = null; };
+    const stop = () => {
+      speechSynthesis.cancel();
+      if (active?.audio) { active.audio.pause(); active.audio.src = ""; if (active.url) URL.revokeObjectURL(active.url); }
+      clearActiveLine();
+      if (active?.status) active.status.textContent = "Narration stopped.";
+      active = null;
+    };
     narrationPlayers.forEach(player => {
       const lines = Array.from(player.querySelectorAll("[data-narration-line]"));
       const play = player.querySelector(".narration-play");
@@ -53,11 +74,30 @@
       const volume = player.querySelector(".narration-volume input");
       const volumeValue = player.querySelector(".narration-volume span");
       if (!lines.length || !play || !pause || !stopButton) return;
-      volume?.addEventListener("input", () => { if (volumeValue) volumeValue.textContent = `${volume.value}%`; });
-      play.addEventListener("click", () => {
+      volume?.addEventListener("input", () => {
+        if (volumeValue) volumeValue.textContent = `${volume.value}%`;
+        if (active?.audio && active.player === player) active.audio.volume = Math.max(0, Math.min(1, Number(volume.value) / 100));
+      });
+      play.addEventListener("click", async () => {
+        if (active?.audio && active.player === player && active.audio.paused) { await active.audio.play(); if (statusLine) statusLine.textContent = "Narration resumed."; return; }
         if (speechSynthesis.paused && active?.player === player) { speechSynthesis.resume(); if (statusLine) statusLine.textContent = "Narration resumed."; return; }
         stop();
         active = { player, status: statusLine };
+        const fullText = lines.map(line => line.textContent || "").join(" ");
+        try {
+          if (statusLine) statusLine.textContent = "Preparing human-like narration.";
+          const generated = await createElevenLabsAudio(fullText);
+          generated.audio.volume = Math.max(0, Math.min(1, Number(volume?.value || 85) / 100));
+          active = { player, status: statusLine, audio: generated.audio, url: generated.url };
+          lines[0]?.classList.add("active");
+          generated.audio.onplay = () => { if (statusLine) statusLine.textContent = "Human-like narration playing."; };
+          generated.audio.onended = () => { if (statusLine) statusLine.textContent = "Narration complete."; clearActiveLine(); active = null; };
+          generated.audio.onerror = () => { if (statusLine) statusLine.textContent = "Narration stopped."; clearActiveLine(); active = null; };
+          await generated.audio.play();
+          return;
+        } catch (error) {
+          if (statusLine) statusLine.textContent = "Using browser narration while human-like audio is unavailable.";
+        }
         const voice = chooseVoice();
         let index = 0;
         const speakNext = () => {
@@ -79,6 +119,7 @@
         speakNext();
       });
       pause.addEventListener("click", () => {
+        if (active?.audio && active.player === player && !active.audio.paused) { active.audio.pause(); if (statusLine) statusLine.textContent = "Narration paused."; return; }
         if (active?.player === player && speechSynthesis.speaking && !speechSynthesis.paused) { speechSynthesis.pause(); if (statusLine) statusLine.textContent = "Narration paused."; }
       });
       stopButton.addEventListener("click", stop);
@@ -101,10 +142,11 @@
     let readerActive = null;
     const chooseReaderVoice = () => {
       const voices = speechSynthesis.getVoices();
-      readerVoice = voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name)) || voices.find(v => /natural|premium|neural/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /^en[-_]/i.test(v.lang)) || voices[0] || null;
+      readerVoice = voices.find(v => /microsoft.*(aria|jenny|michelle|emma|ava|sara|sonia|libby|natasha|clara|neerja|priya|online|natural)/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /microsoft.*(aria|jenny|michelle|emma|ava|sara|sonia|libby|natasha|clara|neerja|priya|online|natural)/i.test(v.name)) || voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name)) || voices.find(v => /natural|premium|neural/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /^en[-_]/i.test(v.lang)) || voices[0] || null;
     };
     const stopReader = () => {
       speechSynthesis.cancel();
+      if (readerActive?.audio) { readerActive.audio.pause(); readerActive.audio.src = ""; if (readerActive.url) URL.revokeObjectURL(readerActive.url); }
       if (readerActive?.status) readerActive.status.textContent = "Read aloud stopped.";
       document.querySelectorAll(".site-reader-active").forEach(node => node.classList.remove("site-reader-active"));
       readerActive = null;
@@ -130,12 +172,28 @@
       volume?.addEventListener("input", () => {
         if (volumeLabel) volumeLabel.textContent = volume.value + "%";
         if (readerActive?.utterance) readerActive.utterance.volume = Number(volume.value) / 100;
+        if (readerActive?.audio) readerActive.audio.volume = Number(volume.value) / 100;
       });
-      play?.addEventListener("click", () => {
+      play?.addEventListener("click", async () => {
+        if (readerActive?.audio && readerActive.target === target && readerActive.audio.paused) { await readerActive.audio.play(); if (status) status.textContent = "Read aloud resumed."; return; }
         if (speechSynthesis.paused && readerActive?.target === target) { speechSynthesis.resume(); if (status) status.textContent = "Read aloud resumed."; return; }
         stopReader();
         const text = getReaderText(target);
         if (!text) { if (status) status.textContent = "There is no readable text in this section."; return; }
+        try {
+          if (status) status.textContent = "Preparing human-like read aloud.";
+          const generated = await createElevenLabsAudio(text);
+          generated.audio.volume = volume ? Number(volume.value) / 100 : 0.85;
+          target.classList.add("site-reader-active");
+          readerActive = { target, audio: generated.audio, url: generated.url, status };
+          generated.audio.onplay = () => { if (status) status.textContent = "Human-like read aloud playing."; };
+          generated.audio.onended = () => { if (status) status.textContent = "Finished reading this section."; target.classList.remove("site-reader-active"); readerActive = null; };
+          generated.audio.onerror = () => { if (status) status.textContent = "Read aloud stopped."; target.classList.remove("site-reader-active"); readerActive = null; };
+          await generated.audio.play();
+          return;
+        } catch (error) {
+          if (status) status.textContent = "Using browser voice while human-like audio is unavailable.";
+        }
         const utterance = new SpeechSynthesisUtterance(text);
         if (readerVoice) utterance.voice = readerVoice;
         utterance.lang = document.documentElement.lang || readerVoice?.lang || "en-US";
@@ -151,6 +209,11 @@
       });
       pause?.addEventListener("click", () => {
         if (!readerActive || readerActive.target !== target) return;
+        if (readerActive.audio) {
+          if (readerActive.audio.paused) { readerActive.audio.play(); if (status) status.textContent = "Read aloud resumed."; }
+          else { readerActive.audio.pause(); if (status) status.textContent = "Read aloud paused."; }
+          return;
+        }
         if (speechSynthesis.paused) { speechSynthesis.resume(); if (status) status.textContent = "Read aloud resumed."; }
         else { speechSynthesis.pause(); if (status) status.textContent = "Read aloud paused."; }
       });
