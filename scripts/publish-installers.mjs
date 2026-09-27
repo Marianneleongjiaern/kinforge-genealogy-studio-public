@@ -58,5 +58,10 @@ async function publishFile(file) {
   } finally { await handle.close(); }
   console.log(`${file.id}: server checksum, download and resume verified`);
 }
-for (const file of release.files) await publishFile(file);
+const pending = [...release.files];
+const results = await Promise.allSettled(Array.from({ length: 3 }, async () => {
+  for (;;) { const file = pending.shift(); if (!file) return; await publishFile(file); }
+}));
+const failed = results.find(result => result.status === "rejected");
+if (failed) throw failed.reason;
 console.log(JSON.stringify({ version: release.version, verifiedDownloads: release.files.length, url: `${origin}/downloads` }));

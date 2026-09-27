@@ -31,7 +31,7 @@ export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
   },
   {
     title: "Support and special access proof",
-    body: "Special access or extra permission requests may include proof descriptions or links showing a close or special relationship with Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
+    body: "Special access or extra written-permission requests may include proof descriptions or links showing a close or special relationship with Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
   },
   {
     title: "Retention and deletion",
@@ -82,7 +82,7 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Acceptable use",
-    body: "Users must not misuse KinForge, break security, submit fake proof, impersonate others, upload malware, infringe copyright, harass people, expose private records without permission, or use the service for unlawful purposes. Celebrities or public figures may be included only when clearly needed for fiction, fanfiction, roleplay, RPG, historical-fiction, story, or research context where the public figure is part of that work."
+    body: "Users must not misuse KinForge, break security, submit fake proof, impersonate others, upload malware, infringe copyright, harass people, expose private records without permission, or use the service for unlawful purposes."
   },
   {
     title: "Changes and support",
