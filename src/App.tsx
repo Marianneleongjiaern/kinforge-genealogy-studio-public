@@ -169,7 +169,7 @@ const NAV: Array<{ id: ViewKey; label: string; icon: ReactNode }> = [
   { id: "support", label: "Support Form", icon: <ClipboardList size={18} /> },
   { id: "private-access", label: "Private Access", icon: <Globe2 size={18} /> },
   { id: "media", label: "Media", icon: <Image size={18} /> },
-  { id: "ideas", label: "Ideas & Feedback", icon: <Lightbulb size={18} /> },
+  { id: "ideas", label: "Contribute & Feedback", icon: <Lightbulb size={18} /> },
   { id: "glyphs", label: "Glyph Library", icon: <Sparkles size={18} /> },
   { id: "accessibility", label: "Accessibility", icon: <Eye size={18} /> },
   { id: "charts", label: "Charts", icon: <ChartNoAxesCombined size={18} /> },
@@ -3335,7 +3335,7 @@ Quality checklist:
           <div className="settings-grid">
             <label className="field"><span>Your name</span><input className="control" value={supportForm.name} onChange={event => setSupportForm(current => ({ ...current, name: event.target.value }))} /></label>
             <label className="field"><span>Email for replies</span><input className="control" type="email" value={supportForm.email} onChange={event => setSupportForm(current => ({ ...current, email: event.target.value }))} /></label>
-            <label className="field"><span>Request type</span><select className="control" value={supportForm.type} onChange={event => setSupportForm(current => ({ ...current, type: event.target.value }))}><option>Support request</option><option>Special access request</option><option>Bug report</option><option>Feature request</option><option>Account or login help</option><option>Sync issue</option><option>Download question</option><option>Accessibility request</option></select></label>
+            <label className="field"><span>Request type</span><select className="control" value={supportForm.type} onChange={event => setSupportForm(current => ({ ...current, type: event.target.value }))}><option>Support request</option><option>Special access request</option><option>Bug report</option><option>Feature request</option><option>Feature addition suggestion</option><option>Contribute / Help Our Cause</option><option>Account or login help</option><option>Sync issue</option><option>Download question</option><option>Accessibility request</option></select></label>
             <label className="field"><span>Device/app version</span><input className="control" value={supportForm.device} placeholder="Example: Mac app 1.3.8 on Apple Silicon" onChange={event => setSupportForm(current => ({ ...current, device: event.target.value }))} /></label>
           </div>
           <label className="field"><span>Subject</span><input className="control" value={supportForm.subject} onChange={event => setSupportForm(current => ({ ...current, subject: event.target.value }))} /></label>
@@ -3558,8 +3558,8 @@ Important limitation:
       <div className="hero-band">
         <div>
           <p className="eyebrow">Planning and app-improvement inbox</p>
-          <h1>Ideas & Feedback</h1>
-          <p>Keep character ideas, fandom notes, app feedback, bugs, accessibility requests, and future release ideas in one searchable library area.</p>
+          <h1>Contribute & Feedback</h1>
+          <p>Help Our Cause by saving feature ideas, app feedback, feature addition suggestions, bugs, accessibility requests, tutorial requests, and future release ideas in one searchable library area.</p>
         </div>
         <div className="hero-actions">
           <Badge>{ideas.length} ideas</Badge>
@@ -3606,7 +3606,8 @@ Important limitation:
             <Button icon={<Plus size={16} />} onClick={addFeedback}>Add feedback</Button>
             <DictationButton enabled={state.accessibility.speechToText} label="Dictate feedback" onStatus={setDictationMessage} onText={text => setFeedbackDraft(current => ({ ...current, body: [current.body, text].filter(Boolean).join(current.body ? "\n" : "") }))} />
           </div>
-          <p className="quiet">Feedback is stored in your KinForge library and can feed the internal monthly update planner. It is not a public support ticket.</p>
+          <p className="quiet">Feedback is stored in your KinForge library and can feed the internal monthly update planner. To send it to Dreams of Serene Landscapes, use the public contribution form.</p>
+          <p><a className="button secondary" href="/website/contribute/" target="_blank" rel="noreferrer">Open public contribution form</a></p>
           <div className="journal-list">
             {feedback.map(entry => <article className="journal-card feedback" key={entry.id}>
               <div className="saved-item-heading"><strong>{entry.title}</strong>{itemActions({ kind: "userFeedback", id: entry.id }, entry.title)}</div>
