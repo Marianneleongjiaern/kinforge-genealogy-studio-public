@@ -39,3 +39,7 @@ KinForge is built for relationship-rich work:
 Product of Dreams of Serene Landscapes. Copyright 2026 Dreams of Serene Landscapes. All rights reserved.
 
 Exports and downloads must follow KinForge copyright and credit rules.
+
+## Verification refresh
+
+Latest public GitHub Pages and KinForge checks were rerun after the download-page test update.
