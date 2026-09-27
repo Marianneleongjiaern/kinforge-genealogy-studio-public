@@ -11,6 +11,29 @@
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
+  const visualDemos = Array.from(document.querySelectorAll("[data-visual-demo]"));
+  visualDemos.forEach(demo => {
+    const frames = Array.from(demo.querySelectorAll("[data-visual-frame]"));
+    const previous = demo.querySelector("[data-visual-prev]");
+    const next = demo.querySelector("[data-visual-next]");
+    const play = demo.querySelector("[data-visual-play]");
+    const statusLine = demo.querySelector("[data-visual-status]");
+    let index = 0, timer = 0, playing = false;
+    const show = nextIndex => {
+      index = (nextIndex + frames.length) % frames.length;
+      frames.forEach((frame, frameIndex) => { frame.hidden = frameIndex !== index; frame.classList.toggle("active", frameIndex === index); });
+      if (statusLine) statusLine.textContent = `Showing step ${index + 1} of ${frames.length}.`;
+    };
+    const stopAuto = () => { if (timer) window.clearInterval(timer); timer = 0; playing = false; if (play) play.textContent = "Play demo"; };
+    previous?.addEventListener("click", () => { stopAuto(); show(index - 1); });
+    next?.addEventListener("click", () => { stopAuto(); show(index + 1); });
+    play?.addEventListener("click", () => {
+      if (playing) { stopAuto(); return; }
+      playing = true; play.textContent = "Pause demo";
+      timer = window.setInterval(() => show(index + 1), 3600);
+    });
+    show(0);
+  });
   const narrationPlayers = Array.from(document.querySelectorAll(".narration-player"));
   if (narrationPlayers.length && "speechSynthesis" in window) {
     let active = null;
