@@ -65,7 +65,7 @@ test("downloads support HEAD and byte ranges without exposing other bucket objec
 });
 test("the public downloads page offers platform labels, checksum and signing disclosure", async () => {
   const page = await request("/downloads"); const html = await page.text();
-  assert.match(html, /Apple Silicon/); assert.match(html, /Intel/); assert.match(html, /Windows/); assert.match(html, /not Apple-notarized/); assert.match(html, /DMG download/); assert.match(html, new RegExp(sha256));
+  assert.match(html, /Apple Silicon/); assert.match(html, /Intel/); assert.match(html, /Windows/); assert.match(html, /not Apple-notarized/); assert.match(html, /KinForge\.dmg/); assert.match(html, new RegExp(sha256));
 });
 test("expired publisher credentials cannot write while published downloads remain available", async () => {
   await mf.setOptions({ ...options, bindings: { RELEASE_UPLOAD_TOKEN: token, RELEASE_UPLOAD_EXPIRES: "1" } });
