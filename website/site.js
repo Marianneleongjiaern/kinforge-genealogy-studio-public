@@ -9,7 +9,30 @@
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
+  const billingControls = document.getElementById("billing-controls");
+  const checkout = document.getElementById("checkout");
+  const portal = document.getElementById("billing-portal");
+  const syncBilling = document.getElementById("sync-billing");
+  const syncRevenue = document.getElementById("sync-revenue");
+  const billingHistory = document.getElementById("billing-history");
+  const revenueReport = document.getElementById("revenue-report");
+  const discountNote = document.getElementById("discount-note");
   if (!auth && !support) return;
+
+  const discounts = {
+    other: "Other uses standard pricing with no discount.",
+    writer: "Writer discount: WRITER10 for 10% off.",
+    social_worker: "Social worker discount: SOCIALWORK15 for 15% off.",
+    genealogist: "Genealogist discount: GENEALOGY10 for 10% off.",
+    historian: "Historian discount: HISTORY10 for 10% off.",
+    roleplayer: "Roleplayer discount: ROLEPLAYER12 for 12% off.",
+    rpg: "RPG player discount: RPG12 for 12% off.",
+    dnd: "DND player discount: DND12 for 12% off.",
+    student: "Student discount: STUDENT20 for 20% off.",
+    nonprofit: "Nonprofit discount: NONPROFIT20 for 20% off.",
+    educator: "Educator discount: EDUCATOR15 for 15% off.",
+    special_unpaid: "Special unpaid or copyright-free versions require a support request before checkout."
+  };
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
   async function api(path, init) {
@@ -31,7 +54,10 @@
         auth.hidden = true; interest.hidden = false; status.textContent = `Signed in as ${me.user.email}.`;
         const saved = await api("/api/beta/interest", { method: "GET", headers: {} });
         withdraw.hidden = !saved.interest;
-        if (saved.interest) result.textContent = `Registered interest: ${saved.interest.plan}.`;
+        if (billingControls) billingControls.hidden = false;
+        if (checkout) checkout.hidden = !saved.interest;
+        if (portal) portal.hidden = false;
+        if (saved.interest) result.textContent = `Saved choice: ${saved.interest.plan}, ${saved.interest.interval || "month"}${saved.interest.discount_code ? `, ${saved.interest.discount_code}` : ""}.`;
       } catch {
         auth.hidden = false; interest.hidden = true; status.textContent = "Create an account or sign in to register interest.";
       }
@@ -55,13 +81,49 @@
       data.consent = Boolean(new FormData(interest).get("consent"));
       try {
         const saved = await api("/api/beta/interest", { method: "POST", body: JSON.stringify(data) });
-        result.textContent = `Saved. ${saved.interest.plan} interest is registered.`;
+        result.textContent = `Saved. ${saved.interest.plan} choice is registered${saved.interest.discountCode ? ` with ${saved.interest.discountCode}` : ""}.`;
         withdraw.hidden = false;
+        if (billingControls) billingControls.hidden = false;
+        if (checkout) checkout.hidden = data.userType === "special_unpaid";
       } catch (error) { result.textContent = error.message; }
     });
+    interest.elements.userType?.addEventListener("change", () => {
+      const type = interest.elements.userType.value;
+      if (discountNote) discountNote.textContent = discounts[type] || discounts.other;
+      if (checkout) checkout.hidden = type === "special_unpaid";
+    });
     withdraw?.addEventListener("click", async () => {
-      try { await api("/api/beta/interest", { method: "DELETE" }); result.textContent = "Beta interest withdrawn."; withdraw.hidden = true; }
+      try { await api("/api/beta/interest", { method: "DELETE" }); result.textContent = "Saved choice withdrawn."; withdraw.hidden = true; if (checkout) checkout.hidden = true; }
       catch (error) { result.textContent = error.message; }
+    });
+    checkout?.addEventListener("click", async () => {
+      const data = Object.fromEntries(new FormData(interest));
+      if (data.userType === "special_unpaid") {
+        result.textContent = "Special unpaid versions must be requested through the support form.";
+        return;
+      }
+      try {
+        const checkoutSession = await api("/api/billing/checkout", { method: "POST", body: JSON.stringify(data) });
+        location.href = checkoutSession.url;
+      } catch (error) { result.textContent = error.message; }
+    });
+    portal?.addEventListener("click", async () => {
+      try {
+        const data = await api("/api/billing/portal", { method: "POST", body: "{}" });
+        location.href = data.url;
+      } catch (error) { result.textContent = error.message; }
+    });
+    syncBilling?.addEventListener("click", async () => {
+      try {
+        const data = await api("/api/billing/history", { method: "GET", headers: {} });
+        if (billingHistory) billingHistory.textContent = JSON.stringify(data, null, 2);
+      } catch (error) { result.textContent = error.message; }
+    });
+    syncRevenue?.addEventListener("click", async () => {
+      try {
+        const data = await api("/api/admin/revenue", { method: "GET", headers: {} });
+        if (revenueReport) revenueReport.textContent = JSON.stringify(data, null, 2);
+      } catch (error) { result.textContent = error.message; }
     });
     refresh();
   }
