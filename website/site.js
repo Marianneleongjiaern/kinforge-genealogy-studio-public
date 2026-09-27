@@ -91,6 +91,81 @@
       if (statusLine) statusLine.textContent = "Audio narration is not available in this browser. The full script and subtitles are still available below.";
     });
   }
+  const siteReaderTargets = Array.from(document.querySelectorAll("main section, main article, main details")).filter(target => {
+    if (target.closest(".narration-player") || target.closest(".site-reader-controls") || target.querySelector(":scope > .site-reader-controls")) return false;
+    const text = (target.innerText || "").replace(/\s+/g, " ").trim();
+    return text.length > 80;
+  });
+  if (siteReaderTargets.length && "speechSynthesis" in window) {
+    let readerVoice = null;
+    let readerActive = null;
+    const chooseReaderVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      readerVoice = voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /samantha|victoria|karen|serena|moira|tessa|zira|ava|susan|allison|female/i.test(v.name)) || voices.find(v => /natural|premium|neural/i.test(v.name) && /^en[-_]/i.test(v.lang)) || voices.find(v => /^en[-_]/i.test(v.lang)) || voices[0] || null;
+    };
+    const stopReader = () => {
+      speechSynthesis.cancel();
+      if (readerActive?.status) readerActive.status.textContent = "Read aloud stopped.";
+      document.querySelectorAll(".site-reader-active").forEach(node => node.classList.remove("site-reader-active"));
+      readerActive = null;
+    };
+    const getReaderText = target => Array.from(target.querySelectorAll("h1,h2,h3,h4,p,li,summary,figcaption,a.button,button:not(.site-reader-button)"))
+      .map(node => (node.innerText || node.textContent || "").replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .join(". ");
+    chooseReaderVoice();
+    siteReaderTargets.forEach((target, index) => {
+      const controls = document.createElement("div");
+      controls.className = "site-reader-controls";
+      controls.setAttribute("aria-label", "Text to speech controls");
+      controls.innerHTML = '<button type="button" class="site-reader-button site-reader-play">Read aloud</button><button type="button" class="site-reader-button site-reader-pause">Pause</button><button type="button" class="site-reader-button site-reader-stop">Stop</button><label class="site-reader-volume">Volume <input type="range" min="0" max="100" step="5" value="85" aria-label="Read aloud volume"><span>85%</span></label><p class="site-reader-status" aria-live="polite"></p>';
+      target.insertBefore(controls, target.firstChild);
+      const play = controls.querySelector(".site-reader-play");
+      const pause = controls.querySelector(".site-reader-pause");
+      const stop = controls.querySelector(".site-reader-stop");
+      const volume = controls.querySelector(".site-reader-volume input");
+      const volumeLabel = controls.querySelector(".site-reader-volume span");
+      const status = controls.querySelector(".site-reader-status");
+      target.dataset.siteReader = String(index + 1);
+      volume?.addEventListener("input", () => {
+        if (volumeLabel) volumeLabel.textContent = volume.value + "%";
+        if (readerActive?.utterance) readerActive.utterance.volume = Number(volume.value) / 100;
+      });
+      play?.addEventListener("click", () => {
+        if (speechSynthesis.paused && readerActive?.target === target) { speechSynthesis.resume(); if (status) status.textContent = "Read aloud resumed."; return; }
+        stopReader();
+        const text = getReaderText(target);
+        if (!text) { if (status) status.textContent = "There is no readable text in this section."; return; }
+        const utterance = new SpeechSynthesisUtterance(text);
+        if (readerVoice) utterance.voice = readerVoice;
+        utterance.lang = document.documentElement.lang || readerVoice?.lang || "en-US";
+        utterance.rate = 0.94;
+        utterance.pitch = 1.03;
+        utterance.volume = volume ? Number(volume.value) / 100 : 0.85;
+        target.classList.add("site-reader-active");
+        readerActive = { target, utterance, status };
+        utterance.onstart = () => { if (status) status.textContent = "Reading this section aloud."; };
+        utterance.onend = () => { if (status) status.textContent = "Finished reading this section."; target.classList.remove("site-reader-active"); readerActive = null; };
+        utterance.onerror = () => { if (status) status.textContent = "Read aloud stopped."; target.classList.remove("site-reader-active"); readerActive = null; };
+        speechSynthesis.speak(utterance);
+      });
+      pause?.addEventListener("click", () => {
+        if (!readerActive || readerActive.target !== target) return;
+        if (speechSynthesis.paused) { speechSynthesis.resume(); if (status) status.textContent = "Read aloud resumed."; }
+        else { speechSynthesis.pause(); if (status) status.textContent = "Read aloud paused."; }
+      });
+      stop?.addEventListener("click", stopReader);
+    });
+    window.addEventListener("pagehide", stopReader);
+    speechSynthesis.addEventListener?.("voiceschanged", chooseReaderVoice);
+  } else if (siteReaderTargets.length) {
+    siteReaderTargets.forEach(target => {
+      const controls = document.createElement("div");
+      controls.className = "site-reader-controls";
+      controls.innerHTML = '<p class="site-reader-status">Read aloud is not available in this browser.</p>';
+      target.insertBefore(controls, target.firstChild);
+    });
+  }
   const languagePanels = Array.from(document.querySelectorAll("[data-language-panel]"));
   languagePanels.forEach(panel => {
     const reader = panel.querySelector("[data-reader-language]");
