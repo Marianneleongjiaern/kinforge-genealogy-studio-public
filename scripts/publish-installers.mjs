@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import { join } from "node:path";
 import { transform } from "esbuild";
 
-const directory = process.argv[2], origin = "https://kinforge-genealogy-studio.marianneleong3.chatgpt.site";
+const directory = process.argv[2], origin = process.env.KINFORGE_RELEASE_ORIGIN || "https://kinforge-genealogy-studio.marianneleong3.chatgpt.site";
 if (!directory) throw new Error("Pass the verified installer directory.");
 const token = process.env.KINFORGE_RELEASE_UPLOAD_TOKEN || (await new Promise((resolve, reject) => {
   process.stdin.setRawMode?.(true);
