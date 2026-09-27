@@ -1,5 +1,5 @@
 export const PUBLIC_EXPORT_COPYRIGHT = "Copyright 2026 Dreams of Serene Landscapes. All rights reserved.";
-export const PUBLIC_EXPORT_CREDIT = "Created with KinForge Genealogy Studio by Dreams of Serene Landscapes.";
+export const PUBLIC_EXPORT_CREDIT = "Created with KinForge Genealogy Studio, a product of Dreams of Serene Landscapes.";
 export const PUBLIC_EXPORT_PERMISSION = "Copyright-free exports require written permission through the KinForge support form before account creation or use. Close or special users must provide real, non-AI proof such as photos together or other digital or physical records. Approved users may place their own copyright on their books, but should credit Dreams of Serene Landscapes when asked.";
 export const PUBLIC_EXPORT_NOTICE = `${PUBLIC_EXPORT_COPYRIGHT} ${PUBLIC_EXPORT_CREDIT} ${PUBLIC_EXPORT_PERMISSION}`;
 export const PUBLIC_EXPORT_TERMS_STORAGE_KEY = "kinforge-public-export-terms-v1";

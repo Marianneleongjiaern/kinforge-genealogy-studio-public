@@ -787,7 +787,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
         error={authError}
         onGuest={() => {
           if (!authForm.privacyAccepted || !authForm.termsAccepted) {
-            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            setAuthError("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
             return;
           }
           recordAppLegalAgreement();
@@ -797,7 +797,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
         }}
         onSubmit={() => {
           if (!authForm.privacyAccepted || !authForm.termsAccepted) {
-            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            setAuthError("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
             return;
           }
           const result = authMode === "create"
@@ -4291,8 +4291,8 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
       {TERMS_CONDITIONS_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
     </details>
     <div className="legal-checks">
-      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I have read and agree to the KinForge Privacy Policy.</label>
-      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I have read and agree to the KinForge Terms & Conditions.</label>
+      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I accept and agree to follow the KinForge Privacy Policy.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I accept and agree to follow the KinForge Terms & Conditions, including the export and download copyright rules.</label>
     </div>
   </section>;
 }

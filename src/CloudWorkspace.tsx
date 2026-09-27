@@ -177,8 +177,8 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
       {TERMS_CONDITIONS_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
     </details>
     <div className="legal-checks">
-      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I have read and agree to the KinForge Privacy Policy.</label>
-      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I have read and agree to the KinForge Terms & Conditions.</label>
+      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I accept and agree to follow the KinForge Privacy Policy.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I accept and agree to follow the KinForge Terms & Conditions, including the export and download copyright rules.</label>
     </div>
   </section>;
 }
@@ -192,7 +192,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
   const linkAttempted = useRef(false);
   const requireAgreement = () => {
     if (privacyAccepted && termsAccepted) return true;
-    setError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+    setError("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
     return false;
   };
   useEffect(() => { setCodeRequested(false); setRecoveryCode(""); setStatus(""); }, [mode, recoveryMethod, email]);
@@ -201,7 +201,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     const query = new URLSearchParams(window.location.hash.includes("?") ? window.location.hash.slice(window.location.hash.indexOf("?") + 1) : "");
     const linkEmail = query.get("email") || "", linkCode = query.get("code") || "";
     if (!linkEmail || !linkCode) return;
-    linkAttempted.current = true; setMode("forgot"); setRecoveryMethod("login-code"); setCodeRequested(true); setEmail(linkEmail); setRecoveryCode(linkCode); setStatus("Agree to the KinForge Privacy Policy and Terms & Conditions, then sign in with the code from your email link.");
+    linkAttempted.current = true; setMode("forgot"); setRecoveryMethod("login-code"); setCodeRequested(true); setEmail(linkEmail); setRecoveryCode(linkCode); setStatus("Click both I accept checkboxes, then sign in with the code from your email link.");
   }, [onSignedIn]);
   const showPassword = mode !== "forgot" || recoveryMethod === "secret" || (recoveryMethod === "reset-code" && codeRequested);
   const showRecoveryCode = mode === "forgot" && (recoveryMethod === "secret" || (codeRequested && recoveryMethod !== "login-link"));
@@ -210,7 +210,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     event.preventDefault(); setBusy(true); setError(""); setStatus("");
     try {
       let result: { user: CloudUser; recoveryCode?: string };
-      if (!privacyAccepted || !termsAccepted) throw new Error("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+      if (!privacyAccepted || !termsAccepted) throw new Error("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
       if (mode === "forgot" && recoveryMethod !== "secret") {
         const purpose = recoveryMethod === "login-code" || recoveryMethod === "login-link" ? "login" : "reset";
         if (!codeRequested) {
