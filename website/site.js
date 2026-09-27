@@ -106,6 +106,30 @@
     };
     const languageCodes = { "en-US":"en-US", "en-GB":"en-GB", zh:"zh", es:"es", fr:"fr", de:"de", hi:"hi", ar:"ar", pt:"pt", id:"id", ms:"ms", ja:"ja", ko:"ko", other:"en" };
     const translatedCodes = new Set(["zh", "es", "fr", "de", "hi", "ar", "pt", "id", "ms", "ja", "ko"]);
+    const britishTerms = [
+      ["localization", "localisation"], ["Localization", "Localisation"], ["localize", "localise"], ["localizing", "localising"], ["localized", "localised"],
+      ["organization", "organisation"], ["Organization", "Organisation"], ["organize", "organise"], ["organizing", "organising"], ["organized", "organised"],
+      ["behavior", "behaviour"], ["Behavior", "Behaviour"], ["color", "colour"], ["Color", "Colour"], ["favorite", "favourite"], ["Favorite", "Favourite"],
+      ["center", "centre"], ["Center", "Centre"], ["program", "programme"], ["Program", "Programme"], ["toward", "towards"], ["Toward", "Towards"],
+      ["learned", "learnt"], ["Learned", "Learnt"], ["canceled", "cancelled"], ["Canceled", "Cancelled"], ["modeling", "modelling"], ["Modeling", "Modelling"],
+      ["license", "licence"], ["License", "Licence"], ["practice", "practise"], ["Practice", "Practise"]
+    ];
+    const americanTerms = britishTerms.map(([us, gb]) => [gb, us]);
+    const replaceWords = (text, pairs) => pairs.reduce((value, pair) => value.replace(new RegExp("\\b" + pair[0] + "\\b", "g"), pair[1]), text);
+    const applyEnglishVariant = (style) => {
+      const pairs = style === "en-GB" ? britishTerms : americanTerms;
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+        acceptNode(node) {
+          const parent = node.parentElement;
+          if (!parent || ["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "SELECT", "OPTION"].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+          if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      });
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => { node.nodeValue = replaceWords(node.nodeValue, pairs); });
+    };
     const updateText = (selector, text) => panel.querySelectorAll(selector).forEach(node => { node.textContent = text; });
     const currentPageUrl = (value) => {
       const next = new URL(window.location.href);
@@ -127,6 +151,7 @@
       else if (value === "en-GB") updateText('[data-language-card-copy="english"]', "British English is active. KinForge uses British spelling, grammar, and wording in this language panel.");
       else updateText('[data-language-card-copy="english"]', "English remains available as American English or British English in this same dropdown.");
       if (statusLine) statusLine.textContent = "Current choice: " + selectedName + ". " + englishCopy.note;
+      if (value === "en-US" || value === "en-GB") applyEnglishVariant(value);
     };
     const reloadForChoice = () => {
       const value = reader?.value || "en-US";
