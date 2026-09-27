@@ -249,7 +249,7 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
 }
 
 function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: string; onSignedIn: (user: CloudUser, code?: string) => void; onDemo: () => void }) {
-  const [mode, setMode] = useState<"login" | "create" | "forgot">("login"); const [error, setError] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<"home" | "login" | "create" | "forgot">("home"); const [error, setError] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
   const [recoveryMethod, setRecoveryMethod] = useState<"secret" | "reset-code" | "login-code" | "login-link">("secret"); const [codeRequested, setCodeRequested] = useState(false); const [updatesOpen, setUpdatesOpen] = useState(false);
   const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [recoveryCode, setRecoveryCode] = useState("");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
@@ -268,6 +268,16 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     if (!linkEmail || !linkCode) return;
     linkAttempted.current = true; setMode("forgot"); setRecoveryMethod("login-code"); setCodeRequested(true); setEmail(linkEmail); setRecoveryCode(linkCode); setStatus("Click both I accept checkboxes, then sign in with the code from your email link.");
   }, [onSignedIn]);
+  if (mode === "home") return <div className="auth-shell"><section className="auth-panel">
+    <div className="brand auth-brand"><span className="brand-mark"><img src="./icon.svg" alt="" /></span><div><strong>KinForge</strong><small>Product of Dreams of Serene Landscapes</small></div></div>
+    <h1>KinForge Genealogy Studio</h1>
+    <p className="quiet">Build relationship maps for family history, social-work genograms, books, historical research, roleplay campaigns, RPG worlds, and other connection-rich projects.</p>
+    <div className="auth-message"><strong>4-day free trial:</strong> start with a simplified, lower-quality trial of the core tools. After the trial, choose a paid tier or request special access through support.</div>
+    {(error || initialError) && <p className="auth-message bad" role="alert">{error || initialError}</p>}
+    <div className="button-row"><button className="button" type="button" onClick={() => { if (requireAgreement()) { recordAppLegalAgreement(); recordPublicExportAgreement(); onDemo(); } }}>Get started free</button><button className="button secondary" type="button" onClick={() => setMode("create")}>Create free account</button></div>
+    <div className="auth-links"><button type="button" onClick={() => setMode("login")}>Login</button><a href="/downloads/trial">Download trial</a><a href="/website/beta/">Plans & subscriptions</a><a href="/downloads/special-access">Special access</a><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button></div>
+    <LegalAgreementBox privacyAccepted={privacyAccepted} termsAccepted={termsAccepted} onPrivacyAccepted={setPrivacyAccepted} onTermsAccepted={setTermsAccepted} />
+  </section>{updatesOpen && <UpdateCenter onClose={() => setUpdatesOpen(false)} />}</div>;
   const showPassword = mode !== "forgot" || recoveryMethod === "secret" || (recoveryMethod === "reset-code" && codeRequested);
   const showRecoveryCode = mode === "forgot" && (recoveryMethod === "secret" || (codeRequested && recoveryMethod !== "login-link"));
   const actionText = mode === "create" ? "Create account" : mode === "login" ? "Sign in" : recoveryMethod === "secret" ? "Reset password" : !codeRequested ? recoveryMethod === "login-link" ? "Send login link" : "Send code" : recoveryMethod === "login-code" ? "Sign in with code" : recoveryMethod === "login-link" ? "Send another link" : "Reset password";
@@ -311,7 +321,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     {(error || initialError) && <p className="auth-message bad" role="alert">{error || initialError}</p>}
     {status && <p className="auth-message" role="status">{status}</p>}
     <button className="button" type="submit" disabled={busy}><LogIn size={16} />{busy ? "Connecting..." : actionText}</button>
-    <div className="auth-links"><button type="button" onClick={() => { setMode("login"); setError(""); }}>Login</button><button type="button" onClick={() => { setMode("create"); setError(""); }}>Create account</button><button type="button" onClick={() => { setMode("forgot"); setError(""); }}>Forgot password</button><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button><button type="button" aria-label="Continue as guest" onClick={() => { if (!requireAgreement()) return; recordAppLegalAgreement(); recordPublicExportAgreement(); onDemo(); }}>Try a separate demo</button></div>
+    <div className="auth-links"><button type="button" onClick={() => { setMode("home"); setError(""); }}>Home</button><button type="button" onClick={() => { setMode("login"); setError(""); }}>Login</button><button type="button" onClick={() => { setMode("create"); setError(""); }}>Create account</button><button type="button" onClick={() => { setMode("forgot"); setError(""); }}>Forgot password</button><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button><button type="button" aria-label="Continue as guest" onClick={() => { if (!requireAgreement()) return; recordAppLegalAgreement(); recordPublicExportAgreement(); onDemo(); }}>Try a separate demo</button></div>
     <LegalAgreementBox privacyAccepted={privacyAccepted} termsAccepted={termsAccepted} onPrivacyAccepted={setPrivacyAccepted} onTermsAccepted={setTermsAccepted} />
     {mode === "create" && <p className="quiet">Existing work on this device will sync automatically to this account.</p>}
   </form>{updatesOpen && <UpdateCenter onClose={() => setUpdatesOpen(false)} />}</div>;

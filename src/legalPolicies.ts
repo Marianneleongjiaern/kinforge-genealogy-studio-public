@@ -30,8 +30,8 @@ export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
     body: "Family history, case work, historical research, fiction, roleplay, and RPG worldbuilding can include private, medical, identity, legal, child-care, protection, government, and relationship information. Users are responsible for entering only information they have permission to store and share, marking sensitive records private where appropriate, and reviewing exports before sharing them."
   },
   {
-    title: "Support and copyright-free permission proof",
-    body: "Permission requests may include proof descriptions or links showing a close or special relationship with Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
+    title: "Support and special access proof",
+    body: "Special access or extra permission requests may include proof descriptions or links showing a close or special relationship with Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
   },
   {
     title: "Retention and deletion",
@@ -62,11 +62,11 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Export and download credit",
-    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and copyright notice unless Dreams of Serene Landscapes gives written permission through support."
+    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and Dreams of Serene Landscapes copyright notice. This applies to free trials, beta access, paid subscriptions, and approved special free access."
   },
   {
-    title: "Copyright-free permission",
-    body: "Only approved close or special people may receive permission to make a copyright-free version or place their own copyright on books made with KinForge. They must provide real, non-AI proof, such as photos together or other digital or physical records. Even approved users should credit Dreams of Serene Landscapes when asked. Anyone who is not close, cannot provide proof, or does not want to credit Dreams of Serene Landscapes must keep the KinForge copyright and credit."
+    title: "Copyright and special access",
+    body: "Paid versions and approved special free access both keep KinForge and Dreams of Serene Landscapes copyright and credit on the app, website, downloads, documents, and exports. Close or special people may request special access or extra written permission through support with real, non-AI proof, such as photos together or other digital or physical records. Approval is not automatic."
   },
   {
     title: "User content",
@@ -82,7 +82,7 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Acceptable use",
-    body: "Users must not misuse KinForge, break security, submit fake proof, impersonate others, upload malware, infringe copyright, harass people, expose private records without permission, or use the service for unlawful purposes."
+    body: "Users must not misuse KinForge, break security, submit fake proof, impersonate others, upload malware, infringe copyright, harass people, expose private records without permission, or use the service for unlawful purposes. Celebrities or public figures may be included only when clearly needed for fiction, fanfiction, roleplay, RPG, historical-fiction, story, or research context where the public figure is part of that work."
   },
   {
     title: "Changes and support",
