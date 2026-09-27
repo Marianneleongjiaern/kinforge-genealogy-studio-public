@@ -93,23 +93,32 @@
   }
   const languagePanels = Array.from(document.querySelectorAll("[data-language-panel]"));
   languagePanels.forEach(panel => {
-    const english = panel.querySelector("[data-english-style]");
     const reader = panel.querySelector("[data-reader-language]");
     const apply = panel.querySelector("[data-apply-language]");
     const statusLine = panel.querySelector("[data-language-status]");
-    const savedEnglish = localStorage.getItem("kinforgeEnglishStyle") || ((navigator.language || "").toLowerCase().includes("us") ? "us" : "gb");
-    const savedReader = localStorage.getItem("kinforgeReaderLanguage") || "browser";
-    if (english) english.value = savedEnglish;
-    if (reader) reader.value = savedReader;
-    const update = () => {
-      const englishName = english?.value === "gb" ? "British English" : "American English";
-      const languageName = reader?.selectedOptions?.[0]?.textContent || "browser/device translation";
-      document.documentElement.lang = english?.value === "gb" ? "en-GB" : "en-US";
-      localStorage.setItem("kinforgeEnglishStyle", english?.value || "us");
-      localStorage.setItem("kinforgeReaderLanguage", reader?.value || "browser");
-      if (statusLine) statusLine.textContent = `Current choice: ${englishName}. Reading language: ${languageName}. Use your browser translation tool when a full translation is needed.`;
+    const savedLanguage = localStorage.getItem("kinforgeReaderLanguage") || ((navigator.language || "").toLowerCase().includes("us") ? "en-US" : "en-GB");
+    if (reader) reader.value = savedLanguage;
+    const copy = {
+      "en-US": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. American English uses U.S. spelling, grammar, and wording across the language panel.", note: "Visible wording is set to American English." },
+      "en-GB": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. British English uses British spelling, grammar, and wording across the language panel.", note: "Visible wording is set to British English." }
     };
-    english?.addEventListener("change", update);
+    const languageCodes = { "en-US":"en-US", "en-GB":"en-GB", zh:"zh", es:"es", fr:"fr", de:"de", hi:"hi", ar:"ar", pt:"pt", id:"id", ms:"ms", ja:"ja", ko:"ko", other:"en" };
+    const updateText = (selector, text) => panel.querySelectorAll(selector).forEach(node => { node.textContent = text; });
+    const update = () => {
+      const value = reader?.value || "en-US";
+      const selectedName = reader?.selectedOptions?.[0]?.textContent || "English - American English";
+      const englishCopy = copy[value] || { title: "Choose your reading language", intro: "KinForge is meant to be readable in your own language where browser or device translation supports it. For English, choose American English or British English in this same dropdown.", note: "Use your browser or device translation tool for this language where available." };
+      document.documentElement.lang = languageCodes[value] || "en";
+      document.documentElement.dir = value === "ar" ? "rtl" : "ltr";
+      localStorage.setItem("kinforgeReaderLanguage", value);
+      localStorage.setItem("kinforgeEnglishStyle", value === "en-GB" ? "gb" : "us");
+      updateText("[data-language-title]", englishCopy.title);
+      updateText('[data-language-copy="intro"]', englishCopy.intro);
+      if (value === "en-US") updateText('[data-language-card-copy="english"]', "American English is active. KinForge uses U.S. spelling, grammar, and wording in this language panel.");
+      else if (value === "en-GB") updateText('[data-language-card-copy="english"]', "British English is active. KinForge uses British spelling, grammar, and wording in this language panel.");
+      else updateText('[data-language-card-copy="english"]', "English remains available as American English or British English in this same dropdown.");
+      if (statusLine) statusLine.textContent = `Current choice: ${selectedName}. ${englishCopy.note}`;
+    };
     reader?.addEventListener("change", update);
     apply?.addEventListener("click", update);
     update();
