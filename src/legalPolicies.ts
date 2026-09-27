@@ -11,7 +11,7 @@ export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
   },
   {
     title: "What information is collected",
-    body: "KinForge may collect account details such as name, email address, password hash, recovery-code hash, session information, beta-interest registration, support requests, permission-proof descriptions, and technical logs needed to run the site. Your family trees, character trees, social-work genograms, history projects, books, collections, media, reports, GEDCOM imports, backups, drive-export records, and app settings may be stored when you use cloud features."
+    body: "KinForge may collect account details such as name, email address, password hash, recovery-code hash, session information, beta-interest registration, newsletter signup details, support requests, permission-proof descriptions, and technical logs needed to run the site. Your family trees, character trees, social-work genograms, history projects, books, collections, media, reports, GEDCOM imports, backups, drive-export records, and app settings may be stored when you use cloud features."
   },
   {
     title: "Local demo and device storage",
@@ -19,7 +19,7 @@ export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
   },
   {
     title: "How information is used",
-    body: "KinForge uses information to provide accounts, sign-in, recovery, private libraries, explicit sharing, beta interest, downloads, support replies, permission review, security checks, backups, exports, update checks, and bug or abuse prevention."
+    body: "KinForge uses information to provide accounts, sign-in, recovery, private libraries, explicit sharing, beta interest, monthly newsletters, app-update emails, downloads, support replies, permission review, security checks, backups, exports, update checks, and bug or abuse prevention."
   },
   {
     title: "Sharing and third parties",
@@ -54,7 +54,7 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "KinForge account",
-    body: "KinForge uses a KinForge email-and-password account, not ChatGPT login. Users must keep passwords and recovery codes private and are responsible for activity from their account."
+    body: "KinForge uses a KinForge email-and-password account, not ChatGPT login. Users must keep passwords and recovery codes private and are responsible for activity from their account. Creating an account also signs the user up for monthly KinForge newsletters, app updates, new-feature notes, and release emails."
   },
   {
     title: "Copyright and ownership",
@@ -74,7 +74,7 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Beta and updates",
-    body: "Beta features and preview downloads may contain bugs. Users should keep backups, test with copies, and avoid using beta builds as the only copy of important work. Update checks and installers update the app, not the user's library data."
+    body: "Beta features and preview downloads may contain bugs. Users should keep backups, test with copies, and avoid using beta builds as the only copy of important work. Update checks and installers update the app, not the user's library data. KinForge may send monthly newsletters and update emails about app changes, new features, releases, tutorials, beta news, downloads, Suite plans, and related notices."
   },
   {
     title: "No genealogy, legal, medical, or financial guarantee",

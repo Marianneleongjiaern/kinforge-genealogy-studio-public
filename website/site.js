@@ -2,14 +2,16 @@
   const auth = document.getElementById("beta-auth");
   const interest = document.getElementById("beta-register");
   const support = document.getElementById("public-support");
+  const newsletter = document.getElementById("public-newsletter");
   const supportResult = document.getElementById("support-result");
+  const newsletterResult = document.getElementById("newsletter-result");
   const status = document.getElementById("account-status");
   const result = document.getElementById("beta-result");
   const recovery = document.getElementById("recovery");
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
-  if (!auth && !support) return;
+  if (!auth && !support && !newsletter) return;
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
   async function api(path, init) {
@@ -76,6 +78,22 @@
       support.reset();
     } catch (error) {
       if (supportResult) supportResult.textContent = error.message;
+    }
+  });
+  newsletter?.addEventListener("submit", async event => {
+    event.preventDefault();
+    if (newsletterResult) newsletterResult.textContent = "";
+    const data = Object.fromEntries(new FormData(newsletter));
+    data.permissionToReply = Boolean(new FormData(newsletter).get("permissionToReply"));
+    data.proof = "";
+    data.device = "Public website newsletter signup";
+    data.message = `${data.message || "Please add this email to the monthly KinForge newsletter and app-update list."}\n\nUser type: ${data.userType || "Not provided"}`;
+    try {
+      const saved = await api("/api/support", { method: "POST", body: JSON.stringify(data) });
+      if (newsletterResult) newsletterResult.textContent = saved.message || "Newsletter signup sent.";
+      newsletter.reset();
+    } catch (error) {
+      if (newsletterResult) newsletterResult.textContent = error.message;
     }
   });
 })();

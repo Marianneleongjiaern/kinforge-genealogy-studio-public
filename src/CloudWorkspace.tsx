@@ -329,7 +329,7 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
     </details>
     <div className="legal-checks">
       <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I accept and agree to follow the KinForge Privacy Policy.</label>
-      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I accept and agree to follow the KinForge Terms & Conditions, including the export and download copyright rules.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I accept and agree to follow the KinForge Terms & Conditions, including the export, download, copyright, and monthly newsletter/update email rules.</label>
     </div>
   </section>;
 }
