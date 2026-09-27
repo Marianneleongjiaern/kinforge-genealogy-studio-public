@@ -11,7 +11,6 @@ type Env = DriveEnv & ReleaseEnv & {
   EMAIL_CODE_ENDPOINT?: string; EMAIL_CODE_TOKEN?: string; EMAIL_CODE_FROM?: string;
   SERENE_RELAY_SUPPORT_ENDPOINT?: string; SERENE_RELAY_SUPPORT_TOKEN?: string; SERENE_RELAY_SUPPORT_TO?: string; SERENE_RELAY_SUPPORT_FROM?: string;
   KINFORGE_OWNER_EMAILS?: string; KINFORGE_ADMIN_EMAILS?: string; OWNER_EMAILS?: string; STRIPE_WEBHOOK_SECRET?: string;
-  ELEVENLABS_API_KEY?: string; ELEVENLABS_VOICE_ID?: string; ELEVENLABS_MODEL_ID?: string;
 };
 type Account = { id: string; email: string; name: string; password: string; recovery_hash: string };
 type Library = { id: string; owner_id: string; name: string; revision: number; object_key: string | null; updated_at: number; role: string };
@@ -52,39 +51,6 @@ async function readText(request: Request, limit: number) {
 async function body(request: Request, limit = 16384): Promise<Record<string, any>> {
   try { const data = JSON.parse(await readText(request, limit)); if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error(); return data; }
   catch (error) { if (error instanceof Problem) throw error; throw new Problem(400, "The request could not be read."); }
-}
-async function elevenLabsSpeech(request: Request, env: Env) {
-  if (!env.ELEVENLABS_API_KEY) throw new Problem(503, "Human-like narration is not configured yet.");
-  const data = await body(request, 8192);
-  await rateLimit(env, request, "elevenlabs-tts", 80, 60 * 60000);
-  const text = String(data.text || "").replace(/\s+/g, " ").trim().slice(0, 3000);
-  if (!text) throw new Problem(400, "Choose text to read aloud.");
-  const voiceId = String(data.voiceId || env.ELEVENLABS_VOICE_ID || "21m00Tcm4TlvDq8ikWAM").replace(/[^A-Za-z0-9_-]/g, "");
-  const upstream = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
-    method: "POST",
-    headers: {
-      "xi-api-key": env.ELEVENLABS_API_KEY,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      text,
-      model_id: env.ELEVENLABS_MODEL_ID || "eleven_multilingual_v2",
-      voice_settings: {
-        stability: 0.43,
-        similarity_boost: 0.82,
-        style: 0.38,
-        use_speaker_boost: true
-      }
-    })
-  });
-  if (!upstream.ok || !upstream.body) throw new Problem(502, "Human-like narration is temporarily unavailable.");
-  return new Response(upstream.body, {
-    headers: {
-      "Content-Type": "audio/mpeg",
-      "Cache-Control": "private, no-store",
-      "X-Content-Type-Options": "nosniff"
-    }
-  });
 }
 async function rateLimit(env: Env, request: Request, name: string, limit: number, windowMs: number, account = "") {
   const now = Date.now(); const address = request.headers.get("CF-Connecting-IP") || "local";
@@ -348,7 +314,6 @@ async function api(request: Request, env: Env, ctx: ExecutionContext) {
   if (method !== "GET" && method !== "HEAD") {
     if (request.headers.get("X-KinForge-Client") !== "1" || (request.headers.get("origin") && request.headers.get("origin") !== url.origin) || request.headers.get("sec-fetch-site") === "cross-site") throw new Problem(403, "This request must come from KinForge.");
   }
-  if (path === "/api/tts" && method === "POST") return elevenLabsSpeech(request, env);
   if (path === "/api/health") return json({ ok: true, version: "1.3.8" });
   if (path === "/api/support" && method === "POST") {
     const data = await body(request, 32768);
