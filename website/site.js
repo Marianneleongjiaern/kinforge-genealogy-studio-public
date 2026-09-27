@@ -11,6 +11,59 @@
   const recoveryKey = document.getElementById("recovery-key");
   const saveRecovery = document.getElementById("save-recovery");
   const withdraw = document.getElementById("withdraw-interest");
+  const narrationPlayers = Array.from(document.querySelectorAll(".narration-player"));
+  if (narrationPlayers.length && "speechSynthesis" in window) {
+    let active = null;
+    const voiceHint = /female|woman|samantha|victoria|karen|zira|aria|jenny|susan|ava|serena|moira|tessa|salli|joanna|amy|emma/i;
+    const chooseVoice = () => {
+      const voices = speechSynthesis.getVoices();
+      return voices.find(voice => voice.lang.toLowerCase().startsWith("en") && voiceHint.test(voice.name)) || voices.find(voice => voice.lang.toLowerCase().startsWith("en")) || voices[0] || null;
+    };
+    const clearActiveLine = () => document.querySelectorAll("[data-narration-line].active").forEach(line => line.classList.remove("active"));
+    const stop = () => { speechSynthesis.cancel(); clearActiveLine(); if (active?.status) active.status.textContent = "Narration stopped."; active = null; };
+    narrationPlayers.forEach(player => {
+      const lines = Array.from(player.querySelectorAll("[data-narration-line]"));
+      const play = player.querySelector(".narration-play");
+      const pause = player.querySelector(".narration-pause");
+      const stopButton = player.querySelector(".narration-stop");
+      const statusLine = player.querySelector(".narration-status");
+      if (!lines.length || !play || !pause || !stopButton) return;
+      play.addEventListener("click", () => {
+        if (speechSynthesis.paused && active?.player === player) { speechSynthesis.resume(); if (statusLine) statusLine.textContent = "Narration resumed."; return; }
+        stop();
+        active = { player, status: statusLine };
+        const voice = chooseVoice();
+        let index = 0;
+        const speakNext = () => {
+          clearActiveLine();
+          if (index >= lines.length) { if (statusLine) statusLine.textContent = "Narration complete."; active = null; return; }
+          const line = lines[index++];
+          line.classList.add("active");
+          line.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          const utterance = new SpeechSynthesisUtterance(line.textContent || "");
+          if (voice) utterance.voice = voice;
+          utterance.rate = 0.95;
+          utterance.pitch = 1.04;
+          utterance.onend = speakNext;
+          utterance.onerror = () => { if (statusLine) statusLine.textContent = "Narration stopped because this browser could not finish the audio."; clearActiveLine(); active = null; };
+          if (statusLine) statusLine.textContent = `Playing line ${index} of ${lines.length}.`;
+          speechSynthesis.speak(utterance);
+        };
+        speakNext();
+      });
+      pause.addEventListener("click", () => {
+        if (active?.player === player && speechSynthesis.speaking && !speechSynthesis.paused) { speechSynthesis.pause(); if (statusLine) statusLine.textContent = "Narration paused."; }
+      });
+      stopButton.addEventListener("click", stop);
+    });
+    window.addEventListener("pagehide", stop);
+    speechSynthesis.onvoiceschanged = chooseVoice;
+  } else if (narrationPlayers.length) {
+    narrationPlayers.forEach(player => {
+      const statusLine = player.querySelector(".narration-status");
+      if (statusLine) statusLine.textContent = "Audio narration is not available in this browser. The full script and subtitles are still available below.";
+    });
+  }
   if (!auth && !support && !newsletter) return;
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
