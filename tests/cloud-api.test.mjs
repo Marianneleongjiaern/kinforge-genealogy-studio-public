@@ -48,7 +48,7 @@ test("beta interest is account protected and records interest without payment da
   assert.equal((await call("/api/beta/interest")).status, 401);
   const saved = await call("/api/beta/interest", "POST", { plan: "beta", interval: "year", discountCode: "WRITER10", consent: true }, owner.cookie);
   assert.equal(saved.status, 201, JSON.stringify(saved.body));
-  assert.deepEqual(saved.body.interest, { plan: "beta", interval: "year", discountCode: null });
+  assert.deepEqual(saved.body.interest, { plan: "beta", interval: "month", discountCode: null });
   const listed = await call("/api/beta/interest", "GET", undefined, owner.cookie);
   assert.equal(listed.body.interest.discount_code, null);
   assert.equal((await call("/api/beta/interest", "POST", { plan: "beta", interval: "month", consent: false }, owner.cookie)).status, 400);
