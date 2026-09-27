@@ -101,8 +101,8 @@
     const savedLanguage = queryLanguage || localStorage.getItem("kinforgeReaderLanguage") || ((navigator.language || "").toLowerCase().includes("us") ? "en-US" : "en-GB");
     if (reader) reader.value = savedLanguage;
     const copy = {
-      "en-US": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. American English uses U.S. spelling, grammar, and wording across the language panel.", note: "Visible wording is set to American English." },
-      "en-GB": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. British English uses British spelling, grammar, and wording across the language panel.", note: "Visible wording is set to British English." }
+      "en-US": { title: "Choose the language that works best for you", intro: "KinForge is designed to feel natural for people using American English. This setting uses U.S. spelling, grammar, vocabulary, and phrasing across the page.", note: "The page is using American English wording." },
+      "en-GB": { title: "Choose the language that suits you best", intro: "KinForge is written to read naturally for people using British English. This setting favours British spelling, grammar, vocabulary, and phrasing across the page.", note: "The page is using British English wording." }
     };
     const languageCodes = { "en-US":"en-US", "en-GB":"en-GB", zh:"zh", es:"es", fr:"fr", de:"de", hi:"hi", ar:"ar", pt:"pt", id:"id", ms:"ms", ja:"ja", ko:"ko", other:"en" };
     const translatedCodes = new Set(["zh", "es", "fr", "de", "hi", "ar", "pt", "id", "ms", "ja", "ko"]);
@@ -115,8 +115,25 @@
       ["license", "licence"], ["License", "Licence"], ["practice", "practise"], ["Practice", "Practise"]
     ];
     const americanTerms = britishTerms.map(([us, gb]) => [gb, us]);
+    const britishPhrases = [
+      ["Choose the language that works best for you", "Choose the language that suits you best"],
+      ["KinForge is designed to feel natural for people using American English.", "KinForge is written to read naturally for people using British English."],
+      ["This setting uses U.S. spelling, grammar, vocabulary, and phrasing across the page.", "This setting favours British spelling, grammar, vocabulary, and phrasing across the page."],
+      ["The page is using American English wording.", "The page is using British English wording."],
+      ["Get started free", "Start for free"], ["Get started for free", "Start for free"], ["Create free account", "Create a free account"],
+      ["Official app", "Official application"], ["official app", "official application"], ["Use cases", "Who it is for"], ["use cases", "who it is for"],
+      ["Help & support", "Help and support"], ["Download KinForge", "Download KinForge"], ["4-day free trial", "four-day free trial"],
+      ["safer workspace", "more secure workspace"], ["safe workspace", "secure workspace"], ["data practices", "data handling"],
+      ["feedback paths", "feedback routes"], ["support paths", "support routes"], ["meaningful features", "properly useful features"],
+      ["people using it", "people who use it"], ["works best for you", "suits you best"], ["what comes next", "what happens next"],
+      ["relationship-focused workspace", "relationship-focused workspace"], ["user ownership", "user control"], ["Users should", "People should"],
+      ["users deserve", "people deserve"], ["Users deserve", "People deserve"], ["user needs", "people's needs"], ["real users", "real people"],
+      ["learn", "find out"], ["Learn", "Find out"], ["sign up", "register"], ["Sign up", "Register"]
+    ];
+    const americanPhrases = britishPhrases.map(([us, gb]) => [gb, us]);
     const replaceWords = (text, pairs) => pairs.reduce((value, pair) => value.replace(new RegExp("\\b" + pair[0] + "\\b", "g"), pair[1]), text);
     const applyEnglishVariant = (style) => {
+      const phrasePairs = style === "en-GB" ? britishPhrases : americanPhrases;
       const pairs = style === "en-GB" ? britishTerms : americanTerms;
       const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
         acceptNode(node) {
@@ -128,7 +145,7 @@
       });
       const nodes = [];
       while (walker.nextNode()) nodes.push(walker.currentNode);
-      nodes.forEach(node => { node.nodeValue = replaceWords(node.nodeValue, pairs); });
+      nodes.forEach(node => { node.nodeValue = replaceWords(replaceWords(node.nodeValue, phrasePairs), pairs); });
     };
     const updateText = (selector, text) => panel.querySelectorAll(selector).forEach(node => { node.textContent = text; });
     const currentPageUrl = (value) => {
