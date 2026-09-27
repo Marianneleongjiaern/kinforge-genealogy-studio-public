@@ -9,7 +9,7 @@ const partSize = 8 * 1024 * 1024;
 const json = (data: unknown, status = 200) => Response.json(data, { status, headers: { "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff" } });
 const keyFor = (hash: string) => `releases/${release.version}/${hash}`;
 const equal = (a: string, b: string) => { let different = a.length ^ b.length; for (let i = 0; i < 64; i++) different |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0); return different === 0; };
-const pageHeaders = { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'" };
+const pageHeaders = { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Referrer-Policy": "strict-origin-when-cross-origin", "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; img-src 'self'; form-action 'self'; base-uri 'none'; frame-ancestors https://*.tumblr.com https://www.tumblr.com" };
 const downloadPaths = new Set(["/downloads", "/downloads/", "/downloads/trial", "/downloads/paid", "/downloads/special", "/downloads/special-access"]);
 async function releaseFiles(env: ReleaseEnv) {
   return Promise.all(release.files.map(async file => ({ ...file, available: !!await env.BUCKET.head(`${keyFor(file.sha256)}.verified`), url: `/api/releases/${release.version}/${file.id}` })));
