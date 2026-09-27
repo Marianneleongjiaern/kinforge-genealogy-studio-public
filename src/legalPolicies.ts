@@ -7,7 +7,7 @@ export type LegalSection = { title: string; body: string };
 export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
   {
     title: "Who runs KinForge",
-    body: "KinForge Genealogy Studio is a product of Dreams of Serene Landscapes / Marianne Leong. This policy explains what the app and website collect, why it is used, and how users can ask questions."
+    body: "KinForge Genealogy Studio is a product of Dreams of Serene Landscapes. This policy explains what the app and website collect, why it is used, and how users can ask questions."
   },
   {
     title: "What information is collected",
@@ -31,7 +31,7 @@ export const PRIVACY_POLICY_SECTIONS: LegalSection[] = [
   },
   {
     title: "Support and copyright-free permission proof",
-    body: "Permission requests may include proof descriptions or links showing a close or special relationship with Marianne Leong / Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
+    body: "Permission requests may include proof descriptions or links showing a close or special relationship with Dreams of Serene Landscapes. Proof must be real and not AI-generated. Do not submit identity documents or highly private material through the public form unless support specifically asks for a safer method."
   },
   {
     title: "Retention and deletion",
@@ -58,15 +58,15 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Copyright and ownership",
-    body: "KinForge Genealogy Studio, its app, website, product idea, design, source, export templates, names, and related materials are owned by Marianne Leong / Dreams of Serene Landscapes unless another owner is clearly stated. Copyright 2026 Dreams of Serene Landscapes. All rights reserved."
+    body: "KinForge Genealogy Studio, its app, website, product idea, design, source, export templates, names, and related materials are owned by Dreams of Serene Landscapes unless another owner is clearly stated. Copyright 2026 Dreams of Serene Landscapes. All rights reserved."
   },
   {
     title: "Export and download credit",
-    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and copyright notice unless Marianne Leong gives written permission through support."
+    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and copyright notice unless Dreams of Serene Landscapes gives written permission through support."
   },
   {
     title: "Copyright-free permission",
-    body: "Only approved close or special people may receive permission to make a copyright-free version or place their own copyright on books made with KinForge. They must provide real, non-AI proof, such as photos together or other digital or physical records. Even approved users should credit Marianne Leong when asked. Anyone who is not close, cannot provide proof, or does not want to credit Marianne Leong must keep the KinForge copyright and credit."
+    body: "Only approved close or special people may receive permission to make a copyright-free version or place their own copyright on books made with KinForge. They must provide real, non-AI proof, such as photos together or other digital or physical records. Even approved users should credit Dreams of Serene Landscapes when asked. Anyone who is not close, cannot provide proof, or does not want to credit Dreams of Serene Landscapes must keep the KinForge copyright and credit."
   },
   {
     title: "User content",
