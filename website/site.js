@@ -96,14 +96,23 @@
     const reader = panel.querySelector("[data-reader-language]");
     const apply = panel.querySelector("[data-apply-language]");
     const statusLine = panel.querySelector("[data-language-status]");
-    const savedLanguage = localStorage.getItem("kinforgeReaderLanguage") || ((navigator.language || "").toLowerCase().includes("us") ? "en-US" : "en-GB");
+    const params = new URLSearchParams(window.location.search);
+    const queryLanguage = params.get("lang");
+    const savedLanguage = queryLanguage || localStorage.getItem("kinforgeReaderLanguage") || ((navigator.language || "").toLowerCase().includes("us") ? "en-US" : "en-GB");
     if (reader) reader.value = savedLanguage;
     const copy = {
       "en-US": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. American English uses U.S. spelling, grammar, and wording across the language panel.", note: "Visible wording is set to American English." },
       "en-GB": { title: "Choose your reading language", intro: "KinForge is meant to sound natural to the people using it. British English uses British spelling, grammar, and wording across the language panel.", note: "Visible wording is set to British English." }
     };
     const languageCodes = { "en-US":"en-US", "en-GB":"en-GB", zh:"zh", es:"es", fr:"fr", de:"de", hi:"hi", ar:"ar", pt:"pt", id:"id", ms:"ms", ja:"ja", ko:"ko", other:"en" };
+    const translatedCodes = new Set(["zh", "es", "fr", "de", "hi", "ar", "pt", "id", "ms", "ja", "ko"]);
     const updateText = (selector, text) => panel.querySelectorAll(selector).forEach(node => { node.textContent = text; });
+    const currentPageUrl = (value) => {
+      const next = new URL(window.location.href);
+      next.searchParams.set("lang", value);
+      return next.toString();
+    };
+    const translateUrl = (value) => "https://translate.google.com/translate?sl=en&tl=" + encodeURIComponent(value) + "&u=" + encodeURIComponent(currentPageUrl(value));
     const update = () => {
       const value = reader?.value || "en-US";
       const selectedName = reader?.selectedOptions?.[0]?.textContent || "English - American English";
@@ -117,10 +126,17 @@
       if (value === "en-US") updateText('[data-language-card-copy="english"]', "American English is active. KinForge uses U.S. spelling, grammar, and wording in this language panel.");
       else if (value === "en-GB") updateText('[data-language-card-copy="english"]', "British English is active. KinForge uses British spelling, grammar, and wording in this language panel.");
       else updateText('[data-language-card-copy="english"]', "English remains available as American English or British English in this same dropdown.");
-      if (statusLine) statusLine.textContent = `Current choice: ${selectedName}. ${englishCopy.note}`;
+      if (statusLine) statusLine.textContent = "Current choice: " + selectedName + ". " + englishCopy.note;
     };
-    reader?.addEventListener("change", update);
-    apply?.addEventListener("click", update);
+    const reloadForChoice = () => {
+      const value = reader?.value || "en-US";
+      localStorage.setItem("kinforgeReaderLanguage", value);
+      localStorage.setItem("kinforgeEnglishStyle", value === "en-GB" ? "gb" : "us");
+      if (translatedCodes.has(value)) { window.location.assign(translateUrl(value)); return; }
+      window.location.assign(currentPageUrl(value));
+    };
+    reader?.addEventListener("change", reloadForChoice);
+    apply?.addEventListener("click", reloadForChoice);
     update();
   });
   if (!auth && !support && !newsletter) return;
