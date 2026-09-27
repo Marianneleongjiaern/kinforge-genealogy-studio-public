@@ -31,7 +31,7 @@
     student: "Student discount: STUDENT20 for 20% off.",
     nonprofit: "Nonprofit discount: NONPROFIT20 for 20% off.",
     educator: "Educator discount: EDUCATOR15 for 15% off.",
-    special_unpaid: "Special unpaid or copyright-free versions require a support request before checkout."
+    special_unpaid: "Special free access requires a support request before checkout. Paid and special free access both keep KinForge copyright."
   };
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
@@ -99,7 +99,7 @@
     checkout?.addEventListener("click", async () => {
       const data = Object.fromEntries(new FormData(interest));
       if (data.userType === "special_unpaid") {
-        result.textContent = "Special unpaid versions must be requested through the support form.";
+        result.textContent = "Special free access must be requested through the support form. Paid and special free access both keep KinForge copyright.";
         return;
       }
       try {

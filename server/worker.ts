@@ -230,7 +230,7 @@ async function billingCheckout(request: Request, env: Env, user: Account) {
   const plan = billingPlans[planKey] || billingPlans.beta;
   const interval = data.interval === "year" ? "year" : "month";
   const userType = String(data.userType || "other").trim().toLowerCase();
-  if (userType === "special_unpaid") throw new StripeProblem(400, "Special unpaid versions must be requested through the support form, not checkout.");
+  if (userType === "special_unpaid") throw new StripeProblem(400, "Special free access must be requested through the support form, not checkout. Paid versions and special free access both keep KinForge copyright.");
   const discount = discountRates[userType];
   const stripe = stripeClient(env), origin = env.KINFORGE_PUBLIC_ORIGIN || new URL(request.url).origin;
   const unitAmount = plan[interval];
