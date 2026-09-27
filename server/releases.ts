@@ -90,7 +90,7 @@ export async function releaseRoutes(request: Request, env: ReleaseEnv): Promise<
     if (upload[2] === "start") {
       if (await env.BUCKET.head(verifiedKey)) return json({ complete: true });
       const saved = await env.BUCKET.get(sessionKey);
-      if (saved) { const session = await saved.json<{ uploadId: string }>(); return json({ uploadId: session.uploadId, partSize }); }
+      if (saved) await env.BUCKET.delete(sessionKey);
       const session = await env.BUCKET.createMultipartUpload(key, { httpMetadata: { contentType: "application/octet-stream" } });
       await env.BUCKET.put(sessionKey, JSON.stringify({ uploadId: session.uploadId }));
       return json({ uploadId: session.uploadId, partSize });
