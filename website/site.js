@@ -91,6 +91,29 @@
       if (statusLine) statusLine.textContent = "Audio narration is not available in this browser. The full script and subtitles are still available below.";
     });
   }
+  const languagePanels = Array.from(document.querySelectorAll("[data-language-panel]"));
+  languagePanels.forEach(panel => {
+    const english = panel.querySelector("[data-english-style]");
+    const reader = panel.querySelector("[data-reader-language]");
+    const apply = panel.querySelector("[data-apply-language]");
+    const statusLine = panel.querySelector("[data-language-status]");
+    const savedEnglish = localStorage.getItem("kinforgeEnglishStyle") || ((navigator.language || "").toLowerCase().includes("us") ? "us" : "gb");
+    const savedReader = localStorage.getItem("kinforgeReaderLanguage") || "browser";
+    if (english) english.value = savedEnglish;
+    if (reader) reader.value = savedReader;
+    const update = () => {
+      const englishName = english?.value === "gb" ? "British English" : "American English";
+      const languageName = reader?.selectedOptions?.[0]?.textContent || "browser/device translation";
+      document.documentElement.lang = english?.value === "gb" ? "en-GB" : "en-US";
+      localStorage.setItem("kinforgeEnglishStyle", english?.value || "us");
+      localStorage.setItem("kinforgeReaderLanguage", reader?.value || "browser");
+      if (statusLine) statusLine.textContent = `Current choice: ${englishName}. Reading language: ${languageName}. Use your browser translation tool when a full translation is needed.`;
+    };
+    english?.addEventListener("change", update);
+    reader?.addEventListener("change", update);
+    apply?.addEventListener("click", update);
+    update();
+  });
   if (!auth && !support && !newsletter) return;
 
   const clientHeaders = { "Content-Type": "application/json", "X-KinForge-Client": "1" };
