@@ -787,7 +787,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
         error={authError}
         onGuest={() => {
           if (!authForm.privacyAccepted || !authForm.termsAccepted) {
-            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            setAuthError("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
             return;
           }
           recordAppLegalAgreement();
@@ -797,7 +797,7 @@ function App({ cloud }: { cloud?: CloudApp }) {
         }}
         onSubmit={() => {
           if (!authForm.privacyAccepted || !authForm.termsAccepted) {
-            setAuthError("Agree to both the KinForge Privacy Policy and Terms & Conditions before using the app.");
+            setAuthError("Click both I accept checkboxes to follow the KinForge Privacy Policy and Terms & Conditions before using the app.");
             return;
           }
           const result = authMode === "create"
@@ -3339,7 +3339,7 @@ Quality checklist:
             <label className="field"><span>Device/app version</span><input className="control" value={supportForm.device} placeholder="Example: Mac app 1.3.8 on Apple Silicon" onChange={event => setSupportForm(current => ({ ...current, device: event.target.value }))} /></label>
           </div>
           <label className="field"><span>Subject</span><input className="control" value={supportForm.subject} onChange={event => setSupportForm(current => ({ ...current, subject: event.target.value }))} /></label>
-          <label className="field"><span>Proof for copyright-free permission</span><textarea className="control" rows={4} value={supportForm.proof} placeholder="Only for permission requests: describe or link real non-AI proof, such as photos together or digital/physical records showing you are close to Marianne Leong / Dreams of Serene Landscapes." onChange={event => setSupportForm(current => ({ ...current, proof: event.target.value }))} /></label>
+          <label className="field"><span>Proof for copyright-free permission</span><textarea className="control" rows={4} value={supportForm.proof} placeholder="Only for permission requests: describe or link real non-AI proof, such as photos together or digital/physical records showing you are close to Dreams of Serene Landscapes." onChange={event => setSupportForm(current => ({ ...current, proof: event.target.value }))} /></label>
           <label className="field"><span>Message</span><textarea className="control" rows={7} value={supportForm.message} placeholder="Tell support what happened, what you expected, and what you clicked." onChange={event => setSupportForm(current => ({ ...current, message: event.target.value }))} /></label>
           <label className="check-row"><input type="checkbox" checked={supportForm.permissionToReply} onChange={event => setSupportForm(current => ({ ...current, permissionToReply: event.target.checked }))} />Allow support to reply to this email</label>
           <label className="check-row"><input type="checkbox" checked={supportForm.includeDiagnostics} onChange={event => setSupportForm(current => ({ ...current, includeDiagnostics: event.target.checked }))} />Include non-sensitive app diagnostics</label>
@@ -4291,8 +4291,8 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
       {TERMS_CONDITIONS_SECTIONS.map(section => <article key={section.title}><h3>{section.title}</h3><p>{section.body}</p></article>)}
     </details>
     <div className="legal-checks">
-      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I have read and agree to the KinForge Privacy Policy.</label>
-      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I have read and agree to the KinForge Terms & Conditions.</label>
+      <label className="check-row"><input type="checkbox" checked={privacyAccepted} onChange={event => onPrivacyAccepted(event.target.checked)} />I accept and agree to follow the KinForge Privacy Policy.</label>
+      <label className="check-row"><input type="checkbox" checked={termsAccepted} onChange={event => onTermsAccepted(event.target.checked)} />I accept and agree to follow the KinForge Terms & Conditions, including the export and download copyright rules.</label>
     </div>
   </section>;
 }
