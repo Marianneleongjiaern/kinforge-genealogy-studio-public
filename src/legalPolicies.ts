@@ -62,11 +62,11 @@ export const TERMS_CONDITIONS_SECTIONS: LegalSection[] = [
   },
   {
     title: "Export and download credit",
-    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and Dreams of Serene Landscapes copyright notice. This applies to free trials, beta access, paid subscriptions, and approved special free access."
+    body: "GEDCOM, Word/RTF-style documents, PDFs, HTML, JSON backups, CSV, app downloads, documents, and any other exported or downloaded KinForge files must keep the KinForge credit and Dreams of Serene Landscapes copyright notice. This applies to free trials, beta access, Suite subscriptions, and approved special free access."
   },
   {
     title: "Copyright and special access",
-    body: "Paid versions and approved special free access both keep KinForge and Dreams of Serene Landscapes copyright and credit on the app, website, downloads, documents, and exports. Close or special people may request special access or extra written permission through support with real, non-AI proof, such as photos together or other digital or physical records. Approval is not automatic."
+    body: "KinForge Genealogy Studio Suite and approved special free access both keep KinForge and Dreams of Serene Landscapes copyright and credit on the app, website, downloads, documents, and exports. Close or special people may request special access or extra written permission through support with real, non-AI proof, such as photos together or other digital or physical records. Approval is not automatic."
   },
   {
     title: "User content",

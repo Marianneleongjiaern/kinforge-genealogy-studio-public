@@ -249,9 +249,10 @@ function LegalAgreementBox({ privacyAccepted, termsAccepted, onPrivacyAccepted, 
 }
 
 function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: string; onSignedIn: (user: CloudUser, code?: string) => void; onDemo: () => void }) {
-  const [mode, setMode] = useState<"home" | "login" | "create" | "forgot">("home"); const [error, setError] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<"home" | "login" | "create" | "forgot">(() => window.location.hash.startsWith("#/create-account") ? "create" : window.location.hash.startsWith("#/login") ? "login" : "home"); const [error, setError] = useState(""); const [status, setStatus] = useState(""); const [busy, setBusy] = useState(false);
   const [recoveryMethod, setRecoveryMethod] = useState<"secret" | "reset-code" | "login-code" | "login-link">("secret"); const [codeRequested, setCodeRequested] = useState(false); const [updatesOpen, setUpdatesOpen] = useState(false);
   const [name, setName] = useState(""); const [email, setEmail] = useState(""); const [password, setPassword] = useState(""); const [recoveryCode, setRecoveryCode] = useState("");
+  const [userType, setUserType] = useState("Other");
   const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const linkAttempted = useRef(false);
@@ -273,10 +274,10 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     <p className="eyebrow">Relationship studio for real work and imagined worlds</p>
     <h1>KinForge Genealogy Studio</h1>
     <p className="quiet">Build relationship maps for family history, social-work genograms, books, historical research, roleplay campaigns, RPG worlds, and other connection-rich projects.</p>
-    <div className="auth-message"><strong>4-day free trial:</strong> start with a simplified, lower-quality trial of the core tools. After the trial, choose a paid tier or request special access through support.</div>
+    <div className="auth-message"><strong>4-day free trial:</strong> start with a simplified, lower-quality trial of the core tools. After the trial, choose a Suite plan or request special access through support.</div>
     {(error || initialError) && <p className="auth-message bad" role="alert">{error || initialError}</p>}
     <div className="button-row"><button className="button" type="button" onClick={() => { if (requireAgreement()) { recordAppLegalAgreement(); recordPublicExportAgreement(); onDemo(); } }}>Get started free</button><button className="button secondary" type="button" onClick={() => setMode("create")}>Create free account</button></div>
-    <div className="landing-actions"><a href="/downloads/trial">Download trial</a><a href="/downloads/paid">Paid downloads</a><a href="/downloads/special-access">Special access</a><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button></div>
+    <div className="landing-actions"><a href="/downloads/trial">Download trial</a><a href="/downloads/paid">Suite downloads</a><a href="/downloads/special-access">Special access</a><button type="button" onClick={() => { if (requireAgreement()) setUpdatesOpen(true); }}>Updates</button></div>
     <LegalAgreementBox privacyAccepted={privacyAccepted} termsAccepted={termsAccepted} onPrivacyAccepted={setPrivacyAccepted} onTermsAccepted={setTermsAccepted} />
   </section>{updatesOpen && <UpdateCenter onClose={() => setUpdatesOpen(false)} />}</div>;
   const showPassword = mode !== "forgot" || recoveryMethod === "secret" || (recoveryMethod === "reset-code" && codeRequested);
@@ -300,12 +301,12 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
         result = await cloudRequest("/api/auth/code/confirm", "POST", { email, purpose, code: recoveryCode, password });
         onSignedIn(result.user, result.recoveryCode); return;
       }
-      try { result = await cloudRequest(`/api/auth/${mode === "create" ? "register" : mode === "forgot" ? "recover" : "login"}`, "POST", { name, email, password, recoveryCode, privacyAccepted, termsAccepted }); }
+      try { result = await cloudRequest(`/api/auth/${mode === "create" ? "register" : mode === "forgot" ? "recover" : "login"}`, "POST", { name, email, password, recoveryCode, privacyAccepted, termsAccepted, userType }); }
       catch (error) {
         const local = legacyLogin(loadAuthState(), email, password);
         if (mode !== "login" || !(error instanceof CloudError) || error.status !== 401 || local.error) throw error;
         if (password.length < 12) throw new Error("Your existing account is stored on this device. Create its cloud account with the same email and a password of at least 12 characters. Your data will sync automatically.");
-        result = await cloudRequest("/api/auth/register", "POST", { email, password, name: legacyUser(local.state)?.name || name, privacyAccepted, termsAccepted });
+        result = await cloudRequest("/api/auth/register", "POST", { email, password, name: legacyUser(local.state)?.name || name, privacyAccepted, termsAccepted, userType });
       }
       recordAppLegalAgreement();
       recordPublicExportAgreement();
@@ -314,6 +315,7 @@ function CloudSignIn({ error: initialError, onSignedIn, onDemo }: { error: strin
     catch (e) { setError(e instanceof Error ? e.message : "Could not connect. Please retry."); } finally { setBusy(false); }
   }}><div className="brand auth-brand"><span className="brand-mark"><img src="./icon.svg" alt="" /></span><div><strong>KinForge</strong><small>Product of Dreams of Serene Landscapes</small></div></div><h1>{mode === "create" ? "Create your cloud account" : mode === "forgot" ? "Recover your account" : "Sign in to KinForge"}</h1><p className="quiet">Relationship maps, family trees, social-work genograms, character networks, history projects and RPG worlds on every device.</p>
     {mode === "create" && <label className="field"><span>Name</span><input className="control" value={name} onChange={e => setName(e.target.value)} autoComplete="name" required maxLength={100} /></label>}
+    {mode === "create" && <label className="field"><span>I am using KinForge as</span><select className="control" value={userType} onChange={e => setUserType(e.target.value)}><option>Writer</option><option>DND player</option><option>Historian</option><option>Roleplayer</option><option>RPG player</option><option>Genealogist</option><option>Social worker</option><option>Student</option><option>Nonprofit</option><option>Educator</option><option>Other</option></select></label>}
     <label className="field"><span>Email</span><input className="control" type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="username" required /></label>
     {mode === "forgot" && <label className="field"><span>Recovery option</span><select className="control" value={recoveryMethod} onChange={e => setRecoveryMethod(e.target.value as "secret" | "reset-code" | "login-code" | "login-link")}><option value="secret">Secret recovery key</option><option value="reset-code">Email password reset code</option><option value="login-code">Email code login</option><option value="login-link">Email secret login link</option></select></label>}
     {showRecoveryCode && <label className="field"><span>{recoveryMethod === "secret" ? "Secret recovery key" : "Email code"}</span><input className="control" value={recoveryCode} onChange={e => setRecoveryCode(e.target.value)} autoComplete="one-time-code" required /></label>}
