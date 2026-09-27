@@ -1,6 +1,6 @@
 export const PUBLIC_EXPORT_COPYRIGHT = "Copyright 2026 Dreams of Serene Landscapes. All rights reserved.";
 export const PUBLIC_EXPORT_CREDIT = "Created with KinForge Genealogy Studio, a product of Dreams of Serene Landscapes.";
-export const PUBLIC_EXPORT_PERMISSION = "Paid access and special free access both keep the KinForge and Dreams of Serene Landscapes copyright on app exports and downloads. Special access or extra permission requests must go through the KinForge support form before account creation or use. Close or special users must provide real, non-AI proof such as photos together or other digital or physical records.";
+export const PUBLIC_EXPORT_PERMISSION = "Copyright-free exports require written permission through the KinForge support form before account creation or use. Close or special users must provide real, non-AI proof such as photos together or other digital or physical records. Approved users may place their own copyright on their books, but should credit Dreams of Serene Landscapes when asked.";
 export const PUBLIC_EXPORT_NOTICE = `${PUBLIC_EXPORT_COPYRIGHT} ${PUBLIC_EXPORT_CREDIT} ${PUBLIC_EXPORT_PERMISSION}`;
 export const PUBLIC_EXPORT_TERMS_STORAGE_KEY = "kinforge-public-export-terms-v1";
 
@@ -31,7 +31,7 @@ export function ensurePublicExportAgreement(fileName: string) {
     "",
     PUBLIC_EXPORT_NOTICE,
     "",
-    "Select OK only if you agree that paid access and special free access both keep the required KinForge and Dreams of Serene Landscapes copyright/credit on exported or downloaded files."
+    "Select OK only if you agree to keep the required copyright/credit on exported or downloaded files, unless Dreams of Serene Landscapes has given written permission through support for a copyright-free version."
   ].join("\n"));
   if (accepted) recordPublicExportAgreement();
   return accepted;
