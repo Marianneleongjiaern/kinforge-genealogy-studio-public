@@ -50,7 +50,10 @@
       const pause = player.querySelector(".narration-pause");
       const stopButton = player.querySelector(".narration-stop");
       const statusLine = player.querySelector(".narration-status");
+      const volume = player.querySelector(".narration-volume input");
+      const volumeValue = player.querySelector(".narration-volume span");
       if (!lines.length || !play || !pause || !stopButton) return;
+      volume?.addEventListener("input", () => { if (volumeValue) volumeValue.textContent = `${volume.value}%`; });
       play.addEventListener("click", () => {
         if (speechSynthesis.paused && active?.player === player) { speechSynthesis.resume(); if (statusLine) statusLine.textContent = "Narration resumed."; return; }
         stop();
@@ -65,6 +68,7 @@
           line.scrollIntoView({ behavior: "smooth", block: "nearest" });
           const utterance = new SpeechSynthesisUtterance(line.textContent || "");
           if (voice) utterance.voice = voice;
+          utterance.volume = Math.max(0, Math.min(1, Number(volume?.value || 85) / 100));
           utterance.rate = 0.95;
           utterance.pitch = 1.04;
           utterance.onend = speakNext;
